@@ -1,6 +1,9 @@
 package com.example.coin_panion.general;
 
+import com.github.ybq.android.spinkit.SpinKitView;
+
 public class Notification {
+
 
     private Integer NotificationID;
     private Integer SenderID;
