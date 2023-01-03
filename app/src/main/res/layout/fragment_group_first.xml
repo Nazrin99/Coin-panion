@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GroupFirstFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="154dp"
+        android:layout_height="36dp"
+        android:layout_marginHorizontal="130dp"
+        android:layout_marginVertical="350dp"
+        android:gravity="center"
+        android:text="Oopps, you don't have any group yet"
+        android:textColor="#80000000" />
+
+<!--    TODO make it clickable-->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="80dp"
+        android:layout_height="70dp"
+        android:layout_marginHorizontal="75dp"
+        android:layout_marginVertical="380dp"
+        android:src="@mipmap/ic_addexpenses_foreground" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:layout_marginHorizontal="140dp"
+        android:layout_marginVertical="400dp"
+        android:text="Create a group / expenses"
+        android:textColor="#000000" />
+
+</FrameLayout>

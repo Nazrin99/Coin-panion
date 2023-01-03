@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/ITfriends"
+        android:icon="@drawable/ic_friend_background"
+        android:title="FRIENDS" />
+
+    <item
+        android:id="@+id/ITgroups"
+        android:icon="@drawable/ic_baseline_groups_24"
+        android:title="GROUPS"/>
+
+    <item
+        android:id="@+id/IThistory"
+        android:icon="@drawable/ic_history_background"
+        android:title="HISTORY"/>
+
+    <item
+        android:id="@+id/ITprofile"
+        android:icon="@drawable/ic_profile_background"
+        android:title="PROFILE"/>
+
+
+</menu>

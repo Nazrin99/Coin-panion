@@ -40,7 +40,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     implementation 'commons-codec:commons-codec:1.11'
-    implementation 'javax.mail:javax.mail-api:1.6.2'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
 
-
+    //Card View
+    implementation "androidx.cardview:cardview:1.0.0"
 }
