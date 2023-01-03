@@ -70,6 +70,7 @@ public class Friend{
     // TODO add settle up function
     public void settleUpFriendDebt(Blob paymentEvidence){
         SettleUpDebt settleUpDebt = new SettleUpDebt(friendID, userID, paymentEvidence);
+
     }
 
 

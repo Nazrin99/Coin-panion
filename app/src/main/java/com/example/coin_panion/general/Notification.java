@@ -1,28 +1,28 @@
 package com.example.coin_panion.general;
 
-import com.github.ybq.android.spinkit.SpinKitView;
-
 public class Notification {
 
 
-    private Integer NotificationID;
-    private Integer SenderID;
-    private Integer ReceiverID;
-    private String NotificationDesc;
+    private Integer notificationID;
+    private Integer senderID;
+    private Integer receiverID;
+    private String notificationDesc;
 
     public Notification(Integer notificationID, Integer senderID, Integer receiverID, String notificationDesc) {
-        NotificationID = notificationID;
-        SenderID = senderID;
-        ReceiverID = receiverID;
-        NotificationDesc = notificationDesc;
+        this.notificationID = notificationID;
+        this.senderID = senderID;
+        this.receiverID = receiverID;
+        this.notificationDesc = notificationDesc;
     }
 
     public String getNotificationDesc() {
-        return NotificationDesc;
+        return notificationDesc;
     }
 
     public void setNotificationDesc(String notificationDesc) {
-        NotificationDesc = notificationDesc;
+        this.notificationDesc = notificationDesc;
     }
+
+
 
 }

@@ -54,7 +54,6 @@ public class SettleUpDebt {
     // TODO store payment request
     public void createPaymentRequest(){
         PaymentRequest paymentRequest = new PaymentRequest(6,this.debtorID,this.debtorName,this.creditorName,getReceipt());
-
     }
 
 

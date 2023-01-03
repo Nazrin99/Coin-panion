@@ -1,8 +1,6 @@
 package com.example.coin_panion.general;
 
 import com.example.coin_panion.Friends.Friend;
-import com.example.coin_panion.SettleUp.SettleUp;
-import com.example.coin_panion.SettleUp.SettleUpDebt;
 
 import java.sql.Blob;
 import java.util.ArrayList;
@@ -22,10 +20,10 @@ public class Account {
 
     public void updateUserProfile(Blob profilePic, String userName, String phoneNumber, String email){
         if(profilePic!=null) {
-            profile.UpdateProfilePic(profilePic);
+            profile.updateProfilePic(profilePic);
         }
         if(userName!=null){
-            profile.UpdateUserName(userName);
+            profile.updateUserName(userName);
         }
         if(phoneNumber!=null){
             profile.updatePhoneNumber(phoneNumber);
