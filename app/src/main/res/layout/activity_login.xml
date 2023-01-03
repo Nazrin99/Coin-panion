@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/ETUserInfo"
+        android:id="@+id/ETUserLogin"
         android:layout_width="324dp"
         android:layout_height="50dp"
         android:layout_marginTop="28dp"
@@ -45,10 +45,10 @@
         android:hint="@string/password"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="@+id/ETUserInfo"
+        app:layout_constraintEnd_toEndOf="@+id/ETUserLogin"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/ETUserInfo"
-        app:layout_constraintTop_toBottomOf="@+id/ETUserInfo" />
+        app:layout_constraintStart_toStartOf="@+id/ETUserLogin"
+        app:layout_constraintTop_toBottomOf="@+id/ETUserLogin" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/BtnSignUp"
@@ -72,7 +72,7 @@
         android:layout_marginTop="132dp"
         android:text="@string/forgot_password"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/ETUserInfo"
+        app:layout_constraintEnd_toEndOf="@+id/ETUserLogin"
         app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="@+id/BtnLogin"
         app:layout_constraintTop_toBottomOf="@+id/ETUserPass" />
