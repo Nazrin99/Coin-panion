@@ -5,8 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
-
+    tools:context=".general.Login">
 
     <TextView
         android:id="@+id/TVTitleLogin"
@@ -14,7 +13,7 @@
         android:layout_height="85dp"
         android:layout_marginTop="100dp"
         android:gravity="center_horizontal"
-        android:text="Coin - Panion Login"
+        android:text="@string/coin_panion_login"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -24,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/IVUserInfo"
+        android:id="@+id/ETUserInfo"
         android:layout_width="324dp"
         android:layout_height="50dp"
         android:layout_marginTop="28dp"
@@ -46,18 +45,17 @@
         android:hint="@string/password"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="@+id/IVUserInfo"
+        app:layout_constraintEnd_toEndOf="@+id/ETUserInfo"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/IVUserInfo"
-        app:layout_constraintTop_toBottomOf="@+id/IVUserInfo" />
+        app:layout_constraintStart_toStartOf="@+id/ETUserInfo"
+        app:layout_constraintTop_toBottomOf="@+id/ETUserInfo" />
 
-    <Button
-        android:id="@+id/button2"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/BtnSignUp"
         android:layout_width="117dp"
         android:layout_height="48dp"
         android:layout_marginStart="24dp"
         android:background="@drawable/rounded_edge_button"
-        android:backgroundTint="#ACDAFF"
         android:text="@string/sign_up"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/BtnLogin"
@@ -74,12 +72,12 @@
         android:layout_marginTop="132dp"
         android:text="@string/forgot_password"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="@+id/ETUserInfo"
         app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="@+id/BtnLogin"
         app:layout_constraintTop_toBottomOf="@+id/ETUserPass" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/BtnLogin"
         android:layout_width="117dp"
         android:layout_height="48dp"

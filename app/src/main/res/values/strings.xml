@@ -12,4 +12,5 @@
     <string name="enter_the_4_digit_code">Enter the 4-digit Code</string>
     <string name="new_password">New Password</string>
     <string name="phone_number_email">Phone Number / Email</string>
+    <string name="coin_panion_login">Coin - Panion Login</string>
 </resources>
