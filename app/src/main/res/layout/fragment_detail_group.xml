@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".DetailGroupFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="@+id/button8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button8"
+            app:layout_constraintVertical_bias="0.115"
+            app:srcCompat="@mipmap/ic_back_foreground" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button8"
+            android:layout_width="79dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@color/black"
+            android:text="Finish"
+            android:textSize="13dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.018"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="72dp"
+            android:layout_marginBottom="728dp"
+            android:background="#8AB1F8"
+            android:elevation="10dp"
+            android:outlineAmbientShadowColor="@color/black"
+            android:paddingHorizontal="70dp"
+            android:paddingVertical="10dp"
+            android:text="Enter a group name"
+            android:textColor="#80000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editTextPersonName2"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:background="@color/blue_omey"
+            android:elevation="10dp"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:text="Name"
+            android:textColor="#80000000"
+            android:textSize="13dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.601"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.404"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:text="Split"
+            android:textColor="@color/black"
+            android:textSize="13dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.418"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/spinner0"
+            app:layout_constraintVertical_bias="0.0" />
+
+<!--        TODO make spinner here-->
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner1"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:background="@color/blue_omey"
+            android:elevation="10dp"
+            android:pointerIcon="arrow"
+            android:spinnerMode="dropdown"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.418"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/editTextPersonName"
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editTextPersonName"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:background="@color/blue_omey"
+            android:elevation="10dp"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:text="0.00"
+            android:textColor="#80000000"
+            android:textSize="13dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.601"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.339"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:text="Paid by"
+            android:textColor="@color/black"
+            android:textSize="13dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextPersonName2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.418"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/editTextPersonName2"
+            app:layout_constraintVertical_bias="0.0" />
+
+<!--        TODO make spinner here-->
+        <Spinner
+            android:id="@+id/spinner0"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:background="@color/blue_omey"
+            android:elevation="10dp"
+            android:pointerIcon="arrow"
+            android:spinnerMode="dropdown"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.601"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.489"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="72dp"
+            android:layout_marginBottom="560dp"
+            android:background="#8AB1F8"
+            android:elevation="10dp"
+            android:outlineAmbientShadowColor="@color/black"
+            android:paddingHorizontal="58dp"
+            android:paddingVertical="10dp"
+            android:text="Enter group description"
+            android:textColor="#80000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textView7"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/textView7"
+            app:layout_constraintVertical_bias="0.364" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
