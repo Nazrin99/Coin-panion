@@ -7,9 +7,15 @@ import java.util.ArrayList;
 public class History {
 
     private String HistoryID;
-    private final Integer userID = User.userID;
+    private Integer userID;
     ArrayList<Notification> notificationList = new ArrayList<>();
     ArrayList<PaymentRequest> paymentRequestList = new ArrayList<>();
+
+    public History(ArrayList<Notification> notificationList, ArrayList<PaymentRequest> paymentRequestList) {
+        this.notificationList = notificationList;
+        this.paymentRequestList = paymentRequestList;
+        this.userID = User.userID;
+    }
 
     //TODO call Notification from database based on receiverID that is the UserID place everything into an arraylist
     public ArrayList<Notification> NotificationList(Integer userID){

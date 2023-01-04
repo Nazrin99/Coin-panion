@@ -23,7 +23,6 @@ public class User {
         this.profilePic = profilePic;
         this.password = password;
 
-
     }
 
     public boolean confirmPassword(String password){
