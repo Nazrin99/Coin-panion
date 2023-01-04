@@ -44,6 +44,7 @@ public class PaymentRequest{
     //Tobe displayed in the interface
 
 
+
     //TODO get notification for approved payment request
     //UserName has approved your payment request FriendName
     public String approvePaymentRequestNotification(){
