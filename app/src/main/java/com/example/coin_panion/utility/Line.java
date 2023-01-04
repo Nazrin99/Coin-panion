@@ -11,7 +11,13 @@ public class Line {
     static String password = "nazrin0965";
     static String database = "coinpanion";
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s&useSSL=false", host, port, database, user, password));
+    public static Connection getConnection() {
+        Connection connection = null;
+        try{
+            connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s&useSSL=false", host, port, database, user, password));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
     }
 }
