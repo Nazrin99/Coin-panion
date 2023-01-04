@@ -3,4 +3,17 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_your_friends"><u>Add your friends</u></string>
+    <string name="password">Password</string>
+    <string name="username_phonenumber_email">Username / PhoneNumber / Email</string>
+    <string name="forgot_password"><u>Forgot password? </u></string>
+    <string name="login">LOGIN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="submit_credentials">Submit Credentials</string>
+    <string name="_0">0</string>
+    <string name="reset_password">RESET PASSWORD</string>
+    <string name="confirm_new_password">Confirm new Password</string>
+    <string name="enter_the_4_digit_code">Enter the 4-digit Code</string>
+    <string name="new_password">New Password</string>
+    <string name="phone_number_email">Phone Number / Email</string>
+    <string name="coin_panion_login">Coin - Panion Login</string>
 </resources>
