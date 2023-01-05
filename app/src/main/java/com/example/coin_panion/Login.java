@@ -1,8 +1,7 @@
-package com.example.coin_panion;
+package com.example.coin_panion.general;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,15 +12,25 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.utility.Line;
 
+//import org.apache.commons.codec.digest.DigestUtils;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
 
-    EditText ETUserInfo;
+    EditText ETUserLogin;
     EditText ETUserPass;
     Button BtnLogin;
     Button BtnSignUp;
+    Thread dataThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +38,13 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         callUI();
         setupUIListeners();
+
+        dataThread = new Thread(() -> {});
     }
 
-    public void callUI(){
-        ETUserInfo = findViewById(R.id.ETUserLogin);
+    public void
+    callUI(){
+        ETUserLogin = findViewById(R.id.ETUserLogin);
         ETUserPass = findViewById(R.id.ETUserPass);
         BtnLogin = findViewById(R.id.BtnLogin);
         BtnSignUp = findViewById(R.id.BtnSignUp);
@@ -57,46 +69,66 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    public void validateLogin(){
-        boolean validCredentials = true;
-        if(ETUserInfo.getText().toString().equals(" ")){
-            ETUserInfo.requestFocus();
-            ETUserInfo.setError("You must enter your credentials to login!");
-            validCredentials = false;
-        }else{
-            if(!isEmail(ETUserInfo)){
-                ETUserInfo.setError("Enter valid email!");
-                validCredentials = false;
-            }
+    public void validateLogin() {
+        String gettingColumn = "";
+
+        if(ETUserPass.getText().toString().isEmpty()){
+            ETUserPass.setError("Please enter a password");
+            return;
+        }
+        if(ETUserLogin.getText().toString().isEmpty()){
+            ETUserLogin.setError("Please enter your credentials");
+            return;
+        }
+        if(isEmail(ETUserLogin)){
+            gettingColumn = "email";
+        }
+        else if(isPhoneNumber(ETUserLogin)){
+            gettingColumn = "phone_number";
+        }
+        else{
+            gettingColumn = "username";
         }
 
-        if(isEmpty(ETUserPass)){
-            ETUserPass.setError("You must enter your password to login!");
-            validCredentials = false;
-        }else{
-            if(ETUserPass.getText().toString().length() < 5){
-                ETUserPass.setError("password must be more than 5 character long!");
-                validCredentials = false;
-            }
-        }
+        String userLogin = ETUserLogin.getText().toString();
+        String userPass = ETUserPass.getText().toString();
+        String column = gettingColumn;
 
-        //If the credentials entered by User is Valid
-        // TODO need to validate with backend database
-        if(validCredentials){
-            String userInfo = ETUserInfo.getText().toString();
-            String userPass = ETUserPass.getText().toString();
-            // Code to validate the user Credentials with the database
-            if(userInfo.equals("UserInfo") && userPass.equals("UserPass"));
-            // After user is validated log to new interface and close this existing interface
-//            Intent loginValid = new Intent(Login.this,FirstActivity.class);
-//            startActivity(loginValid);
-            this.finish();
-            } else {
-            Toast notAccurateCredentials = Toast.makeText(this,"Wrong information or password", Toast.LENGTH_SHORT);
-            notAccurateCredentials.show();
+        while(dataThread.isAlive()){
+
         }
+        dataThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM account WHERE ?=?");
+                    preparedStatement.setString(1, column);
+                    preparedStatement.setString(2, userLogin);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if(resultSet.next()){
+                        // Credentials exists, verifying password
+                        if(new DigestUtils("SHA3-256").digestAsHex(resultSet.getString("password")).equalsIgnoreCase(userPass)){
+                            // TODO Password valid, go to Home Activity
+                        }
+                        else{
+                            // Password is wrong
+                            Toast.makeText(getApplicationContext(), "Invalid login credentials", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else{
+                        // Credentials doesn't exist
+                        Toast.makeText(getApplicationContext(), "Login credentials not found", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        dataThread.start();
+
     }
-
     // Check if the editText is empty
     boolean isEmpty(EditText text){
         CharSequence string = text.getText().toString();
@@ -110,9 +142,13 @@ public class Login extends AppCompatActivity {
     }
 
     // Check if it was a valid phone Number
-    boolean isPhoneNumber(EditText text){
-        CharSequence phoneNumber = text.getText().toString();
-        return (!TextUtils.isEmpty(phoneNumber) && Patterns.PHONE.matcher(phoneNumber).matches());
+    boolean isPhoneNumber(EditText text) {
+        String regexPhone = "[0][1][0-9]{8}[0-9]?";
+
+        return Pattern.compile(regexPhone).matcher(text.getText().toString()).matches();
+
     }
+
+
 
 }
