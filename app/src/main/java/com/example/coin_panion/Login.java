@@ -1,4 +1,4 @@
-package com.example.coin_panion.general;
+package com.example.coin_panion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,7 +32,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void callUI(){
-        ETUserInfo = findViewById(R.id.ETUserInfo);
+        ETUserInfo = findViewById(R.id.ETUserLogin);
         ETUserPass = findViewById(R.id.ETUserPass);
         BtnLogin = findViewById(R.id.BtnLogin);
         BtnSignUp = findViewById(R.id.BtnSignUp);
@@ -59,7 +59,6 @@ public class Login extends AppCompatActivity {
 
     public void validateLogin(){
         boolean validCredentials = true;
-
         if(ETUserInfo.getText().toString().equals(" ")){
             ETUserInfo.requestFocus();
             ETUserInfo.setError("You must enter your credentials to login!");
@@ -82,9 +81,8 @@ public class Login extends AppCompatActivity {
         }
 
         //If the credentials entered by User is Valid
-        // TO:DO need to validate with backend database
+        // TODO need to validate with backend database
         if(validCredentials){
-
             String userInfo = ETUserInfo.getText().toString();
             String userPass = ETUserPass.getText().toString();
             // Code to validate the user Credentials with the database

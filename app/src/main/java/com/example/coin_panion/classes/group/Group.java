@@ -1,6 +1,6 @@
-package com.example.coin_panion.Group;
+package com.example.coin_panion.classes.group;
 
-import com.example.coin_panion.Friends.Friend;
+import com.example.coin_panion.classes.friends.Friend;
 
 import java.sql.Blob;
 import java.util.ArrayList;

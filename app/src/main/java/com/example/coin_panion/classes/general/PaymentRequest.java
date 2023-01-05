@@ -1,7 +1,8 @@
-package com.example.coin_panion.general;
+package com.example.coin_panion.classes.general;
+
+import com.example.coin_panion.classes.User;
 
 import java.sql.Blob;
-import java.util.ArrayList;
 
 public class PaymentRequest{
 
@@ -20,7 +21,7 @@ public class PaymentRequest{
         this.paymentEvidence = paymentEvidence;
         this.debtorName = debtorName;
         this.creditorName = creditorName;
-        this.creditorID = User.userID;
+        this.creditorID = Integer.parseInt(System.getProperty("userID"));
         this.paymentStatus = false;
     }
 
@@ -42,8 +43,9 @@ public class PaymentRequest{
 
     //TODO get friend Info
     //Tobe displayed in the interface
-
-
+    public String getFriendInfo() {
+        return "Debtor: " + debtorName + " (ID: " + debtorID + ")\nCreditor: " + creditorName + " (ID: " + creditorID + ")";
+    }
 
     //TODO get notification for approved payment request
     //UserName has approved your payment request FriendName
@@ -56,6 +58,4 @@ public class PaymentRequest{
     public void addPaymentRequest(){
 
     }
-
-
 }

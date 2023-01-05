@@ -1,4 +1,4 @@
-package com.example.coin_panion.general;
+package com.example.coin_panion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
-import com.example.coin_panion.R;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -147,7 +145,7 @@ public class ForgotPassword extends AppCompatActivity {
         Toast.makeText(ForgotPassword.this,"Password changed successfully",Toast.LENGTH_LONG).show();
         this.finish();
         // Navigate to login page after password has been reset successfully
-        Intent toLoginInt = new Intent(ForgotPassword.this,Login.class);
+        Intent toLoginInt = new Intent(ForgotPassword.this, Login.class);
         startActivity(toLoginInt);
     }
 
