@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Coin-panion</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="add_your_friends"><u>Add your friends</u></string>
     <string name="password">Password</string>
     <string name="username_phonenumber_email">Username / PhoneNumber / Email</string>
     <string name="forgot_password"><u>Forgot password? </u></string>
