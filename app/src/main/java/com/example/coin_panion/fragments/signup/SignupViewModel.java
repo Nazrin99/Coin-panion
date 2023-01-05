@@ -1,4 +1,4 @@
-package com.example.coin_panion.general.signnup;
+package com.example.coin_panion.fragments.signup;
 
 import androidx.lifecycle.ViewModel;
 

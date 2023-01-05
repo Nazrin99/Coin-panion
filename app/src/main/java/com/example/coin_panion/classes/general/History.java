@@ -16,7 +16,7 @@ public class History {
     public History(ArrayList<Notification> notificationList, ArrayList<PaymentRequest> paymentRequestList) {
         this.notificationList = notificationList;
         this.paymentRequestList = paymentRequestList;
-        this.userID = User.userID;
+        this.userID = 0;
     }
 
     //TODO call Notification from database based on receiverID that is the UserID place everything into an arraylist

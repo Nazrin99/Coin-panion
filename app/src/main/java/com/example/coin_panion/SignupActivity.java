@@ -4,9 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
-import android.widget.EditText;
 
-import com.example.coin_panion.general.signnup.SignupViewModel;
+import com.example.coin_panion.fragments.signup.SignupViewModel;
 
 public class SignupActivity extends AppCompatActivity {
     SignupViewModel signupViewModel;

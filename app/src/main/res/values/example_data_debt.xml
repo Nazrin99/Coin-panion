@@ -2,6 +2,6 @@
 <resources>
     <string-array name="sample_debt">
         <item>@string/name_debt</item>
-        <subitem>@string/amount_debt</subitem>
+        <item>@string/amount_debt</item>
     </string-array>
 </resources>

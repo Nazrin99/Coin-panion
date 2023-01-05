@@ -1,6 +1,5 @@
-package com.example.coin_panion.general.signnup;
+package com.example.coin_panion.fragments.signup;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,16 +17,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.coin_panion.R;
-import com.example.coin_panion.utility.Line;
-import com.example.coin_panion.utility.SendSMS;
+import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.utility.Validifier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
-import java.util.Objects;
 
 public class Signup_Fragment_1 extends Fragment {
     private SignupViewModel signupViewModel;

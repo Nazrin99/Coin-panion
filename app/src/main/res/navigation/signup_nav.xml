@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/signup_Fragment_1"
-        android:name="com.example.coin_panion.general.signnup.Signup_Fragment_1"
+        android:name="com.example.coin_panion.fragments.signup.Signup_Fragment_1"
         android:label="fragment_signup_1"
         tools:layout="@layout/fragment_signup_1" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/signup_Fragment_2"
-        android:name="com.example.coin_panion.general.signnup.Signup_Fragment_2"
+        android:name="com.example.coin_panion.fragments.signup.Signup_Fragment_2"
         android:label="fragment_signup_2"
         tools:layout="@layout/fragment_signup_2" />
 </navigation>

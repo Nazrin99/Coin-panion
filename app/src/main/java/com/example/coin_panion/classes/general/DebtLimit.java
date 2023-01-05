@@ -13,7 +13,7 @@ public class DebtLimit {
 
     public DebtLimit(Integer debtLimitID, String currencyType, String debtLimitTime, Integer debtLimitAmount) {
         this.DebtLimitID = debtLimitID;
-        this.DebtLimitUser = User.userID;
+        this.DebtLimitUser = 0;
         this.DebtLimitTime = debtLimitTime;
         this.CurrencyType = currencyType;
         this.DebtLimitAmount = debtLimitAmount;
