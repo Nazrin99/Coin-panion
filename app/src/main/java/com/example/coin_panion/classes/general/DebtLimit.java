@@ -1,4 +1,6 @@
-package com.example.coin_panion.general;
+package com.example.coin_panion.classes.general;
+
+import com.example.coin_panion.classes.User;
 
 public class DebtLimit {
 

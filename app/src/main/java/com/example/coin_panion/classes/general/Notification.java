@@ -1,4 +1,4 @@
-package com.example.coin_panion.general;
+package com.example.coin_panion.classes.general;
 
 public class Notification {
 

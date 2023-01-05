@@ -1,7 +1,7 @@
-package com.example.coin_panion.SettleUp;
+package com.example.coin_panion.classes.settleUp;
 
-import com.example.coin_panion.general.Notification;
-import com.example.coin_panion.general.PaymentRequest;
+import com.example.coin_panion.classes.general.Notification;
+import com.example.coin_panion.classes.general.PaymentRequest;
 
 import java.sql.Blob;
 
@@ -13,6 +13,8 @@ public class SettleUpDebt {
     private String creditorName;
     private Blob receipt;
     private Boolean settleUpStatus;
+
+
 
     public SettleUpDebt(Integer creditorID, Integer debtorID, Blob receipt) {
         this.creditorID = creditorID;
@@ -55,7 +57,5 @@ public class SettleUpDebt {
     public void createPaymentRequest(){
         PaymentRequest paymentRequest = new PaymentRequest(6,this.debtorID,this.debtorName,this.creditorName,getReceipt());
     }
-
-
 
 }

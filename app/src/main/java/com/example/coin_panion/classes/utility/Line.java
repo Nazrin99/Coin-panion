@@ -1,4 +1,4 @@
-package com.example.coin_panion.utility;
+package com.example.coin_panion.classes.utility;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

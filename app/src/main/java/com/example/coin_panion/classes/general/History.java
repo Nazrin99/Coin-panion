@@ -1,6 +1,8 @@
-package com.example.coin_panion.general;
+package com.example.coin_panion.classes.general;
 
 import android.app.Notification;
+
+import com.example.coin_panion.classes.User;
 
 import java.util.ArrayList;
 
