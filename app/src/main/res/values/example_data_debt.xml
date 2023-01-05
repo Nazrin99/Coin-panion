@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sample_debt">
+        <item>@string/name_debt</item>
+        <subitem>@string/amount_debt</subitem>
+    </string-array>
+</resources>
