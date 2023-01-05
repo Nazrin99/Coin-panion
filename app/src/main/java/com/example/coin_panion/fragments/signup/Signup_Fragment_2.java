@@ -1,4 +1,4 @@
-package com.example.coin_panion.general.signnup;
+package com.example.coin_panion.fragments.signup;
 
 import android.os.Bundle;
 
@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.coin_panion.R;
-import com.example.coin_panion.utility.Line;
+import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.utility.Validifier;
 
 import java.sql.Connection;

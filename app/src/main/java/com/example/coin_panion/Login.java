@@ -3,16 +3,15 @@ package com.example.coin_panion;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.coin_panion.R;
 import com.example.coin_panion.classes.utility.Line;
+import static com.example.coin_panion.utility.Validifier.isEmail;
+import static com.example.coin_panion.utility.Validifier.isPhoneNumber;
 
 //import org.apache.commons.codec.digest.DigestUtils;
 
@@ -22,13 +21,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
 
-    EditText ETUserLogin;
+    EditText ETUserInfo;
     EditText ETUserPass;
     Button BtnLogin;
     Button BtnSignUp;
@@ -46,7 +42,7 @@ public class Login extends AppCompatActivity {
 
     public void
     callUI(){
-        ETUserLogin = findViewById(R.id.ETUserLogin);
+        ETUserInfo = findViewById(R.id.ETUserInfo);
         ETUserPass = findViewById(R.id.ETUserPass);
         BtnLogin = findViewById(R.id.BtnLogin);
         BtnSignUp = findViewById(R.id.BtnSignUp);
@@ -78,21 +74,21 @@ public class Login extends AppCompatActivity {
             ETUserPass.setError("Please enter a password");
             return;
         }
-        if(ETUserLogin.getText().toString().isEmpty()){
-            ETUserLogin.setError("Please enter your credentials");
+        if(ETUserInfo.getText().toString().isEmpty()){
+            ETUserInfo.setError("Please enter your credentials");
             return;
         }
-        if(isEmail(ETUserLogin)){
+        if(isEmail(ETUserInfo.getText().toString())){
             gettingColumn = "email";
         }
-        else if(isPhoneNumber(ETUserLogin)){
+        else if(isPhoneNumber(ETUserInfo.getText().toString())){
             gettingColumn = "phone_number";
         }
         else{
             gettingColumn = "username";
         }
 
-        String userLogin = ETUserLogin.getText().toString();
+        String userLogin = ETUserInfo.getText().toString();
         String userPass = ETUserPass.getText().toString();
         String column = gettingColumn;
 
@@ -129,25 +125,6 @@ public class Login extends AppCompatActivity {
             }
         });
         dataThread.start();
-
-    }
-    // Check if the editText is empty
-    boolean isEmpty(EditText text){
-        CharSequence string = text.getText().toString();
-        return TextUtils.isEmpty(string);
-    }
-
-    // Check if it was a valid email
-    boolean isEmail(EditText text){
-        CharSequence email = text.getText().toString();
-        return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
-    }
-
-    // Check if it was a valid phone Number
-    boolean isPhoneNumber(EditText text) {
-        String regexPhone = "[0][1][0-9]{8}[0-9]?";
-
-        return Pattern.compile(regexPhone).matcher(text.getText().toString()).matches();
 
     }
 
