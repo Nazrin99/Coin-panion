@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signup_nav"
+    app:startDestination="@id/signup_Fragment_1">
+
+    <fragment
+        android:id="@+id/signup_Fragment_1"
+        android:name="com.example.coin_panion.general.signnup.Signup_Fragment_1"
+        android:label="fragment_signup_1"
+        tools:layout="@layout/fragment_signup_1" >
+        <action
+            android:id="@+id/action_signup_Fragment_1_to_signup_Fragment_2"
+            app:destination="@id/signup_Fragment_2" />
+    </fragment>
+    <fragment
+        android:id="@+id/signup_Fragment_2"
+        android:name="com.example.coin_panion.general.signnup.Signup_Fragment_2"
+        android:label="fragment_signup_2"
+        tools:layout="@layout/fragment_signup_2" />
+</navigation>
