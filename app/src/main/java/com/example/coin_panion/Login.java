@@ -1,4 +1,4 @@
-package com.example.coin_panion.general;
+package com.example.coin_panion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,9 +12,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.coin_panion.R;
-import com.example.coin_panion.utility.Line;
+import com.example.coin_panion.classes.utility.Line;
 
 //import org.apache.commons.codec.digest.DigestUtils;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
