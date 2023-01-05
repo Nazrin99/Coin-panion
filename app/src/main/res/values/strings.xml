@@ -3,8 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_your_friends"><u>Add your friends</u></string>
-    <string name="password">Password</string>
-    <string name="username_phonenumber_email">Username / PhoneNumber / Email</string>
+    <string name="phonenumber_email">PhoneNumber / Email</string>
     <string name="forgot_password"><u>Forgot password? </u></string>
     <string name="login">LOGIN</string>
     <string name="sign_up">SIGN UP</string>
@@ -15,5 +14,42 @@
     <string name="enter_the_4_digit_code">Enter the 4-digit Code</string>
     <string name="new_password">New Password</string>
     <string name="phone_number_email">Phone Number / Email</string>
-    <string name="coin_panion_login">Coin - Panion Login</string>
+    <string name="coin_panion_login">Coin-Panion\nLogin</string>
+
+    <!-- SIGNUP -->
+    <!-- Fragment 1 -->
+    <string name="coin_panion_signup">Coin-Panion\nSignup</string>
+    <string name="signup_welcome">Welcome to Coin-panion!</string>
+    <string name="signup_phone_hint">Let\'s start with your phone number</string>
+    <string name="signup_phone_wrong_format">Please enter a valid phone number (Eg:+60179916645)</string>
+    <string name="signup_phone_already_exists">Phone number already exists</string>
+    <string name="signup_phone_is_available">You\'re good to go!</string>
+
+    <!-- Fragment 2 -->
+    <!--
+    Strings used:
+        - next
+        - first_name
+        - last_name
+        - email
+        - email_hint
+        - password
+        - password_hint
+        - email_format_error
+        - checking
+    -->
+
+    <!-- GENERAL -->
+    <string name="next">Next</string>
+    <string name="checking">Checking</string>
+    <string name="verify">Verify</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="email_hint">eg: yourname@domain.com</string>
+    <string name="password">Password</string>
+    <string name="password_hint">Your password must contain at least eight characters, one number and one special character</string>
+    <string name="email_format_error">Please enter a valid email address</string>
+    <string name="email_exists">Email already exists, please choose another email</string>
+
 </resources>
