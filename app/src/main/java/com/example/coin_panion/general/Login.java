@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.utility.Validifier;
 
 import java.util.regex.Pattern;
 
@@ -65,7 +66,7 @@ public class Login extends AppCompatActivity {
             ETUserInfo.setError("You must enter your credentials to login!");
             validCredentials = false;
         }else{
-            if(!isEmail(ETUserInfo)){
+            if(!Validifier.isEmail(ETUserInfo.getText().toString())){
                 ETUserInfo.setError("Enter valid email!");
                 validCredentials = false;
             }
@@ -103,18 +104,6 @@ public class Login extends AppCompatActivity {
     boolean isEmpty(EditText text){
         CharSequence string = text.getText().toString();
         return TextUtils.isEmpty(string);
-    }
-
-    // Check if it was a valid email
-    boolean isEmail(EditText text){
-        CharSequence email = text.getText().toString();
-        return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
-    }
-
-    // Check if it was a valid phone Number
-    boolean isPhoneNumber(EditText text){
-        CharSequence phoneNumber = text.getText().toString();
-        return (!TextUtils.isEmpty(phoneNumber) && Patterns.PHONE.matcher(phoneNumber).matches());
     }
 
 }
