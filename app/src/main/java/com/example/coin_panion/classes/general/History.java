@@ -2,7 +2,7 @@ package com.example.coin_panion.classes.general;
 
 import android.app.Notification;
 
-import com.example.coin_panion.classes.User;
+import com.example.coin_panion.classes.PaymentRequest;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ public class History {
     public History(ArrayList<Notification> notificationList, ArrayList<PaymentRequest> paymentRequestList) {
         this.notificationList = notificationList;
         this.paymentRequestList = paymentRequestList;
-        this.userID = User.userID;
+//        this.userID = User.userID;
     }
 
     //TODO call Notification from database based on receiverID that is the UserID place everything into an arraylist

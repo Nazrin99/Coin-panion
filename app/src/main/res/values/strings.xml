@@ -28,4 +28,8 @@
         <item>Month</item>
         <item>Year</item>
     </string-array>
+
+    <!--TODO include this into login page lead to privacy policy page only if checkbox is check then the login button can be activated-->
+    <string name="terms_text">By using our app, you acknowledge and agree to our terms and privacy policy.
+        Our terms and privacy policy can be found at [C:\Users\Huawei\StudioProjects\Coin-panionUICreation\app\src\main\assets\terms_and_privacy.html].</string>
 </resources>
