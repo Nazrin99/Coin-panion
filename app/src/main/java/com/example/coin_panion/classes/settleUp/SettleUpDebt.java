@@ -1,8 +1,5 @@
 package com.example.coin_panion.classes.settleUp;
 
-import com.example.coin_panion.classes.general.Notification;
-import com.example.coin_panion.classes.general.PaymentRequest;
-
 import java.sql.Blob;
 
 public class SettleUpDebt {
@@ -48,14 +45,14 @@ public class SettleUpDebt {
     }
 
     // TODO on click method
-    public String settleUpNotification(){
-        Notification notification = new Notification(4,debtorID,creditorID,"Hello " + getCreditorName() + ", " + getDebtorName() + "has sent you a payment request");
-        return notification.getNotificationDesc();
-    }
+//    public String settleUpNotification(){
+//        Notification notification = new Notification(4,debtorID,creditorID,"Hello " + getCreditorName() + ", " + getDebtorName() + "has sent you a payment request");
+//        return notification.getNotificationDesc();
+//    }
 
     // TODO store payment request
-    public void createPaymentRequest(){
-        PaymentRequest paymentRequest = new PaymentRequest(6,this.debtorID,this.debtorName,this.creditorName,getReceipt());
-    }
+//    public void createPaymentRequest(){
+//        PaymentRequest paymentRequest = new PaymentRequest(6,this.debtorID,this.debtorName,this.creditorName,getReceipt());
+//    }
 
 }

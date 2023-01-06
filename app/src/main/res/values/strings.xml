@@ -14,6 +14,7 @@
     <string name="enter_the_4_digit_code">Enter the 4-digit Code</string>
     <string name="new_password">New Password</string>
     <string name="phone_number_email">Phone Number / Email</string>
+    <string name="coin_panion_login">Coin - Panion Login</string>
     <string name="name_debt">Name</string>
     <string name="amount_debt">RMx.xx</string>
     <string-array name="sample_currency">
@@ -72,4 +73,8 @@
     <string name="email_exists">Email already exists, please choose another email</string>
     <string name="good_to_go">You\'re good to go!</string>
     <string name="enter_details">Please enter your details and set your password below</string>
+
+    <!--TODO include this into login page lead to privacy policy page only if checkbox is check then the login button can be activated-->
+    <string name="terms_text">By using our app, you acknowledge and agree to our terms and privacy policy.
+        Our terms and privacy policy can be found at [C:\Users\Huawei\StudioProjects\Coin-panionUICreation\app\src\main\assets\terms_and_privacy.html].</string>
 </resources>
