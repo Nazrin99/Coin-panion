@@ -15,10 +15,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.myToolBar);
-        textView = findViewById(R.id.activity_name);
+//        toolbar = findViewById(R.id.myToolBar);
+//        textView = findViewById(R.id.activity_name);
 
-        setSupportActionBar(toolbar);
-        textView.setText("Main");
+//        setSupportActionBar(toolbar);
+//        textView.setText("Main");
     }
 }

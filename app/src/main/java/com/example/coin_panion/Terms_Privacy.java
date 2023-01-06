@@ -1,5 +1,7 @@
 package com.example.coin_panion;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +9,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +66,41 @@ public class Terms_Privacy extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        /*Get and display the privacy policy of the app*/
+        WebView webView = getView().findViewById(R.id.WVprivacyPolicy);
+        webView.loadUrl("file:///assets/terms_and_privacy.html");
+
+        /*Button to proceed to the login page*/
+        Button btnToLogin = getView().findViewById(R.id.BtnToLogin);
+        btnToLogin.setClickable(false);
+
+        /*Check whether the check box is already check or not*/
+        CheckBox checkBox = getView().findViewById(R.id.CBAgree);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    btnToLogin.setClickable(true);
+                    Toast.makeText(getContext(),"Click on the Next Button to proceed with login",Toast.LENGTH_SHORT).show();
+                    // User has agreed to the terms.
+                    // TODO enable the next button or proceed with the app's login process.
+                }
+            }
+        });
+
+        /*Move on to the login page*/
+        btnToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO go to login page after next button is clicked
+                if(btnToLogin.isClickable()){
+                    //TODO after button is clickable go to login page
+                }else{
+                    Toast.makeText(getContext(),"Please agree to the app privacy and policies to proceed",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         return inflater.inflate(R.layout.fragment_terms_privacy, container, false);
     }
 }

@@ -4,27 +4,26 @@ import android.widget.Toast;
 
 import java.sql.Blob;
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User{
 
-    //TODO generate UserId
-    /*User Details*/
-    private Integer userID = null;
-    private String mobileNumber;
-    private String email;
-    private String fullName;
-    private String userName;
-    private Blob profilePic;
+    /*User info for account*/
+    private static Integer account_ID;
+    private String mobile_number;
+    private String first_name;
+    private String last_name;
+    private String username;
     private String password;
-    private Thread dataThread;
 
-    /*SettleUp*/
-    private SettleUp settleUp;
+    /*User additional info*/
+    private Blob profile_pic;
+    private String user_bio;
 
-    /*DebtLimit*/
-    private Integer debtLimitAmount;
-    private String debtLimitPeriod;
-
+    private DebtLimit user_debtLimit;
+    
     /*Retrieve user from database*/
     public User(String mobileNumber) {
         // TODO query from database to retrieve user info based on mobile number
@@ -67,34 +66,14 @@ public class User{
             this.email = email;
     }
 
-    public void updateProfilePic(Blob newProPic){
-        if(newProPic!=null)
-            this.profilePic = newProPic;
-    }
+    /*User friend*/
+    private List<Friend> friends;
 
-    public void updateFullName(String newFullName){
-        if(newFullName!=null)
-            this.fullName = newFullName;
-    }
+    /*User notification & activity*/
+    private List<Notification> notifications;
 
-    public void updateUserName(String newUserName){
-        if(newUserName!=null)
-            this.userName = newUserName;
-    }
-
-    public void updatePhoneNumber(String newMobilePhoneNumber){
-        if(newMobilePhoneNumber!=null)
-            this.mobileNumber = newMobilePhoneNumber;
-    }
-
-    /*All getters*/
-    public String getMobileNumber() {
-        return mobileNumber;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
+    /*Payment request*/
+    private List<PaymentRequest> paymentRequests;
 
     public String getUserName() {
         return userName;
@@ -108,46 +87,17 @@ public class User{
         return password;
     }
 
-
-    /*Query to update user info*/
-    public void editUserInfo(String userName, String email, String phoneNumber, String password, Blob userProfileImage){
-        updateUserName(userName);
-        updateEmail(email);
-        updatePhoneNumber(phoneNumber);
-        Password(password);
-        updateProfilePic(userProfileImage);
-        // update query based on this.variable
-        String query = this.email + this.userName ;
     }
 
-    /*Query to delete user from database*/
-    public void deleteUser() {
-        String query = "DELETE FROM `User` " +
-                "WHERE userID = " + userID;
+    /*TODO Delete user info database based on this.variable*/
+    public void deleteUser(){
+
     }
 
-    /*Add settleUp for user account*/
-    public void addSettleUp(long accountNum, Blob QRCode, String settleup_account_name){
-        /*TODO if userID have the accountNum false no need to add*/
-        settleUp = new SettleUp(userID, settleup_account_name, accountNum, QRCode);
-    }
-
-    /*Update settleUp for user account*/
-    public void updateSettleUp(long accountNum, Blob QRCode,  String settleup_account_name){
-        /*TODO */
-        settleUp.updateSettleUpInformation(settleup_account_name,accountNum,QRCode);
-    }
-
-    /*Retrieve existing Settle up*/
-    public SettleUp getSettleUp() {
-        settleUp = new SettleUp(userID);
-        return settleUp;
-    }
-
-    private ResultSet getUserData(String phoneNumber){
+    private ResultSet fetchUserData(String phoneNumber){
         Integer userID = null;
-        dataThread = new Thread(() ->{
-           // TODO QUERY USER INFO
+        Thread dataThread = new Thread(() -> {
+            // TODO QUERY USER INFO
         });
         dataThread.start();
         while(dataThread.isAlive()){
@@ -157,20 +107,40 @@ public class User{
         return null; //TODO CHANGE TO RESULTSET LATER
     }
 
-    /*User set debt limit*/
-    public void userSetDebtLimit(Integer debtLimitAmount, String debtLimitPeriod){
-        this.debtLimitAmount = debtLimitAmount;
-        this.debtLimitPeriod = debtLimitPeriod;
-
-        //TODO update user debtLimit
+    public void fetchGeneralNotification(){
+        Notification notification = new Notification(account_ID);
+        this.notifications = new ArrayList<>(notification.fetchGeneralNotification());
+//        String[] notifications = new String[] {
+//                "Notification 1",
+//                "Notification 2",
+//                "Notification 3"
+//        };
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, notifications);
+//        ListView listView = findViewById(R.id.list_view);
+//        listView.setAdapter(adapter);
 
     }
 
-    public Integer getDebtLimitAmount() {
-        return debtLimitAmount;
+    public List<Notification> getNotifications() {
+        return notifications;
     }
 
-    public String getDebtLimitPeriod() {
-        return debtLimitPeriod;
+    public void fetchGeneralPaymentRequest(){
+        PaymentRequest paymentRequest = new PaymentRequest(account_ID);
+        this.paymentRequests = new ArrayList<>(paymentRequest.retrieveAllPaymentRequest());
     }
+
+    public List<PaymentRequest> getPaymentRequests() {
+        return paymentRequests;
+    }
+
+    public void setSettleUp(String accountName, long accountNumber, Blob qrCode){
+        user_paymentMethod = new SettleUp(account_ID,accountName,accountNumber,qrCode);
+        user_paymentMethod.updateSettleUpInfo();
+    }
+
+    public SettleUp getUser_paymentMethod() {
+        return user_paymentMethod.fetchSettleUp(account_ID);
+    }
+
 }
