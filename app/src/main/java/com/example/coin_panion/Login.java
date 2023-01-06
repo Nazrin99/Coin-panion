@@ -10,8 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.coin_panion.classes.utility.Line;
-import static com.example.coin_panion.utility.Validifier.isEmail;
-import static com.example.coin_panion.utility.Validifier.isPhoneNumber;
+import static com.example.coin_panion.classes.utility.Validifier.isEmail;
+import static com.example.coin_panion.classes.utility.Validifier.isPhoneNumber;
 
 //import org.apache.commons.codec.digest.DigestUtils;
 

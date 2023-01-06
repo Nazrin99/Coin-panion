@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'androidx.navigation.safeargs'
 }
 
 android {
@@ -8,6 +9,7 @@ android {
 
     packagingOptions {
         resources.excludes.add("META-INF/*")
+        pickFirst 'META-INF/LICENSE.txt'
     }
 
     defaultConfig {
@@ -47,12 +49,17 @@ dependencies {
 
     // MySQL Connector
     implementation 'mysql:mysql-connector-java:5.1.49'
-    implementation 'com.sun.mail:javax.mail:1.6.2'
+
+
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'commons-codec:commons-codec:1.15'
+
+    // Email
+    implementation 'com.sun.mail:android-mail:1.5.6'
+    implementation 'com.sun.mail:android-activation:1.5.6'
 
     //Card View
     implementation "androidx.cardview:cardview:1.0.0"

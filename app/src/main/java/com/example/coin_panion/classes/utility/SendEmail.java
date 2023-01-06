@@ -1,12 +1,5 @@
 package com.example.coin_panion.classes.utility;
 
-
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-
-import androidx.annotation.Nullable;
-
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -14,30 +7,11 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class SendEmail extends Service{
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        sendEmail(intent.getExtras().getString("recepient"));
-        stopSelf();
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    private static void sendEmail(String to){
+public class SendEmail{
+    public static void sendEmail(String to, String otp){
 
         // Sender's email ID needs to be mentioned
         String from = "coin.panion12@gmail.com";
@@ -79,10 +53,11 @@ public class SendEmail extends Service{
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
             // Set Subject: header field
-            message.setSubject("This is the Subject Line!");
+            message.setSubject("Coin-panion Email Verification");
 
             // Now set the actual message
-            message.setText("This is actual message");
+            message.setText("Your verification code for Coin-panion is "+ otp + "" +
+                    "\n\nThe code is only valid for 1 minute");
 
             System.out.println("sending...");
             // Send message

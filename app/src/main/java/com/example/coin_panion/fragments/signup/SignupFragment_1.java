@@ -18,14 +18,14 @@ import android.widget.EditText;
 
 import com.example.coin_panion.R;
 import com.example.coin_panion.classes.utility.Line;
-import com.example.coin_panion.utility.Validifier;
+import com.example.coin_panion.classes.utility.Validifier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Signup_Fragment_1 extends Fragment {
+public class SignupFragment_1 extends Fragment {
     private SignupViewModel signupViewModel;
     Button nextButton;
     EditText phoneNumberField;
@@ -90,6 +90,7 @@ public class Signup_Fragment_1 extends Fragment {
 
         nextButton.setOnClickListener(v ->{
             // Phone number is in order, proceed to enter next info
+            signupViewModel.put("phone_number", phoneNumberField.getText().toString());
             Navigation.findNavController(v).navigate(R.id.action_signup_Fragment_1_to_signup_Fragment_2);
         });
     }
@@ -109,7 +110,7 @@ public class Signup_Fragment_1 extends Fragment {
                     requireActivity().runOnUiThread(() -> {phoneNumberField.setError("Phone number already exists!");});
                 }
                 else{
-                    // Phone number does not exist, verify phone number using OTP
+                    // Phone number does not exist, proceed to next fragment
                     phoneNumberExists[0] = false;
                 }
             } catch (SQLException e) {

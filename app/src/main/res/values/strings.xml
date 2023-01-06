@@ -51,6 +51,11 @@
         - checking
     -->
 
+    <!-- Fragment 3 -->
+    <string name="email_sent_to">A verification code has been sent to your email at <b>%1$s</b>.\nPLease enter the verification code below to verify your email</string>
+    <string name="enter_code">Enter your code here</string>
+    <string name="wrong_code">Wrong verification code</string>
+
     <!-- GENERAL -->
     <string name="next">Next</string>
     <string name="checking">Checking</string>
@@ -63,5 +68,7 @@
     <string name="password_hint">Your password must contain at least eight characters, one number and one special character</string>
     <string name="email_format_error">Please enter a valid email address</string>
     <string name="email_exists">Email already exists, please choose another email</string>
+    <string name="good_to_go">You\'re good to go!</string>
+    <string name="enter_details">Please enter your details and set your password below</string>
 
 </resources>

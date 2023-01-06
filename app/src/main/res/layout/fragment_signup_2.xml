@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.signup.Signup_Fragment_2">
+    tools:context=".fragments.signup.SignupFragment_2">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             android:id="@+id/textView25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="150dp"
             android:layout_marginEnd="127dp"
             android:text="@string/last_name"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,8 +38,8 @@
             android:id="@+id/textView24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="55dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="150dp"
             android:text="@string/first_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -98,7 +98,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="55dp"
             android:ems="10"
-            android:inputType="textPassword|numberPassword|textWebPassword"
+            android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView27"
@@ -111,6 +111,20 @@
             android:layout_marginBottom="125dp"
             android:text="@string/next"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView28"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="55dp"
+            android:layout_marginEnd="55dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/fugaz_one"
+            android:text="@string/enter_details"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
