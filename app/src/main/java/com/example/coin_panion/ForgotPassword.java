@@ -145,7 +145,7 @@ public class ForgotPassword extends AppCompatActivity {
         Toast.makeText(ForgotPassword.this,"Password changed successfully",Toast.LENGTH_LONG).show();
         this.finish();
         // Navigate to login page after password has been reset successfully
-        Intent toLoginInt = new Intent(ForgotPassword.this, Login.class);
+        Intent toLoginInt = new Intent(ForgotPassword.this, LoginActivity.class);
         startActivity(toLoginInt);
     }
 

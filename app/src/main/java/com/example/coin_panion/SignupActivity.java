@@ -5,16 +5,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
-import com.example.coin_panion.fragments.signup.SignupViewModel;
+import com.example.coin_panion.classes.utility.BaseViewModel;
 
 public class SignupActivity extends AppCompatActivity {
-    SignupViewModel signupViewModel;
+    BaseViewModel signupViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        signupViewModel = new ViewModelProvider(this).get(SignupViewModel.class);
+        signupViewModel = new ViewModelProvider(this).get(BaseViewModel.class);
     }
 
 }
