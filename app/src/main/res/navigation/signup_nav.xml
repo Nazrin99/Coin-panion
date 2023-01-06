@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/signup_Fragment_1"
-        android:name="com.example.coin_panion.fragments.signup.Signup_Fragment_1"
+        android:name="com.example.coin_panion.fragments.signup.SignupFragment_1"
         android:label="fragment_signup_1"
         tools:layout="@layout/fragment_signup_1" >
         <action
@@ -16,7 +16,25 @@
     </fragment>
     <fragment
         android:id="@+id/signup_Fragment_2"
-        android:name="com.example.coin_panion.fragments.signup.Signup_Fragment_2"
+        android:name="com.example.coin_panion.fragments.signup.SignupFragment_2"
         android:label="fragment_signup_2"
-        tools:layout="@layout/fragment_signup_2" />
+        tools:layout="@layout/fragment_signup_2" >
+        <action
+            android:id="@+id/action_signup_Fragment_2_to_signupFragment_3"
+            app:destination="@id/signupFragment_3" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment_3"
+        android:name="com.example.coin_panion.fragments.signup.SignupFragment_3"
+        android:label="fragment_signup_3"
+        tools:layout="@layout/fragment_signup_3" >
+        <action
+            android:id="@+id/action_signupFragment_3_to_signupFragment_4"
+            app:destination="@id/signupFragment_4" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment_4"
+        android:name="com.example.coin_panion.fragments.signup.SignupFragment_4"
+        android:label="fragment_signup_4"
+        tools:layout="@layout/fragment_signup_4" />
 </navigation>

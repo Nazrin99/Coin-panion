@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,19 +18,22 @@ import android.widget.EditText;
 
 import com.example.coin_panion.R;
 import com.example.coin_panion.classes.utility.Line;
-import com.example.coin_panion.utility.Validifier;
+import com.example.coin_panion.classes.utility.SendSMS;
+import com.example.coin_panion.classes.utility.Validifier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Signup_Fragment_2#newInstance} factory method to
+ * Use the {@link SignupFragment_2#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Signup_Fragment_2 extends Fragment {
+public class SignupFragment_2 extends Fragment {
     private SignupViewModel signupViewModel;
     EditText firstName, lastName, email, password;
     Button nextButton;
@@ -44,7 +48,7 @@ public class Signup_Fragment_2 extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Signup_Fragment_2() {
+    public SignupFragment_2() {
         // Required empty public constructor
     }
 
@@ -57,8 +61,8 @@ public class Signup_Fragment_2 extends Fragment {
      * @return A new instance of fragment Signup_Fragment_2.
      */
     // TODO: Rename and change types and number of parameters
-    public static Signup_Fragment_2 newInstance(String param1, String param2) {
-        Signup_Fragment_2 fragment = new Signup_Fragment_2();
+    public static SignupFragment_2 newInstance(String param1, String param2) {
+        SignupFragment_2 fragment = new SignupFragment_2();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -118,28 +122,8 @@ public class Signup_Fragment_2 extends Fragment {
                     });
                 }
                 else{
-                    requireActivity().runOnUiThread(() -> {email.setError(getResources().getString(R.string.checking));});
+                    requireActivity().runOnUiThread(() -> {email.setError(null);});
                     // Email format is correct, search email availability in database
-                    dataThread = new Thread(() -> {
-                        try{
-                            Connection connection = Line.getConnection();
-                            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM account WHERE email = ?");
-                            preparedStatement.setString(1, email.getText().toString());
-                            ResultSet resultSet = preparedStatement.executeQuery();
-
-                            if(resultSet.next()){
-                                // Email exists, throw error on EditText
-                                email.setError(getResources().getString(R.string.email_exists));
-                            }
-                            else{
-                                // Email does not exists, can proceed as normal
-                                email.setError("");
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    dataThread.start();
                 }
             }
         });
@@ -156,10 +140,17 @@ public class Signup_Fragment_2 extends Fragment {
                     if(!Validifier.validPassword(password.getText().toString())){
                         // Password format is invalid
                         password.setError(getResources().getString(R.string.password_hint));
+                        nextButton.setEnabled(false);
                     }
                     else{
-                        password.setError("");
+                        password.setError(null);
                         // Password format is valid
+                        if(Validifier.isEmail(email.getText().toString())){
+                            nextButton.setEnabled(true);
+                        }
+                        else{
+                            nextButton.setEnabled(false);
+                        }
                     }
                 });
             }
@@ -171,9 +162,53 @@ public class Signup_Fragment_2 extends Fragment {
         });
 
         nextButton.setOnClickListener(v -> {
-            // All data is correct and in order, proceed to set profile picture
+            // Verify email existence
+            email.setError(getResources().getString(R.string.checking));
+            AtomicBoolean emailExist = new AtomicBoolean(false);
+            dataThread = new Thread(() -> {
+                try{
+                    Connection connection = Objects.requireNonNull(Line.getConnection());
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM account WHERE email = ?");
+                    preparedStatement.setString(1, email.getText().toString());
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if(resultSet.next()){
+                        // Email exists, throw error on EditText
+                        emailExist.set(true);
+                    }
+                    else{
+                        // Email does not exists, can proceed as normal
+                        emailExist.set(false);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+            dataThread.start();
+            while(dataThread.isAlive()){
+
+            }
+            if(emailExist.get()){
+                email.setError(getResources().getString(R.string.email_exists));
+                nextButton.setEnabled(false);
+            }
+            else{
+                email.setError(getResources().getString(R.string.good_to_go));
+                if(Validifier.validPassword(password.getText().toString())){
+                    // All data is correct and in order, store into model
+                    signupViewModel.put("first_name", firstName.getText().toString());
+                    signupViewModel.put("last_name", lastName.getText().toString());
+                    signupViewModel.put("email", email.getText().toString());
+                    signupViewModel.put("password", password.getText().toString());
+                    signupViewModel.put("otp", SendSMS.generateOTP());
+
+                    // Proceed to email verification
+                    Navigation.findNavController(v).navigate(R.id.action_signup_Fragment_2_to_signupFragment_3);
+                }
+                else{
+                    nextButton.setEnabled(false);
+                }
+            }
         });
-
-
     }
 }
