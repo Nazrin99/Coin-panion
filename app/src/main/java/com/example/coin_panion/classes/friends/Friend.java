@@ -1,7 +1,7 @@
 package com.example.coin_panion.classes.friends;
 
-import SettleUpDebt;
 import com.example.coin_panion.classes.general.Notification;
+import com.example.coin_panion.classes.settleUp.SettleUpDebt;
 
 import java.sql.Blob;
 
