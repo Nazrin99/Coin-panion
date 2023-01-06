@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.Validifier;
 
@@ -26,10 +27,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SignupFragment_1 extends Fragment {
-    private SignupViewModel signupViewModel;
+    private BaseViewModel signupViewModel;
     Button nextButton;
     EditText phoneNumberField;
     Thread dataThread;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class SignupFragment_1 extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        signupViewModel = new ViewModelProvider(requireActivity()).get(SignupViewModel.class);
+        signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
 
         nextButton = view.findViewById(R.id.signupNextButton);
         phoneNumberField = view.findViewById(R.id.signupPhoneNumberEditText);

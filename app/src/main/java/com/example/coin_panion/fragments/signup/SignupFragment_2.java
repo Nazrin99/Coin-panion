@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.SendSMS;
 import com.example.coin_panion.classes.utility.Validifier;
@@ -34,7 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * create an instance of this fragment.
  */
 public class SignupFragment_2 extends Fragment {
-    private SignupViewModel signupViewModel;
+    private BaseViewModel signupViewModel;
     EditText firstName, lastName, email, password;
     Button nextButton;
     Thread dataThread;
@@ -91,7 +92,7 @@ public class SignupFragment_2 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        signupViewModel = new ViewModelProvider(requireActivity()).get(SignupViewModel.class);
+        signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
 
         firstName = view.findViewById(R.id.signupFirstNameEditText);
         lastName = view.findViewById(R.id.signupLastNameEditText);

@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.SendEmail;
 
 /**
@@ -30,7 +31,7 @@ import com.example.coin_panion.classes.utility.SendEmail;
 public class SignupFragment_3 extends Fragment {
     TextView emailSentTextView;
     EditText emailCodeEditText;
-    SignupViewModel signupViewModel;
+    BaseViewModel signupViewModel;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,7 +88,7 @@ public class SignupFragment_3 extends Fragment {
         emailCodeEditText = view.findViewById(R.id.emailCodeEditText);
         emailSentTextView = view.findViewById(R.id.emailSentTextView);
 
-        signupViewModel = new ViewModelProvider(requireActivity()).get(SignupViewModel.class);
+        signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
 
         //Send verification email
         String otp = signupViewModel.get("otp").toString();
