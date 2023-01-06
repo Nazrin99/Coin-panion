@@ -64,6 +64,11 @@ public class PaymentRequest{
         return null;
     }
 
+    /*TODO get the debtorName based on the debtorID*/
+    public String debtorName(){
+
+        return null;
+    }
 
 
 }

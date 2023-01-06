@@ -16,35 +16,37 @@ import java.util.List;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder>{
     private List<Notification> notificationList;
 
+    public NotificationAdapter(List<Notification> notificationList) {
+        this.notificationList = notificationList;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView TVNotiTitle;
+        TextView TVNotiDesc;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            TVNotiTitle = itemView.findViewById(R.id.TVTitle);
+            TVNotiDesc = itemView.findViewById(R.id.TVNotiDesc);
+        }
+    }
 
     @Override
     public NotificationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // TODO create layout for each notification
-//        View v = LayoutInflater.from(parent.getContext())
-//                .inflate(R.layout., parent, false);
-//        return new ViewHolder(v);
-
-        return null;
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.notification_item, parent, false);
+        return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position) {
         Notification notification = notificationList.get(position);
-//        holder.TVNotiDesc.setText(notification.getDesc());
+        holder.TVNotiTitle.setText(notification.getNoti_title());
+        holder.TVNotiDesc.setText(notification.getNoti_desc());
     }
 
     @Override
     public int getItemCount() {
         return notificationList.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView TVNotiDesc;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-//            TVNotiDesc = itemView.findViewById(R.id.); TODO create recycler view
-        }
     }
 }
 

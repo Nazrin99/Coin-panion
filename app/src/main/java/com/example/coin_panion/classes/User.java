@@ -36,7 +36,6 @@ public class User{
     private List<PaymentRequest> paymentRequests;
 
 
-
     /*Create new User object*/
     public User(String mobile_number, String first_name, String last_name, String username, String password) {
         this.mobile_number = mobile_number;
@@ -59,6 +58,7 @@ public class User{
     public void updateUser(){
 
     }
+
     /*TODO Delete user info database based on this.variable*/
     public void deleteUser(){
 
@@ -112,6 +112,5 @@ public class User{
     public SettleUp getUser_paymentMethod() {
         return user_paymentMethod.fetchSettleUp(account_ID);
     }
-
 
 }

@@ -14,6 +14,8 @@ public class Notification {
    private Timestamp epoch_noti;
    private Integer sender_id;
    private Integer receiver_id;
+   private String noti_title;
+   private String noti_desc;
 
    /*TODO how notification is fetched when no desc is included*/
     public Notification(Integer transaction_id, Integer noti_id, Integer group_id, Timestamp epoch_noti, Integer sender_id, Integer receiver_id) {
@@ -44,6 +46,13 @@ public class Notification {
         this.sender_id = sender_id;
     }
 
+    /*Dummy*/
+
+    public Notification(String noti_title, String noti_desc) {
+        this.noti_title = noti_title;
+        this.noti_desc = noti_desc;
+    }
+
     /*TODO Insert notification created into database based on this.variable*/
     public void addNotification(){
 
@@ -65,6 +74,11 @@ public class Notification {
         return null;
     }
 
+    public String getNoti_title() {
+        return noti_title;
+    }
 
-
+    public String getNoti_desc() {
+        return noti_desc;
+    }
 }
