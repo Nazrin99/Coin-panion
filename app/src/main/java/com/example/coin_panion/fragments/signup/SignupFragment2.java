@@ -31,10 +31,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SignupFragment_2#newInstance} factory method to
+ * Use the {@link SignupFragment2#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignupFragment_2 extends Fragment {
+public class SignupFragment2 extends Fragment {
     private BaseViewModel signupViewModel;
     EditText firstName, lastName, email, password;
     Button nextButton;
@@ -49,7 +49,7 @@ public class SignupFragment_2 extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SignupFragment_2() {
+    public SignupFragment2() {
         // Required empty public constructor
     }
 
@@ -62,8 +62,8 @@ public class SignupFragment_2 extends Fragment {
      * @return A new instance of fragment Signup_Fragment_2.
      */
     // TODO: Rename and change types and number of parameters
-    public static SignupFragment_2 newInstance(String param1, String param2) {
-        SignupFragment_2 fragment = new SignupFragment_2();
+    public static SignupFragment2 newInstance(String param1, String param2) {
+        SignupFragment2 fragment = new SignupFragment2();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
