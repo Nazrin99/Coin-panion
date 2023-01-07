@@ -26,7 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SignupFragment_1 extends Fragment {
+public class SignupFragment1 extends Fragment {
     private BaseViewModel signupViewModel;
     Button nextButton;
     EditText phoneNumberField;

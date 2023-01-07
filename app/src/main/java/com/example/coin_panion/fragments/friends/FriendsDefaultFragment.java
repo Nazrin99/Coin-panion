@@ -1,4 +1,4 @@
-package com.example.coin_panion;
+package com.example.coin_panion.fragments.friends;
 
 import android.os.Bundle;
 
@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.coin_panion.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FriendsSettleUpFragment#newInstance} factory method to
+ * Use the {@link FriendsDefaultFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FriendsSettleUpFragment extends Fragment {
+public class FriendsDefaultFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +26,7 @@ public class FriendsSettleUpFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public FriendsSettleUpFragment() {
+    public FriendsDefaultFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +36,11 @@ public class FriendsSettleUpFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FriendsSettleUpFragment.
+     * @return A new instance of fragment FriendsDefaultFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FriendsSettleUpFragment newInstance(String param1, String param2) {
-        FriendsSettleUpFragment fragment = new FriendsSettleUpFragment();
+    public static FriendsDefaultFragment newInstance(String param1, String param2) {
+        FriendsDefaultFragment fragment = new FriendsDefaultFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +61,8 @@ public class FriendsSettleUpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends_settle_up, container, false);
+        return inflater.inflate(R.layout.fragment_friends_default, container, false);
     }
+
+
 }

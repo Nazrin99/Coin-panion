@@ -1,6 +1,6 @@
 package com.example.coin_panion.classes.friends;
 
-import com.example.coin_panion.classes.general.Notification;
+import com.example.coin_panion.classes.Notification;
 import com.example.coin_panion.classes.settleUp.SettleUpDebt;
 
 import java.sql.Blob;
@@ -60,17 +60,6 @@ public class Friend{
     // get the friend debt
     // if this friend is in debtlist this function  will create notify if not toast message
     // "friendName is not in debt with you"
-    public String remind(){
-
-        int getDebtOwned = getDebtOwned();
-
-        if(getDebtOwned == 0){
-            return getFriendName() + " is not in debt with you";
-        }
-        String reminder = getFriendName() + "Don't forget to pay me 'RM 30'";
-        Notification notification = new Notification(3,userID,friendID,reminder);
-        return notification.getNotificationDesc();
-    }
 
     // TODO add settle up function
     public void settleUpFriendDebt(Blob paymentEvidence){

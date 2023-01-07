@@ -1,6 +1,7 @@
 package com.example.coin_panion.classes.general;
 
 import android.app.Notification;
+import com.example.coin_panion.classes.PaymentRequest;
 
 import com.example.coin_panion.classes.User;
 

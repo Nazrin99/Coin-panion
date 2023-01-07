@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coin_panion.classes.NotificationAdapter;
 import com.example.coin_panion.classes.PaymentRequest;
-import com.twilio.twiml.voice.Pay;
 
 import java.util.List;
 
