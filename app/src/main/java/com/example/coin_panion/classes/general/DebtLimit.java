@@ -1,53 +1,46 @@
 package com.example.coin_panion.classes.general;
 
-import com.example.coin_panion.classes.User;
+import java.time.LocalDate;
 
 public class DebtLimit {
 
-    // TODO generate ID for user's debtLimit
-    private final Integer DebtLimitID;
-    private final Integer DebtLimitUser;
-    private String CurrencyType;
-    private String DebtLimitTime;
-    private Integer DebtLimitAmount;
+    private Integer accountID;
+    private Integer debt_limit_amount;
+    private LocalDate debtLimitEndDate;
 
-    public DebtLimit(Integer debtLimitID, String currencyType, String debtLimitTime, Integer debtLimitAmount) {
-        this.DebtLimitID = debtLimitID;
-        this.DebtLimitUser = 0;
-        this.DebtLimitTime = debtLimitTime;
-        this.CurrencyType = currencyType;
-        this.DebtLimitAmount = debtLimitAmount;
+    /*Set debt limit object for a user*/
+    public DebtLimit(Integer accountID, Integer debt_limit_amount, String timeInterval) {
+        this.accountID = accountID;
+        this.debt_limit_amount = debt_limit_amount;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (timeInterval.equalsIgnoreCase("today")) {
+                this.debtLimitEndDate = LocalDate.now();
+            } else if (timeInterval.equalsIgnoreCase("week")) {
+                this.debtLimitEndDate = LocalDate.now().plusWeeks(1);
+            } else if (timeInterval.equalsIgnoreCase("month")) {
+                this.debtLimitEndDate = LocalDate.now().plusMonths(1);
+            }
+        }
     }
 
-    public void setCurrencyType(String currencyType) {
-        CurrencyType = currencyType;
+    /*Fetch debt limit info of user based on accountID*/
+    public static DebtLimit fetchDebtLimit(Integer accountID){
+        return null; // new DebtLimit(accountID, debt_limit_amount, debtLimitEndDate);
     }
 
-    public void setDebtLimitTime(String debtLimitTime) {
-        DebtLimitTime = debtLimitTime;
+    /*Check if the debt limit already is due*/
+    public boolean isDebtLimitOverDue(){
+        LocalDate today;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            today = LocalDate.now();
+             return today.isAfter(debtLimitEndDate);
+        }
+        return false;
     }
 
-    public void setDebtLimitAmount(Integer debtLimitAmount) {
-        DebtLimitAmount = debtLimitAmount;
+    /*Update DebtLimit based on accountID*/
+    public void updateUserDebtLimit(){
+        //TODO update user debt limit to database based on this.variable
     }
 
-    public Integer getDebtLimitID() {
-        return DebtLimitID;
-    }
-
-    public Integer getDebtLimitUser() {
-        return DebtLimitUser;
-    }
-
-    public String getCurrencyType() {
-        return CurrencyType;
-    }
-
-    public String getDebtLimitTime() {
-        return DebtLimitTime;
-    }
-
-    public Integer getDebtLimitAmount() {
-        return DebtLimitAmount;
-    }
 }

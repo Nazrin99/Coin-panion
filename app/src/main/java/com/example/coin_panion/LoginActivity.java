@@ -2,7 +2,6 @@ package com.example.coin_panion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.coin_panion.classes.User;
 import com.example.coin_panion.classes.utility.Line;
 import static com.example.coin_panion.classes.utility.Validifier.isEmail;
 import static com.example.coin_panion.classes.utility.Validifier.isPhoneNumber;
@@ -19,7 +17,6 @@ import static com.example.coin_panion.classes.utility.Validifier.isPhoneNumber;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

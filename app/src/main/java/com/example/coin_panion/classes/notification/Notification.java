@@ -1,6 +1,4 @@
-package com.example.coin_panion.classes;
-
-import android.media.MediaParser;
+package com.example.coin_panion.classes.notification;
 
 import java.sql.Timestamp;
 import java.util.List;
