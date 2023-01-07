@@ -116,6 +116,8 @@ public class Transaction {
         return  listAtomicReference.get();
     };
 
+    // TODO settle up debt
+
 
     // Getters and Setters
     public Integer getTransactionID() {

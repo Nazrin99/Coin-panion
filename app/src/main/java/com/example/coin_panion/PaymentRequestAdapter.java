@@ -8,16 +8,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.coin_panion.classes.NotificationAdapter;
-import com.example.coin_panion.classes.PaymentRequest;
+import com.example.coin_panion.classes.transaction.PaymentApproval;
 
 import java.util.List;
 
 public class PaymentRequestAdapter extends RecyclerView.Adapter<PaymentRequestAdapter.ViewHolder> {
-    private List<PaymentRequest> paymentRequestList;
+    private List<PaymentApproval> paymentApprovalList;
 
-    public PaymentRequestAdapter(List<PaymentRequest> paymentRequestList) {
-        this.paymentRequestList = paymentRequestList;
+    public PaymentRequestAdapter(List<PaymentApproval> paymentApprovalList) {
+        this.paymentApprovalList = paymentApprovalList;
     }
 
     @NonNull
@@ -30,13 +29,13 @@ public class PaymentRequestAdapter extends RecyclerView.Adapter<PaymentRequestAd
 
     @Override
     public void onBindViewHolder(@NonNull PaymentRequestAdapter.ViewHolder holder, int position) {
-        PaymentRequest paymentRequest = paymentRequestList.get(position);
-        holder.TVUser_name.setText(paymentRequest.debtorName());
+        PaymentApproval paymentApproval = paymentApprovalList.get(position);
+        holder.TVUser_name.setText(paymentApproval.debtorName());
     }
 
     @Override
     public int getItemCount() {
-        return paymentRequestList.size();
+        return paymentApprovalList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

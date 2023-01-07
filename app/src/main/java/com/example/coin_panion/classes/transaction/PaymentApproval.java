@@ -1,12 +1,10 @@
-package com.example.coin_panion.classes;
+package com.example.coin_panion.classes.transaction;
 
 import java.sql.Blob;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-public class PaymentRequest{
+public class PaymentApproval {
 
    private Integer debtorID;
    private Integer creditorID;
@@ -15,7 +13,7 @@ public class PaymentRequest{
    private Timestamp epoch_approv_issue;
 
    /*Create new payment request object*/
-    public PaymentRequest(Integer debtorID, Integer creditorID, Blob paymentEvidence) {
+    public PaymentApproval(Integer debtorID, Integer creditorID, Blob paymentEvidence) {
         this.debtorID = debtorID;
         this.creditorID = creditorID;
         this.paymentEvidence = paymentEvidence;
@@ -24,7 +22,7 @@ public class PaymentRequest{
     }
 
     /*Create payment request object from existing data in database*/
-    public PaymentRequest(Integer debtorID, Integer creditorID, Blob paymentEvidence, Boolean paymentStatus) {
+    public PaymentApproval(Integer debtorID, Integer creditorID, Blob paymentEvidence, Boolean paymentStatus) {
         this.debtorID = debtorID;
         this.creditorID = creditorID;
         this.paymentEvidence = paymentEvidence;
@@ -33,14 +31,14 @@ public class PaymentRequest{
     }
 
     /*Creditor Retrieve payment request from debtor*/
-    public PaymentRequest(Integer creditorID) {
+    public PaymentApproval(Integer creditorID) {
         this.creditorID = creditorID;
         /*TODO take the all payment request data based on creditorID where payment status is still false and epoch_approv_issue is null*/
 
     }
 
     /*Creditor retrieve specified payment request from debtor*/
-    public PaymentRequest(Integer debtorID, Integer creditorID) {
+    public PaymentApproval(Integer debtorID, Integer creditorID) {
         this.debtorID = debtorID;
         this.creditorID = creditorID;
         /*TODO take the specified payment request data based on creditorID */
@@ -59,7 +57,7 @@ public class PaymentRequest{
     }
 
     /*Get all User's payment approval request*/
-    public List<PaymentRequest> retrieveAllPaymentRequest(){
+    public List<PaymentApproval> retrieveAllPaymentRequest(){
 
         return null;
     }

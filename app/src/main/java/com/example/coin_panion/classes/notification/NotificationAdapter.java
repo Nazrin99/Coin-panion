@@ -1,4 +1,4 @@
-package com.example.coin_panion.classes;
+package com.example.coin_panion.classes.notification;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coin_panion.R;
