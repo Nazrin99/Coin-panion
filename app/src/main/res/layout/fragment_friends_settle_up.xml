@@ -27,7 +27,8 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:background="@color/white"
-                android:src="@drawable/backward_arrow_img" />
+                android:src="@drawable/backward_arrow_img"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button4"

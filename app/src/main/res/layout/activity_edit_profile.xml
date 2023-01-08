@@ -209,8 +209,8 @@
 <!--            TODO check balik how to make it to the left-->
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="52dp"
+                android:layout_height="63dp"
                 android:layout_gravity="center_vertical|left"
                 app:srcCompat="@mipmap/ic_add_foreground" />
 

@@ -47,12 +47,12 @@
 
         <ListView
             android:id="@+id/list_notification"
-            android:layout_width="367dp"
-            android:layout_height="298dp"
+            android:layout_width="362dp"
+            android:layout_height="353dp"
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="@+id/TVGroupDesc"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.013"
             app:layout_constraintStart_toStartOf="@+id/TVGroupDesc"
             app:layout_constraintTop_toBottomOf="@+id/TVGroupDesc" />
 

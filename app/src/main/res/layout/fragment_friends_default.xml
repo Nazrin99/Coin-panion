@@ -1,27 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/TVDefaultFriendTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome to CoinPanion"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        />
-
-    <TextView
         android:id="@+id/TVDefaultFriendBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="You have not added any friends yet"
         android:textColor="@color/black"
         android:textSize="15sp"
-        />
+        app:layout_constraintEnd_toEndOf="@+id/TVDefaultFriendTop"
+        app:layout_constraintStart_toStartOf="@+id/TVDefaultFriendTop"
+        app:layout_constraintTop_toBottomOf="@+id/TVDefaultFriendTop" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/TVDefaultFriendTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="320dp"
+        android:text="Welcome to CoinPanion"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_marginTop="360dp"
+        android:background="@color/Biru_Muda"
+        android:text="ADD FRIENDS"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/TVDefaultFriendBottom"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@+id/TVDefaultFriendBottom"
+        app:layout_constraintTop_toBottomOf="@+id/TVDefaultFriendBottom" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

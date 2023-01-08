@@ -175,10 +175,10 @@
             android:textColor="#80000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textView7"
-            app:layout_constraintHorizontal_bias="0.083"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/textView7"
-            app:layout_constraintVertical_bias="0.531" />
+            app:layout_constraintVertical_bias="0.317" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

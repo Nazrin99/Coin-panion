@@ -120,8 +120,6 @@ public class LoginActivity extends AppCompatActivity {
                             Integer debtLimitDate = resultSet.getInt(9);
                             Integer debtLimitAmount = resultSet.getInt(10);
                             Integer pictureID = resultSet.getInt(11);
-
-
                         }
                         else{
                             // Password is wrong
