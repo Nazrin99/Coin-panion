@@ -35,7 +35,7 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
     public void UIElement(){
-        ETUserInfo = findViewById(R.id.ETUserLogin);
+        ETUserInfo = findViewById(R.id.ETUserInfo);
         PTFirstDigit = findViewById(R.id.PTFirstDigit);
         PTSecondDigit = findViewById(R.id.PTSecondDigit);
         PTThirdDigit = findViewById(R.id.PTThirdDigit);

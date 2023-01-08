@@ -1,10 +1,16 @@
 plugins {
     id 'com.android.application'
+    id 'androidx.navigation.safeargs'
 }
 
 android {
     namespace 'com.example.coin_panion'
     compileSdk 33
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+        pickFirst 'META-INF/LICENSE.txt'
+    }
 
     defaultConfig {
         applicationId "com.example.coin_panion"
@@ -36,13 +42,24 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Fragment development
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
+
+    // MySQL Connector
+    implementation 'mysql:mysql-connector-java:5.1.49'
+
+
+
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'commons-codec:commons-codec:1.15'
-    implementation 'com.sun.mail:javax.mail:1.6.2'
+
+    // Email
+    implementation 'com.sun.mail:android-mail:1.5.6'
+    implementation 'com.sun.mail:android-activation:1.5.6'
 
     //Card View
     implementation "androidx.cardview:cardview:1.0.0"
