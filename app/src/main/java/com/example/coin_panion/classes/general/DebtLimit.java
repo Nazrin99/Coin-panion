@@ -1,53 +1,71 @@
 package com.example.coin_panion.classes.general;
 
-import com.example.coin_panion.classes.User;
+import com.example.coin_panion.classes.utility.Line;
+import com.example.coin_panion.classes.utility.ThreadStatic;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.Instant;
+
+@SuppressWarnings("ALL")
 public class DebtLimit {
+    private Double debtLimitAmount;
+    private Long debtLimitEndDate;
 
-    // TODO generate ID for user's debtLimit
-    private final Integer DebtLimitID;
-    private final Integer DebtLimitUser;
-    private String CurrencyType;
-    private String DebtLimitTime;
-    private Integer DebtLimitAmount;
-
-    public DebtLimit(Integer debtLimitID, String currencyType, String debtLimitTime, Integer debtLimitAmount) {
-        this.DebtLimitID = debtLimitID;
-        this.DebtLimitUser = 0;
-        this.DebtLimitTime = debtLimitTime;
-        this.CurrencyType = currencyType;
-        this.DebtLimitAmount = debtLimitAmount;
+    public DebtLimit(Double debtLimitAmount, Long debtLimitEndDate) {
+        this.debtLimitAmount = debtLimitAmount;
+        this.debtLimitEndDate = debtLimitEndDate;
     }
 
-    public void setCurrencyType(String currencyType) {
-        CurrencyType = currencyType;
+    // TODO CHECK IF DEBT IS OVERDUE
+    public boolean isDebtLimitOverDue(){
+        Long now = Instant.now().toEpochMilli();
+        return this.debtLimitEndDate < now;
     }
 
-    public void setDebtLimitTime(String debtLimitTime) {
-        DebtLimitTime = debtLimitTime;
+    public void deleteUserDebtLimit(Integer accountID, Thread dataThread){
+        updateUserDebtLimit(accountID, null, null, dataThread);
     }
 
-    public void setDebtLimitAmount(Integer debtLimitAmount) {
-        DebtLimitAmount = debtLimitAmount;
+    /**
+     * Updates the debt limit of the user in the database the calling object
+     * @param accountID
+     * @param debtLimitAmount
+     * @param debtLimitEndDate
+     * @param dataThread
+     */
+    public void updateUserDebtLimit(Integer accountID, Double debtLimitAmount, Long debtLimitEndDate, Thread dataThread){
+        this.debtLimitAmount = debtLimitAmount;
+        dataThread = new Thread(() -> {
+            try(Connection connection = Line.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE account SET debt_limit_amount = ?, debt_limit_end_date = ? WHERE account_id = ?")){
+                preparedStatement.setDouble(1, debtLimitAmount);
+                preparedStatement.setLong(2, debtLimitEndDate);
+                preparedStatement.setInt(3, accountID);
+                preparedStatement.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            this.setDebtLimitAmount(debtLimitAmount);
+            this.setDebtLimitEndDate(debtLimitEndDate);
+        });
+        ThreadStatic.run(dataThread);
     }
 
-    public Integer getDebtLimitID() {
-        return DebtLimitID;
+    public Double getDebtLimitAmount() {
+        return debtLimitAmount;
     }
 
-    public Integer getDebtLimitUser() {
-        return DebtLimitUser;
+    public void setDebtLimitAmount(Double debtLimitAmount) {
+        this.debtLimitAmount = debtLimitAmount;
     }
 
-    public String getCurrencyType() {
-        return CurrencyType;
+    public Long getDebtLimitEndDate() {
+        return debtLimitEndDate;
     }
 
-    public String getDebtLimitTime() {
-        return DebtLimitTime;
-    }
-
-    public Integer getDebtLimitAmount() {
-        return DebtLimitAmount;
+    public void setDebtLimitEndDate(Long debtLimitEndDate) {
+        this.debtLimitEndDate = debtLimitEndDate;
     }
 }

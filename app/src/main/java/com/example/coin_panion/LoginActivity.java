@@ -22,7 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     EditText ETUserInfo;
     EditText ETUserPass;
@@ -85,7 +85,7 @@ public class Login extends AppCompatActivity {
             gettingColumn = "phone_number";
         }
         else{
-            gettingColumn = "username";
+            return;
         }
 
         String userLogin = ETUserInfo.getText().toString();
@@ -108,7 +108,20 @@ public class Login extends AppCompatActivity {
                     if(resultSet.next()){
                         // Credentials exists, verifying password
                         if(new DigestUtils("SHA3-256").digestAsHex(resultSet.getString("password")).equalsIgnoreCase(userPass)){
-                            // TODO Password valid, go to Home Activity
+                            // TODO Password valid, construct User and pass to Home Activity
+                            Integer accountID = resultSet.getInt(1);
+                            Integer phoneNumber = resultSet.getInt(2);
+                            String email = resultSet.getString(3);
+                            String firstName = resultSet.getString(4);
+                            String lastName = resultSet.getString(5);
+                            String username = resultSet.getString(6);
+                            String password = resultSet.getString(7);
+                            String bio = resultSet.getString(8);
+                            Integer debtLimitDate = resultSet.getInt(9);
+                            Integer debtLimitAmount = resultSet.getInt(10);
+                            Integer pictureID = resultSet.getInt(11);
+
+
                         }
                         else{
                             // Password is wrong

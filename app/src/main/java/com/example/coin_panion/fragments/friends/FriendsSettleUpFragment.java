@@ -1,4 +1,4 @@
-package com.example.coin_panion.fragments.signup;
+package com.example.coin_panion.fragments.friends;
 
 import android.os.Bundle;
 
@@ -12,10 +12,10 @@ import com.example.coin_panion.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SignupFragment_4#newInstance} factory method to
+ * Use the {@link FriendsSettleUpFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignupFragment_4 extends Fragment {
+public class FriendsSettleUpFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class SignupFragment_4 extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SignupFragment_4() {
+    public FriendsSettleUpFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class SignupFragment_4 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SignupFragment_4.
+     * @return A new instance of fragment FriendsSettleUpFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SignupFragment_4 newInstance(String param1, String param2) {
-        SignupFragment_4 fragment = new SignupFragment_4();
+    public static FriendsSettleUpFragment newInstance(String param1, String param2) {
+        FriendsSettleUpFragment fragment = new FriendsSettleUpFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class SignupFragment_4 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_signup_4, container, false);
+        return inflater.inflate(R.layout.fragment_friends_settle_up, container, false);
     }
 }

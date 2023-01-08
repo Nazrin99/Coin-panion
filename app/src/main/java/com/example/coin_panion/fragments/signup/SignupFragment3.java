@@ -1,6 +1,5 @@
 package com.example.coin_panion.fragments.signup;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,22 +14,22 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.SendEmail;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SignupFragment_3#newInstance} factory method to
+ * Use the {@link SignupFragment3#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignupFragment_3 extends Fragment {
+public class SignupFragment3 extends Fragment {
     TextView emailSentTextView;
     EditText emailCodeEditText;
-    SignupViewModel signupViewModel;
+    BaseViewModel signupViewModel;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,7 +40,7 @@ public class SignupFragment_3 extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SignupFragment_3() {
+    public SignupFragment3() {
         // Required empty public constructor
     }
 
@@ -54,8 +53,8 @@ public class SignupFragment_3 extends Fragment {
      * @return A new instance of fragment SignupFragment_1.
      */
     // TODO: Rename and change types and number of parameters
-    public static SignupFragment_3 newInstance(String param1, String param2) {
-        SignupFragment_3 fragment = new SignupFragment_3();
+    public static SignupFragment3 newInstance(String param1, String param2) {
+        SignupFragment3 fragment = new SignupFragment3();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -87,7 +86,7 @@ public class SignupFragment_3 extends Fragment {
         emailCodeEditText = view.findViewById(R.id.emailCodeEditText);
         emailSentTextView = view.findViewById(R.id.emailSentTextView);
 
-        signupViewModel = new ViewModelProvider(requireActivity()).get(SignupViewModel.class);
+        signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
 
         //Send verification email
         String otp = signupViewModel.get("otp").toString();
@@ -114,7 +113,7 @@ public class SignupFragment_3 extends Fragment {
             public void afterTextChanged(Editable s) {
                 if(emailCodeEditText.getText().toString().equals(otp)){
                     // Verification code is correct, move to next fragment
-                    NavDirections toProfileFragment = SignupFragment_3Directions.actionSignupFragment3ToSignupFragment4();
+                    NavDirections toProfileFragment = SignupFragment3Directions.actionSignupFragment3ToSignupFragment4();
                     Navigation.findNavController(view).navigate(toProfileFragment);
                 }
                 else{

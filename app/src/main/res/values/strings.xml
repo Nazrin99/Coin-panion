@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Coin-panion</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_your_friends"><u>Add your friends</u></string>
     <string name="phonenumber_email">PhoneNumber / Email</string>
     <string name="forgot_password"><u>Forgot password? </u></string>
@@ -72,4 +71,8 @@
     <string name="email_exists">Email already exists, please choose another email</string>
     <string name="good_to_go">You\'re good to go!</string>
     <string name="enter_details">Please enter your details and set your password below</string>
+
+    <!--TODO include this into login page lead to privacy policy page only if checkbox is check then the login button can be activated-->
+    <string name="terms_text">By using our app, you acknowledge and agree to our terms and privacy policy.
+        Our terms and privacy policy can be found at [C:\Users\Huawei\StudioProjects\Coin-panionUICreation\app\src\main\assets\terms_and_privacy.html].</string>
 </resources>

@@ -1,88 +1,279 @@
 package com.example.coin_panion.classes.group;
 
-import com.example.coin_panion.classes.friends.Friend;
 
-import java.sql.Blob;
+import android.content.ContentResolver;
+import android.net.Uri;
+
+import com.example.coin_panion.classes.utility.Line;
+import com.example.coin_panion.classes.utility.Picture;
+import com.example.coin_panion.classes.utility.ThreadStatic;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
+@SuppressWarnings("ALL")
 public class Group {
+    private int groupID;
+    private String groupName;
+    private String groupDesc;
+    private String groupType;
+    private List<Integer> groupMembers = new ArrayList<>();
+    private List<Integer> groupTransactions = new ArrayList<>();
+    private Picture groupPic = Picture.getPictureFromDB(new Random().nextInt(5) + 1000);
+    private Picture groupCover = Picture.getPictureFromDB(1005);
 
-    private Integer groupID;
-    private Integer creatorID;
-    private String groupDescription;
-    private Map<Integer,Friend> groupMembers;
-    private Blob groupProfilePic;
-    private Blob groupBackgroundPic;
-    private ArrayList<String> groupActivity;
+    // Default constructor
+    public Group(){
 
-    public Group(Integer groupID, Integer creatorID, String groupDescription, Blob groupProfilePic, Blob groupBackgroundPic) {
+    }
+
+    // Constructor to create new group (group pic not selected, use default)
+    public Group(String groupName, String groupDesc, String groupType, List<Integer> groupMembers, List<Integer> groupTransactions) {
+        this.groupName = groupName;
+        this.groupDesc = groupDesc;
+        this.groupType = groupType;
+        this.groupMembers = groupMembers;
+        this.groupTransactions = groupTransactions;
+    }
+
+    // Constructor to create new group (group pic selected)
+    public Group(String groupName, String groupDesc, String groupType, List<Integer> groupMembers, List<Integer> groupTransactions, Uri groupPicUri, ContentResolver contentResolver, Thread dataThread) {
+        this.groupName = groupName;
+        this.groupDesc = groupDesc;
+        this.groupType = groupType;
+        this.groupMembers = groupMembers;
+        this.groupTransactions = groupTransactions;
+        this.groupPic = Picture.insertPicIntoDB(groupPicUri, contentResolver, dataThread);
+    }
+
+    // Constructor to load existing group (complete parameters)
+    public Group(Integer groupID, String groupName, String groupDesc, String groupType, List<Integer> groupMembers, List<Integer> groupTransactions, Integer groupPicID, Integer groupCoverID) {
         this.groupID = groupID;
-        this.creatorID = creatorID;
-        this.groupDescription = groupDescription;
-        this.groupMembers = new HashMap<>();
-        this.groupProfilePic = groupProfilePic;
-        this.groupBackgroundPic = groupBackgroundPic;
-        this.groupActivity = new ArrayList<>();
+        this.groupName = groupName;
+        this.groupDesc = groupDesc;
+        this.groupType = groupType;
+        this.groupMembers = groupMembers;
+        this.groupTransactions = groupTransactions;
+        this.groupPic = Picture.getPictureFromDB(groupPicID);
+        this.groupCover = Picture.getPictureFromDB(groupCoverID);
     }
 
-    // Group description will have | to seperate each section
-    public void addGroupExpanses(String groupDescription, String amountToPay, String creditor, String splitMethod){
-        this.groupDescription = groupDescription + "|" + amountToPay + "|" + creditor + "|" + splitMethod;
-    }
+    /**
+     * Insert new group into database, returns the original Group object with extra parameter groupID value
+     * @param newGroup
+     * @param dataThread
+     * @return Group object with updated groupID info
+     */
+    public static Group insertNewGroupToDB(Group newGroup, Thread dataThread){
+        AtomicReference<Group> groupAtomicReference = new AtomicReference<>();
+        dataThread = new Thread(() -> {
+            try{
+                Connection connection = Line.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO group(group_name, group_type, group_desc, group_pic, group_cover) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1, newGroup.getGroupName());
+                preparedStatement.setString(2, newGroup.getGroupType());
+                preparedStatement.setString(3, newGroup.getGroupDesc());
+                preparedStatement.setInt(4, newGroup.getGroupCover().getPictureID());
+                preparedStatement.setInt(5, newGroup.getGroupPic().getPictureID());
+                preparedStatement.execute();
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                resultSet.next();
 
-    // Get the latest group description
-    public String getGroupDescription(){
-        String[] groupDesc = this.groupDescription.split("|");
-        return groupDesc[0] + "\n" + groupDesc[1] + "\n" + groupDesc[2] + "\n" + groupDesc[3] + "\n";
-    }
+                newGroup.setGroupID(resultSet.getInt(1));
+                groupAtomicReference.set(newGroup);
 
-    //add friend into group
-    public Boolean addGroupMembers(Integer friendID, Friend friendToAdd){
-        if(!groupMembers.containsKey(friendID)){
-            groupMembers.put(friendID,friendToAdd);
-            return true;
-        }else{
-            System.out.println("Friend already added into group");
+                // Insert members userID and groupID into bridge entity account_group
+                PreparedStatement preparedStatement1 = connection.prepareStatement("INSERT INTO account_group VALUES(?, ?)");
+                preparedStatement1.setInt(2, newGroup.getGroupID());
+                for(int i = 0; i < newGroup.getGroupMembers().size(); i++){
+                    preparedStatement1.setInt(1, newGroup.getGroupMembers().get(i));
+                    preparedStatement1.execute();
+                }
+                preparedStatement.close();
+                preparedStatement1.close();
+                resultSet.close();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        });
+        dataThread.start();
+        while(dataThread.isAlive()){
+
         }
-        return false;
+        return groupAtomicReference.get();
     }
 
-    //remove friend from group
-    public Boolean removeGroupMembers(Integer friendID){
-        if(groupMembers.containsKey(friendID)){
-            groupMembers.remove(friendID);
-            return true;
-        }
-        return false;
+    /**
+     * Retrieve the group data from database based on the groupID, returns a Group object
+     * @param groupID
+     * @param dataThread
+     * @return Group object from database based on groupID
+     */
+    public static Group retrieveGroupFromDB(Integer groupID, Thread dataThread){
+        AtomicReference<Group> retrievedGroup = new AtomicReference<>();
+        dataThread = new Thread(() ->{
+            // Getting the list of members in the group
+            Connection connection = Line.getConnection();
+            List<Integer> userIDs = new ArrayList<>();
+            List<Integer> transactionIDs = new ArrayList<>();
+            try{
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT account_id FROM account_group WHERE group_id = ?");
+                preparedStatement.setInt(1, groupID);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while(resultSet.next()){
+                    userIDs.add(resultSet.getInt(1));
+                }
+                // Already obtained members, next get the list of activities
+                PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT transaction_id FROM transaction WHERE group_id = ?");
+                preparedStatement1.setInt(1, groupID);
+                ResultSet resultSet1 = preparedStatement1.executeQuery();
+
+                while (resultSet1.next()){
+                    transactionIDs.add(resultSet.getInt(1));
+                }
+                // Already get transactions, next get the group info
+                PreparedStatement preparedStatement2 = connection.prepareStatement("SELECT * FROM group WHERE group_id = ?");
+                preparedStatement2.setInt(1, groupID);
+                ResultSet resultSet2 = preparedStatement2.executeQuery();
+
+                // Construct group object, use complete constructor parameters
+                while(resultSet2.next()){
+                    retrievedGroup.set(new Group(groupID, resultSet2.getString(2), resultSet2.getString(4), resultSet2.getString(3), userIDs, transactionIDs, resultSet2.getInt(5), resultSet2.getInt(6)));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
+        return retrievedGroup.get();
     }
 
-    public Map<Integer, Friend> getGroupMembers() {
+    /**
+     * Retrieve list of groups joined by a account
+     * @param userID
+     * @param dataThread
+     * @return
+     */
+    public static List<Integer> retrieveGroupIDsFromDB(Integer accountID, Thread dataThread){
+        AtomicReference<List<Integer>> listAtomicReference = new AtomicReference<>();
+        dataThread = new Thread(() -> {
+            List<Integer> groupIDs = new ArrayList<>();
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM account_group WHERE account_id = ?")){
+                preparedStatement.setInt(1, accountID);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while(resultSet.next()){
+                    groupIDs.add(resultSet.getInt(2));
+                }
+                listAtomicReference.set(groupIDs);
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
+        return listAtomicReference.get();
+    }
+
+    /**
+     * Deletes the group from the database
+     * @param groupID
+     * @param dataThread
+     */
+    public static void deleteGroupFromDB(Integer groupID, Thread dataThread){
+        dataThread = new Thread(() -> {
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM ? WHERE group_id = ?");
+            ){
+                preparedStatement.setInt(2, groupID);
+                preparedStatement.setString(1, "group");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "account_group");
+                preparedStatement.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
+    }
+
+    // Getters & Setters
+    public int getGroupID() {
+        return groupID;
+    }
+
+    public void setGroupID(int groupID) {
+        this.groupID = groupID;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getGroupDesc() {
+        return groupDesc;
+    }
+
+    public void setGroupDesc(String groupDesc) {
+        this.groupDesc = groupDesc;
+    }
+
+    public String getGroupType() {
+        return groupType;
+    }
+
+    public void setGroupType(String groupType) {
+        this.groupType = groupType;
+    }
+
+    public List<Integer> getGroupMembers() {
         return groupMembers;
     }
 
-    public Blob getGroupBackgroundPic() {
-        return groupBackgroundPic;
+    public void setGroupMembers(List<Integer> groupMembers) {
+        this.groupMembers = groupMembers;
     }
 
-    public void setGroupBackgroundPic(Blob groupBackgroundPic) {
-        this.groupBackgroundPic = groupBackgroundPic;
+    public List<Integer> getGroupTransactions() {
+        return groupTransactions;
     }
 
-    public Blob getGroupProfilePic() {
-        return groupProfilePic;
+    public void setGroupTransactions(List<Integer> groupTransactions) {
+        this.groupTransactions = groupTransactions;
     }
 
-    public void setGroupProfilePic(Blob groupProfilePic) {
-        this.groupProfilePic = groupProfilePic;
+    public Picture getGroupPic() {
+        return groupPic;
     }
 
-    public ArrayList<String> getGroupActivity() {
-        return groupActivity;
+    public void setGroupPic(Picture groupPic) {
+        this.groupPic = groupPic;
     }
 
-    public void setGroupActivity(ArrayList<String> groupActivity) {
-        this.groupActivity = groupActivity;
+    public Picture getGroupCover() {
+        return groupCover;
     }
+
+    public void setGroupCover(Picture groupCover) {
+        this.groupCover = groupCover;
+    }
+
+
 }

@@ -1,72 +1,57 @@
 package com.example.coin_panion.classes.general;
 
-import com.example.coin_panion.classes.friends.Friend;
-import com.example.coin_panion.classes.SettleUp;
-import com.example.coin_panion.classes.User;
+import com.example.coin_panion.classes.notification.Notification;
+import com.example.coin_panion.classes.general.SettleUpAccount;
+import com.example.coin_panion.classes.transaction.Transaction;
+import com.example.coin_panion.classes.utility.Line;
+import com.example.coin_panion.classes.utility.ThreadStatic;
 
-import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class Account {
+public class Account{
+    private String accountID;
+    private User user;
+    private String password;
+    private String bio;
+    private List<User> friends;
+    private DebtLimit debtLimit;
+    private List<Transaction> debts;
+    private SettleUpAccount settleUpAccount;
+    private List<Notification> notifications;
 
-    private static User profile;
-    private DebtLimit userDebtLimit;
-    private List<PaymentRequest> paymentRequestsList;
-    private List<Friend> friendsList;
-    private List<SettleUp> paymentMethod;
-
-    public Account() {
-        paymentRequestsList = new ArrayList<>();
-        friendsList = new ArrayList<>();
-        paymentMethod = new ArrayList<>();
-        // Initialize the profile and userDebtLimit objects
-//        profile = new User();
-//        userDebtLimit = new DebtLimit();
-    }
-
-    public void updateUserProfile(Blob profilePic, String userName, String phoneNumber, String email){
-        if(profilePic != null) {
-            profile.updateProfilePic(profilePic);
-        }
-        if(userName != null){
-            profile.updateUserName(userName);
-        }
-        if(phoneNumber != null){
-            profile.updatePhoneNumber(phoneNumber);
-        }
-        if(email != null){
-            profile.updateEmail(email);
-        }
-    }
-
-    // TODO get the userID and DebtLimitID to perform update of debt limit
-    public void setUserDebtLimit(String currencyType, String debtLimitTime, Integer debtLimitAmount){
-        if(currencyType != null){
-            userDebtLimit.setCurrencyType(currencyType);
-        }
-        if(debtLimitTime != null){
-            userDebtLimit.setDebtLimitTime(debtLimitTime);
-        }
-        if(debtLimitAmount != null){
-            userDebtLimit.setDebtLimitAmount(debtLimitAmount);
-        }
-    }
-
-    public List<Friend> getFriendsList() {
-        return friendsList;
-    }
-
-    public void setFriendsList(List<Friend> friendsList) {
-        this.friendsList = friendsList;
-    }
-
-    public List<SettleUp> getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(List<SettleUp> paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    /**
+     * Retrieve a list of UNSETTLED DEBTS from the transaction table
+     * @param accountID
+     * @param dataThread
+     * @return
+     */
+    public static List<Transaction> retrieveDebts(Integer accountID, Thread dataThread){
+        AtomicReference<List<Transaction>> listAtomicReference = new AtomicReference<>();
+        dataThread = new Thread(() -> {
+            List<Transaction> debts = new ArrayList<>();
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM transaction WHERE epoch_settled IS NULL AND debtor = ?");
+            ){
+                preparedStatement.setInt(1, accountID);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while(resultSet.next()){
+                    debts.add(new Transaction(resultSet.getInt(1), resultSet.getString(9), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4),resultSet.getString(5), resultSet.getDouble(6), resultSet.getLong(7), resultSet.getLong(8)));
+                }
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            listAtomicReference.set(debts);
+        });
+        ThreadStatic.run(dataThread);
+        return listAtomicReference.get();
     }
 
 }
