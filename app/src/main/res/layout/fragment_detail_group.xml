@@ -90,7 +90,7 @@
             app:layout_constraintTop_toTopOf="@+id/spinner0"
             app:layout_constraintVertical_bias="0.0" />
 
-<!--        TODO make spinner here-->
+        <!--        TODO make spinner here-->
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spinner1"
             android:layout_width="60dp"
@@ -143,7 +143,7 @@
             app:layout_constraintTop_toTopOf="@+id/editTextPersonName2"
             app:layout_constraintVertical_bias="0.0" />
 
-<!--        TODO make spinner here-->
+        <!--        TODO make spinner here-->
         <Spinner
             android:id="@+id/spinner0"
             android:layout_width="60dp"
@@ -175,10 +175,10 @@
             android:textColor="#80000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textView7"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.083"
             app:layout_constraintStart_toStartOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/textView7"
-            app:layout_constraintVertical_bias="0.364" />
+            app:layout_constraintVertical_bias="0.531" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

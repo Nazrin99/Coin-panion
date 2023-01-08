@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="60dp">
 
         <!--            TODO make it clickable-->
         <ImageView
@@ -26,8 +26,8 @@
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="104dp"
+            android:layout_height="60dp"
             android:background="@android:color/transparent"
             android:text="SAVE"
             android:textColor="@color/black"
