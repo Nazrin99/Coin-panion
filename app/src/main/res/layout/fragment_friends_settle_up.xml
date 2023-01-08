@@ -35,6 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="230dp"
                 android:layout_weight="1"
+                android:textColor="@color/blue_pekat"
+                android:textStyle="bold"
                 android:background="@color/white"
                 android:text="Save"
                 android:textSize="15dp" />
