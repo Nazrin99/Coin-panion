@@ -18,14 +18,17 @@
     <string name="coin_panion_login">Coin - Panion Login</string>
     <string name="name_debt">Name</string>
     <string name="amount_debt">RMx.xx</string>
-    <string-array name="sample_currency">
-        <item>MYR</item>
-        <item>SDG</item>
-        <item>USD</item>
-    </string-array>
     <string-array name="sample_duration">
         <item>Day</item>
         <item>Month</item>
         <item>Year</item>
     </string-array>
+    <string name="expenses_amount">0.00</string>
+    <string name="paid_by">Name</string>
+    <string-array name="split_expenses">
+        <item>Equally</item>
+        <item>Custom</item>
+    </string-array>
+    <string name="member_name">Name</string>
+    <string name="group_description">Group description</string>
 </resources>

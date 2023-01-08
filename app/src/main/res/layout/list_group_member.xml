@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:block_view="http://schemas.android.com/tools">
 
+<!--    TODO cardview for fragment group info-->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,21 +31,13 @@
 
                 <TextView
                     android:id="@+id/textView13"
-                    android:layout_width="200dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text="Name"
+                    android:text="@string/member_name"
                     android:textSize="15dp"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/black"/>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/button4"
-                    android:layout_width="100dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_vertical|end"
-                    android:background="@drawable/round_btn"
-                    android:text="UNBLOCK" />
 
             </TableRow>
 

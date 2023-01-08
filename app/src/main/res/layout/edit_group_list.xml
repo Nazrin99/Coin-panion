@@ -30,7 +30,7 @@
 
                 <TextView
                     android:id="@+id/textView13"
-                    android:layout_width="200dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:text="Name"
                     android:textSize="15dp"
@@ -40,11 +40,11 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button4"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="48dp"
                     android:layout_gravity="center_vertical|end"
-                    android:background="@drawable/round_btn"
-                    android:text="UNBLOCK" />
+                    android:background="@drawable/red_round_btn"
+                    android:text="REMOVE" />
 
             </TableRow>
 

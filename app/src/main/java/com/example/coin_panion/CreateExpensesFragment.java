@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DetailGroupFragment#newInstance} factory method to
+ * Use the {@link CreateExpensesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DetailGroupFragment extends Fragment {
+public class CreateExpensesFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +24,7 @@ public class DetailGroupFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public DetailGroupFragment() {
+    public CreateExpensesFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +34,11 @@ public class DetailGroupFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DetailGroupFragment.
+     * @return A new instance of fragment CreateExpensesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DetailGroupFragment newInstance(String param1, String param2) {
-        DetailGroupFragment fragment = new DetailGroupFragment();
+    public static CreateExpensesFragment newInstance(String param1, String param2) {
+        CreateExpensesFragment fragment = new CreateExpensesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +59,6 @@ public class DetailGroupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail_group, container, false);
+        return inflater.inflate(R.layout.fragment_create_expenses, container, false);
     }
 }

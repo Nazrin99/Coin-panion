@@ -14,7 +14,7 @@
             android:layout_width="250dp"
             android:layout_height="51dp"
             android:layout_gravity="top"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
             app:cardBackgroundColor="#adcaff"
             app:cardCornerRadius="40dp">
@@ -47,17 +47,17 @@
                 android:layout_marginVertical="6dp"
                 android:text="RM34.50"
                 android:textColor="@color/black" />
+
         </androidx.cardview.widget.CardView>
 
+<!--        TODO make it clickable-->
         <ImageView
-            android:layout_alignParentEnd="true"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/cardview_light_background"
-            android:src="@mipmap/ic_addexpenses_foreground" />
-
+            android:id="@+id/imageView10"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginVertical="15dp"
+            android:layout_marginHorizontal="300dp"
+            android:src="@drawable/ic_add_group_foreground" />
     </RelativeLayout>
 
 
