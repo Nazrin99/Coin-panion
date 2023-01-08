@@ -28,6 +28,10 @@ public class Transaction {
     private Long epochIssued;
     private Long epochSettled;
 
+    // Default constructor
+    public Transaction(){
+
+    }
 
     // Constructor for creation of new transaction database object. Serves no purpose other than facilitating database insertion
     public Transaction(Integer groupID, Integer creditorID, Integer debtorID, String transactionName, Double amount, TransactionType transactionType) {
@@ -52,6 +56,7 @@ public class Transaction {
         this.epochIssued = epochIssued;
         this.epochSettled = epochSettled;
     }
+
 
     // Method to store the new transaction in database and returns a complete Transaction object
     public Transaction storeNewTransaction(Transaction transaction, Thread dataThread){
@@ -115,8 +120,6 @@ public class Transaction {
         ThreadStatic.run(dataThread);
         return  listAtomicReference.get();
     };
-
-    // TODO settle up debt
 
 
     // Getters and Setters
