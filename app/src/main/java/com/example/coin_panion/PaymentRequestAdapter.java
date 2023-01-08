@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.coin_panion.classes.transaction.PaymentApproval;
+import com.example.coin_panion.classes.settleUp.PaymentApproval;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class PaymentRequestAdapter extends RecyclerView.Adapter<PaymentRequestAd
     @Override
     public void onBindViewHolder(@NonNull PaymentRequestAdapter.ViewHolder holder, int position) {
         PaymentApproval paymentApproval = paymentApprovalList.get(position);
-        holder.TVUser_name.setText(paymentApproval.debtorName());
+//        holder.TVUser_name.setText(paymentApproval.debtorName());
     }
 
     @Override

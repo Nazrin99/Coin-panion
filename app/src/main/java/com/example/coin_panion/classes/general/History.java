@@ -1,7 +1,7 @@
 package com.example.coin_panion.classes.general;
 
 import android.app.Notification;
-import com.example.coin_panion.classes.transaction.PaymentApproval;
+import com.example.coin_panion.classes.settleUp.PaymentApproval;
 
 import java.util.ArrayList;
 
