@@ -8,7 +8,7 @@
         android:id="@+id/friendsAddFragment"
         android:name="com.example.coin_panion.fragments.friends.FriendsAddFragment"
         android:label="fragment_add_friends"
-        tools:layout="@layout/fragment_add_friends" />
+        tools:layout="@layout/fragment_friends_from_contact" />
     <fragment
         android:id="@+id/friendsFragment"
         android:name="com.example.coin_panion.fragments.friends.FriendsFragment"

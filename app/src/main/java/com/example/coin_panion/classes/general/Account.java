@@ -13,5 +13,17 @@ public class Account {
     private SettleUpAccount settleUpAccount;
     private List<Notification> notifications;
 
+
     // Method to update user info
+
+    // Method to add new friend
+
+    // method to fetch all friend
+
+    // Method to set the user debt limit just update the current null value
+
+    // Method to add settle up account as payment
+
+    // Fetch all user notifications
+
 }
