@@ -1,46 +1,71 @@
 package com.example.coin_panion.classes.general;
 
-import java.time.LocalDate;
+import com.example.coin_panion.classes.utility.Line;
+import com.example.coin_panion.classes.utility.ThreadStatic;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.Instant;
+
+@SuppressWarnings("ALL")
 public class DebtLimit {
+    private Double debtLimitAmount;
+    private Long debtLimitEndDate;
 
-    private Integer accountID;
-    private Integer debt_limit_amount;
-    private LocalDate debtLimitEndDate;
-
-    /*Set debt limit object for a user*/
-    public DebtLimit(Integer accountID, Integer debt_limit_amount, String timeInterval) {
-        this.accountID = accountID;
-        this.debt_limit_amount = debt_limit_amount;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            if (timeInterval.equalsIgnoreCase("today")) {
-                this.debtLimitEndDate = LocalDate.now();
-            } else if (timeInterval.equalsIgnoreCase("week")) {
-                this.debtLimitEndDate = LocalDate.now().plusWeeks(1);
-            } else if (timeInterval.equalsIgnoreCase("month")) {
-                this.debtLimitEndDate = LocalDate.now().plusMonths(1);
-            }
-        }
+    public DebtLimit(Double debtLimitAmount, Long debtLimitEndDate) {
+        this.debtLimitAmount = debtLimitAmount;
+        this.debtLimitEndDate = debtLimitEndDate;
     }
 
-    /*Fetch debt limit info of user based on accountID*/
-    public static DebtLimit fetchDebtLimit(Integer accountID){
-        return null; // new DebtLimit(accountID, debt_limit_amount, debtLimitEndDate);
-    }
-
-    /*Check if the debt limit already is due*/
+    // TODO CHECK IF DEBT IS OVERDUE
     public boolean isDebtLimitOverDue(){
-        LocalDate today;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            today = LocalDate.now();
-             return today.isAfter(debtLimitEndDate);
-        }
-        return false;
+        Long now = Instant.now().toEpochMilli();
+        return this.debtLimitEndDate < now;
     }
 
-    /*Update DebtLimit based on accountID*/
-    public void updateUserDebtLimit(){
-        //TODO update user debt limit to database based on this.variable
+    public void deleteUserDebtLimit(Integer accountID, Thread dataThread){
+        updateUserDebtLimit(accountID, null, null, dataThread);
     }
 
+    /**
+     * Updates the debt limit of the user in the database the calling object
+     * @param accountID
+     * @param debtLimitAmount
+     * @param debtLimitEndDate
+     * @param dataThread
+     */
+    public void updateUserDebtLimit(Integer accountID, Double debtLimitAmount, Long debtLimitEndDate, Thread dataThread){
+        this.debtLimitAmount = debtLimitAmount;
+        dataThread = new Thread(() -> {
+            try(Connection connection = Line.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE account SET debt_limit_amount = ?, debt_limit_end_date = ? WHERE account_id = ?")){
+                preparedStatement.setDouble(1, debtLimitAmount);
+                preparedStatement.setLong(2, debtLimitEndDate);
+                preparedStatement.setInt(3, accountID);
+                preparedStatement.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            this.setDebtLimitAmount(debtLimitAmount);
+            this.setDebtLimitEndDate(debtLimitEndDate);
+        });
+        ThreadStatic.run(dataThread);
+    }
+
+    public Double getDebtLimitAmount() {
+        return debtLimitAmount;
+    }
+
+    public void setDebtLimitAmount(Double debtLimitAmount) {
+        this.debtLimitAmount = debtLimitAmount;
+    }
+
+    public Long getDebtLimitEndDate() {
+        return debtLimitEndDate;
+    }
+
+    public void setDebtLimitEndDate(Long debtLimitEndDate) {
+        this.debtLimitEndDate = debtLimitEndDate;
+    }
 }
