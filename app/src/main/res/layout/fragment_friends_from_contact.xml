@@ -21,41 +21,44 @@
             android:src="@drawable/backward_arrow_img" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/BtnSpace"
+            android:id="@+id/BtnDummy"
             android:layout_width="253dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:background="@color/white"
-            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button"
+            android:id="@+id/BtnSaveFriendContact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:textColor="@color/black"
-            android:text="Button" />
+            android:text="Save"
+            android:textSize="20sp"
+            />
 
     </LinearLayout>
 
     <SearchView
-        android:id="@+id/search_view"
+        android:id="@+id/SVFriendContact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        android:paddingEnd="20dp"
         android:background="@drawable/rounded_edge_button"
+        android:paddingEnd="20dp"
+        android:contentDescription="Phone Number / Contact Number"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RVContactList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/friend_from_contact_item"
-        />
+        android:autofillHints="Phone Number / Contact Number"
+        tools:listitem="@layout/friend_from_contact_item" />
 
 </LinearLayout>
 

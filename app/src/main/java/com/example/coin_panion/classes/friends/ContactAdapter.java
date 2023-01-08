@@ -68,7 +68,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                     /*If the contact selected can be added but diselected*/
                     selectedContacts.remove(contact);
                 }
-
             }
         });
 

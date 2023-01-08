@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.PackageManagerCompat;
@@ -71,9 +72,26 @@ public class FriendsAddFragment extends Fragment {
 
     }
 
+    SearchView SVContactFriend;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = getView();
+        SVContactFriend = view.findViewById(R.id.SVFriendContact);
+        SVContactFriend.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Perform the search and update the UI
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Perform the search and update the UI
+                return false;
+            }
+        });
 
         return inflater.inflate(R.layout.fragment_friends_from_contact, container, false);
     }

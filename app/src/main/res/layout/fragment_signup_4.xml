@@ -1,28 +1,78 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.signup.SignupFragment4">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageButton
+        android:id="@+id/IBBack"
+        android:layout_width="84dp"
+        android:layout_height="82dp"
+        android:layout_gravity="top|left"
+        android:background="@color/white"
+        android:src="@drawable/backward_arrow_img"
+        android:contentDescription="Back to previous"
+        />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20sp"
+        android:layout_marginTop="100sp"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/profilefriends_img"
+            />
+
+        <ImageButton
+            android:id="@+id/BtnUploadProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.6"
+            android:background="@color/white"
+            android:contentDescription="Upload your background profile image"
+            android:src="@drawable/upload_img" />
+    </FrameLayout>
+
+
+    <EditText
+        android:id="@+id/ETCreateUserName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="40sp"
+        android:layout_marginBottom="30sp"
+        android:hint="Username"
+        android:minHeight="48dp" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="128dp"
-            android:text="@string/next"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:id="@+id/ETCreateBio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:layout_marginLeft="40sp"
+        android:layout_marginRight="40sp"
+        android:hint="Bio"
+        android:minHeight="48dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/BtnCreateProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="I want coin-panion"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:background="@drawable/rounded_edge_button"
+        android:layout_marginTop="230sp"
+        android:layout_marginLeft="40sp"
+        android:layout_marginRight="40sp"
+        />
 
 
-</FrameLayout>
+</LinearLayout>

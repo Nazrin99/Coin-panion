@@ -37,9 +37,9 @@
             android:id="@+id/image_view_profile_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@drawable/profile_vector"
             android:layout_gravity="center"
-            
+            android:src="@drawable/profile_vector"
+
             />
 
         <ImageView
