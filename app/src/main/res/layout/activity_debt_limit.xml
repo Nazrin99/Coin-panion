@@ -51,24 +51,24 @@
 
 <!--    NOTE this is spinner-->
 
-    <androidx.appcompat.widget.AppCompatSpinner
+    <TextView
         android:id="@+id/spinner_currency"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:background="@color/blue_omey"
-        android:drawSelectorOnTop="true"
-        android:entries="@array/sample_currency"
         android:gravity="center"
+        android:text="MYR"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.359"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.238"
-        tools:ignore="TouchTargetSizeCheck">
+        app:layout_constraintVertical_bias="0.238">
         <!--        android:prompt="@string/spinn"-->
 
-    </androidx.appcompat.widget.AppCompatSpinner>
+    </TextView>
 
     <EditText
         android:id="@+id/editTextTextPersonName5"

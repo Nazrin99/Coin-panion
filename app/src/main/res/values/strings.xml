@@ -15,11 +15,6 @@
     <string name="phone_number_email">Phone Number / Email</string>
     <string name="name_debt">Name</string>
     <string name="amount_debt">RMx.xx</string>
-    <string-array name="sample_currency">
-        <item>MYR</item>
-        <item>SDG</item>
-        <item>USD</item>
-    </string-array>
     <string-array name="sample_duration">
         <item>Day</item>
         <item>Month</item>
@@ -75,4 +70,12 @@
     <!--TODO include this into login page lead to privacy policy page only if checkbox is check then the login button can be activated-->
     <string name="terms_text">By using our app, you acknowledge and agree to our terms and privacy policy.
         Our terms and privacy policy can be found at [C:\Users\Huawei\StudioProjects\Coin-panionUICreation\app\src\main\assets\terms_and_privacy.html].</string>
+    <string name="expenses_amount">0.00</string>
+    <string name="paid_by">Name</string>
+    <string-array name="split_expenses">
+        <item>Equally</item>
+        <item>Custom</item>
+    </string-array>
+    <string name="member_name">Name</string>
+    <string name="group_description">Group description</string>
 </resources>

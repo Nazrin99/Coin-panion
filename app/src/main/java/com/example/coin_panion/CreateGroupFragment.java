@@ -7,16 +7,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link addFriendsFragment#newInstance} factory method to
+ * Use the {@link CreateGroupFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class addFriendsFragment extends Fragment {
+public class CreateGroupFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +24,7 @@ public class addFriendsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public addFriendsFragment() {
+    public CreateGroupFragment() {
         // Required empty public constructor
     }
 
@@ -37,19 +34,17 @@ public class addFriendsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment addFriendsFragment.
+     * @return A new instance of fragment DetailGroupFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static addFriendsFragment newInstance(String param1, String param2) {
-        addFriendsFragment fragment = new addFriendsFragment();
+    public static CreateGroupFragment newInstance(String param1, String param2) {
+        CreateGroupFragment fragment = new CreateGroupFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
-    ListView listName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,24 +53,12 @@ public class addFriendsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        ArrayList<String> name = new ArrayList<>();
-        name.add("User1");
-        name.add("User1");
-        name.add("User1");
-        name.add("User1");
-        name.add("User1");
-        name.add("User1");
-        name.add("User1");
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends_from_contact, container, false);
-
+        return inflater.inflate(R.layout.fragment_create_group, container, false);
     }
 }

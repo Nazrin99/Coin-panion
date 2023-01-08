@@ -10,7 +10,7 @@ public class DetailGroupActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_friends_from_contact);
+        setContentView(R.layout.fragment_add_group_friends);
 //        textView = findViewById(R.id.activity_name);
 //
 //        textView.setText("New Groups & Expenses");
