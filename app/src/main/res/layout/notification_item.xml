@@ -10,14 +10,21 @@
         android:id="@+id/TVTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Title"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
 
 <!--    Notification desc-->
     <TextView
         android:id="@+id/TVNotiDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp" />
+        android:text="Description"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
 
 </LinearLayout>

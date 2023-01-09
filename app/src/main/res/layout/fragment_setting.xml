@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingFragment"
+    android:orientation="vertical"
+    >
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LLUserProfileSettings"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="10sp"
+            android:src="@mipmap/ic_profile_foreground" />
+
+        <LinearLayout
+            android:layout_width="172dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TVContact_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
+                android:layout_marginLeft="10sp"
+                android:text="User Name"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/TVContact_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8sp"
+                android:layout_marginLeft="10sp"
+                android:text="User Contact Number"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/IVMoveToNextProfile"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:src="@mipmap/ic_next_foreground" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LLUserPrivacySettings"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/IVPrivacySettingsIcon"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="10sp"
+            android:src="@mipmap/ic_privacy_foreground" />
+
+        <TextView
+            android:layout_width="172dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Privacy"
+            android:textColor="@color/black"
+            android:layout_marginRight="50dp"
+            />
+
+        <ImageView
+            android:id="@+id/IVMoveToNextPrivacy"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:src="@mipmap/ic_next_foreground" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LLUserDebtLimitSettings"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/IVDebtLimitIcon"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="10sp"
+            android:src="@mipmap/ic_debtlimit_foreground" />
+
+        <TextView
+            android:layout_width="172dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Debt Limit"
+            android:textColor="@color/black"
+            android:layout_marginRight="50dp"
+            />
+
+        <ImageView
+            android:id="@+id/IVMoveToNextDebtLimit"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:src="@mipmap/ic_next_foreground" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LLUserDebtCheckListSettings"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/IVDebtCheckListIcon"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="10sp"
+            android:src="@mipmap/ic_debtchecklist_foreground" />
+
+        <TextView
+            android:layout_width="172dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Debt Checklist"
+            android:textColor="@color/black"
+            android:layout_marginRight="50dp"
+            />
+
+        <ImageView
+            android:id="@+id/IVMoveToNextDebtCheckList"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:src="@mipmap/ic_next_foreground" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LLUserCreditCheckListSettings"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/IVCreditCheckListIcon"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="10sp"
+            android:src="@mipmap/ic_credit_checkList_foreground" />
+
+        <TextView
+            android:layout_width="172dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Credit Checklist"
+            android:textColor="@color/black"
+            android:layout_marginRight="50dp"
+            />
+
+        <ImageView
+            android:id="@+id/IVMoveToNextCreditCheckList"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:src="@mipmap/ic_next_foreground" />
+
+    </LinearLayout>
+
+</LinearLayout>

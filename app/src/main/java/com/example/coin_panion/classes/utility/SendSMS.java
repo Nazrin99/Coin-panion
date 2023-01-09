@@ -39,4 +39,10 @@ public class SendSMS {
         }
         return String.valueOf(otp);
     }
+
+    // Call to send otp
+//    String phoneNumber = "+1234567890";
+//    String OTP = generateOTP();
+//    sendOTP(phoneNumber, OTP);
+
 }

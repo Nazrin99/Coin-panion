@@ -49,7 +49,7 @@ dependencies {
 
     // MySQL Connector
     implementation 'mysql:mysql-connector-java:5.1.49'
-
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 
     testImplementation 'junit:junit:4.13.2'

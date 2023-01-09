@@ -23,7 +23,7 @@ public class PaymentRequestAdapter extends RecyclerView.Adapter<PaymentRequestAd
     @Override
     public PaymentRequestAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.debt_list_sec, parent, false);
+                .inflate(R.layout.friend_from_acc_item, parent, false);
         return new PaymentRequestAdapter.ViewHolder(v);
     }
 
