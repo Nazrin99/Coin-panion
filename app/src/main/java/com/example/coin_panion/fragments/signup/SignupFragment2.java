@@ -20,6 +20,7 @@ import com.example.coin_panion.R;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.SendSMS;
+import com.example.coin_panion.classes.utility.ThreadStatic;
 import com.example.coin_panion.classes.utility.Validifier;
 
 import java.sql.Connection;
@@ -169,7 +170,7 @@ public class SignupFragment2 extends Fragment {
             dataThread = new Thread(() -> {
                 try{
                     Connection connection = Objects.requireNonNull(Line.getConnection());
-                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM account WHERE email = ?");
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE email = ?");
                     preparedStatement.setString(1, email.getText().toString());
                     ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -185,20 +186,18 @@ public class SignupFragment2 extends Fragment {
                     e.printStackTrace();
                 }
             });
-            dataThread.start();
-            while(dataThread.isAlive()){
-
-            }
+            ThreadStatic.run(dataThread);
             if(emailExist.get()){
-                email.setError(getResources().getString(R.string.email_exists));
-                nextButton.setEnabled(false);
+                requireActivity().runOnUiThread(() -> {
+                    email.setError(getResources().getString(R.string.email_exists));
+                    nextButton.setEnabled(false);
+                });
             }
             else{
-                email.setError(getResources().getString(R.string.good_to_go));
                 if(Validifier.validPassword(password.getText().toString())){
                     // All data is correct and in order, store into model
-                    signupViewModel.put("first_name", firstName.getText().toString());
-                    signupViewModel.put("last_name", lastName.getText().toString());
+                    signupViewModel.put("firstName", firstName.getText().toString());
+                    signupViewModel.put("lastName", lastName.getText().toString());
                     signupViewModel.put("email", email.getText().toString());
                     signupViewModel.put("password", password.getText().toString());
                     signupViewModel.put("otp", SendSMS.generateOTP());

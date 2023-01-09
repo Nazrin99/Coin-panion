@@ -13,7 +13,9 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        runOnUiThread(() -> {
+            setContentView(R.layout.activity_signup);
+        });
         signupViewModel = new ViewModelProvider(this).get(BaseViewModel.class);
     }
 

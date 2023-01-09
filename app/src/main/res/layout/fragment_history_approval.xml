@@ -28,8 +28,7 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:background="@color/white"
-                android:src="@drawable/backward_arrow_img"
-                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+                android:src="@drawable/backward_arrow_img" />
 
             <TextView
                 android:id="@+id/textView31"
@@ -49,8 +48,6 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:text="Save"
-                android:textStyle="bold"
-                android:textColor="@color/blue_pekat"
                 android:textSize="15dp" />
         </LinearLayout>
 

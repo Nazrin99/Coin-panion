@@ -1,36 +1,55 @@
 package com.example.coin_panion.fragments.signup;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.coin_panion.R;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Line;
+import com.example.coin_panion.classes.utility.ThreadStatic;
 import com.example.coin_panion.classes.utility.Validifier;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SignupFragment1 extends Fragment {
     private BaseViewModel signupViewModel;
     Button nextButton;
-    EditText phoneNumberField;
+    TextInputEditText phoneNumberField;
     Thread dataThread;
+    TextInputLayout layout;
 
 
     @Override
@@ -52,8 +71,65 @@ public class SignupFragment1 extends Fragment {
 
         nextButton = view.findViewById(R.id.signupNextButton);
         phoneNumberField = view.findViewById(R.id.signupPhoneNumberEditText);
+        layout = view.findViewById(R.id.phoneNumberLayout);
 
-        nextButton.setEnabled(false);
+        requireActivity().runOnUiThread(() -> {
+            nextButton.setEnabled(false);
+            layout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_blue)));
+            layout.setBoxStrokeColor(getResources().getColor(R.color.dark_blue));
+        });
+
+        Drawable errorIcon = layout.getErrorIconDrawable();
+        ColorStateList red = ColorStateList.valueOf(Color.RED);
+        ColorStateList dark_blue = ColorStateList.valueOf(getResources().getColor(R.color.dark_blue));
+
+        phoneNumberField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Do something after 5s = 5000ms
+                            phoneNumberField.clearFocus();
+                        }
+                    }, 500);
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        phoneNumberField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    boolean exists = phoneNumberExists();
+                    if(exists){
+                        // Phone number already exists in database
+                        requireActivity().runOnUiThread(() -> {
+                            layout.setError(getResources().getString(R.string.signup_phone_already_exists));
+                            layout.setErrorIconDrawable(errorIcon);
+                        });
+                    }
+                    else{
+                        // Phone number is not in database, can proceed to next fragment for verification
+                        requireActivity().runOnUiThread(() -> {
+                            layout.setError(getResources().getString(R.string.signup_phone_is_available));
+                            layout.setErrorIconDrawable(0);
+                            layout.setBoxStrokeErrorColor(dark_blue);
+                            layout.setErrorTextColor(dark_blue);
+                            layout.setHintTextColor(dark_blue);
+                            nextButton.setEnabled(true);
+                        });
+                    }
+                }
+            }
+        });
 
         phoneNumberField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -68,60 +144,62 @@ public class SignupFragment1 extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                requireActivity().runOnUiThread(() -> {
-                    if(!Validifier.isPhoneNumber(phoneNumberField.getText().toString())){
-                        phoneNumberField.setError(getResources().getString(R.string.signup_phone_wrong_format));
+                if(Objects.requireNonNull(phoneNumberField.getText()).toString().isEmpty()){
+                    requireActivity().runOnUiThread(() -> layout.setError(null));
+                }
+                else if(!Validifier.isPhoneNumber(phoneNumberField.getText().toString())){
+                    requireActivity().runOnUiThread(() -> {
+                        layout.setBoxStrokeErrorColor(red);
+                        layout.setErrorTextColor(red);
+                        layout.setHintTextColor(red);
+                        layout.setError(getResources().getString(R.string.signup_phone_wrong_format));
+                        layout.setErrorIconDrawable(errorIcon);
                         nextButton.setEnabled(false);
-                    }
-                    else{
-                        // Phone number is in valid format, check existence in database
-                        phoneNumberField.setError(getResources().getString(R.string.checking));
-                        if(phoneNumberExists()){
-                            // Phone number already exists in database
-                            phoneNumberField.setError(getResources().getString(R.string.signup_phone_already_exists));
-                        }
-                        else{
-                            // Phone number is not in database, can proceed to next fragment for verification
-                            phoneNumberField.setError(getResources().getString(R.string.signup_phone_is_available));
-                            nextButton.setEnabled(true);
-                        }
-                    }
-                });
+                    });
+
+                }
+                else{
+                    // Phone number is in valid format, check existence in database
+                    requireActivity().runOnUiThread(() -> {
+                        layout.setError(getResources().getString(R.string.checking));
+                    });
+                }
             }
         });
 
         nextButton.setOnClickListener(v ->{
             // Phone number is in order, proceed to enter next info
-            signupViewModel.put("phone_number", phoneNumberField.getText().toString());
+            signupViewModel.put("phoneNumber", Objects.requireNonNull(phoneNumberField.getText()).toString());
             Navigation.findNavController(v).navigate(R.id.action_signup_Fragment_1_to_signup_Fragment_2);
         });
     }
 
     public boolean phoneNumberExists(){
         // Assuming phone number format is valid, we check database if phone number already exists
-        final boolean[] phoneNumberExists = {false};
+        AtomicReference<Boolean> phoneNumberExists = new AtomicReference<>();
         dataThread = new Thread(() -> {
             try{
+                String string = phoneNumberField.getText().toString().substring(1);
+                Long phoneNumber = Long.parseLong(string);
+                System.out.println(phoneNumber);
                 Connection connection = Line.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM account WHERE phone_number=?");
-                preparedStatement.setInt(1, Integer.parseInt(phoneNumberField.getText().toString()));
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE phone_number=?");
+                preparedStatement.setLong(1, phoneNumber);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 if(resultSet.next()){
                     // Phone number already exists
-                    requireActivity().runOnUiThread(() -> {phoneNumberField.setError("Phone number already exists!");});
+                    phoneNumberExists.set(true);
                 }
                 else{
                     // Phone number does not exist, proceed to next fragment
-                    phoneNumberExists[0] = false;
+                    phoneNumberExists.set(false);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
-        while(dataThread.isAlive()){
-
-        }
-        return phoneNumberExists[0];
+        ThreadStatic.run(dataThread);
+        return phoneNumberExists.get();
     }
 }

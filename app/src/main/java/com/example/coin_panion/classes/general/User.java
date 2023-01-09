@@ -14,15 +14,15 @@ import java.util.zip.DataFormatException;
 public class User{
     /*User info for account*/
     private Integer userID;
-    private Integer phoneNumber;
+    private Long phoneNumber;
     private String firstName;
     private String lastName;
     private String username;
     private String email;
 
     // Constructor to create User object for existing users from database. REQUIRE phoneNumber
-    public User(Integer phoneNumber, Thread dataThread) {
-        getUserData(phoneNumber, dataThread);
+    public User(Object queryKey, Thread dataThread) {
+        getUserData(queryKey, dataThread);
 
     }
 
@@ -32,7 +32,7 @@ public class User{
     }
 
     // Constructor to create User object during runtime. Application data purpose
-    public User(Integer userID, Integer phoneNumber, String firstName, String lastName, String username, String email) {
+    public User(Integer userID, Long phoneNumber, String firstName, String lastName, String username, String email) {
         this.userID = userID;
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
@@ -42,7 +42,7 @@ public class User{
     }
 
     // Constructor to create new User object for database insertion
-    public User(Integer phoneNumber, String firstName, String lastName, String username, String email) {
+    public User(Long phoneNumber, String firstName, String lastName, String username, String email) {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,7 +57,7 @@ public class User{
             try{
                 Connection connection = Line.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user(phone_number, email, first_name, last_name, username) VALUES(?, ?, ? ,? ,?)", Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setInt(1, user.getPhoneNumber());
+                preparedStatement.setLong(1, user.getPhoneNumber());
                 preparedStatement.setString(2, user.getEmail());
                 preparedStatement.setString(3, user.getFirstName());
                 preparedStatement.setString(4, user.getLastName());
@@ -115,22 +115,25 @@ public class User{
                     preparedStatement.setString(1, "email");
                     preparedStatement.setString(2, (String) queryKey);
                 }
-                else if(queryKey instanceof Integer){
+                else if(queryKey instanceof Long){
                     preparedStatement.setString(1, "phone_number");
-                    preparedStatement.setInt(2, (Integer) queryKey);
+                    preparedStatement.setLong(2, (Long) queryKey);
                 }
                 else{
-                    throw new DataFormatException("Unexpected data type, not an instance of String or Integer");
+                    throw new DataFormatException("Unexpected data type, not an instance of String or Long");
                 }
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                while(resultSet.next()){
+                if(resultSet.next()){
                     this.userID = resultSet.getInt(1);
-                    this.phoneNumber = resultSet.getInt(2);
+                    this.phoneNumber = resultSet.getLong(2);
                     this.email = resultSet.getString(3);
                     this.firstName = resultSet.getString(4);
                     this.lastName = resultSet.getString(5);
                     this.username = resultSet.getString(6);
+                }
+                else{
+                    this.userID = -1;
                 }
                 resultSet.close();
             } catch (SQLException | DataFormatException e) {
@@ -149,11 +152,11 @@ public class User{
         this.userID = userID;
     }
 
-    public Integer getPhoneNumber() {
+    public Long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(Integer phoneNumber) {
+    public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

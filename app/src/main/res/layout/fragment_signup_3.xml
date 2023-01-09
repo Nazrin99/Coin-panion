@@ -14,7 +14,7 @@
             android:id="@+id/imageView25"
             android:layout_width="300dp"
             android:layout_height="268dp"
-            android:layout_marginTop="88dp"
+            android:layout_marginTop="164dp"
             android:src="@mipmap/email_verify_foreground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
@@ -28,22 +28,85 @@
             android:layout_marginTop="30dp"
             android:gravity="center"
             android:text="@string/email_sent_to"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView25" />
 
         <EditText
-            android:id="@+id/emailCodeEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginTop="48dp"
+            android:id="@+id/codeEditText1"
+            android:layout_width="45dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="90dp"
             android:ems="10"
-            android:hint="@string/enter_code"
-            android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailSentTextView" />
+            android:gravity="center"
+            android:inputType="textPersonName"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/codeEditText2"
+            app:layout_constraintStart_toStartOf="@+id/emailSentTextView"
+            app:layout_constraintTop_toBottomOf="@+id/emailSentTextView"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+        <EditText
+            android:id="@+id/codeEditText2"
+            android:layout_width="45dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="90dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toStartOf="@+id/codeEditText3"
+            app:layout_constraintStart_toEndOf="@+id/codeEditText1"
+            app:layout_constraintTop_toBottomOf="@+id/emailSentTextView"
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        <EditText
+            android:id="@+id/codeEditText3"
+            android:layout_width="45dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="90dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toStartOf="@+id/codeEditText4"
+            app:layout_constraintStart_toEndOf="@+id/codeEditText2"
+            app:layout_constraintTop_toBottomOf="@+id/emailSentTextView"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        <EditText
+            android:id="@+id/codeEditText4"
+            android:layout_width="45dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="90dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toStartOf="@+id/codeEditText5"
+            app:layout_constraintStart_toEndOf="@+id/codeEditText3"
+            app:layout_constraintTop_toBottomOf="@+id/emailSentTextView"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        <EditText
+            android:id="@+id/codeEditText5"
+            android:layout_width="45dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="90dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toStartOf="@+id/codeEditText6"
+            app:layout_constraintStart_toEndOf="@+id/codeEditText4"
+            app:layout_constraintTop_toBottomOf="@+id/emailSentTextView"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        <EditText
+            android:id="@+id/codeEditText6"
+            android:layout_width="45dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="90dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="@+id/emailSentTextView"
+            app:layout_constraintStart_toEndOf="@+id/codeEditText5"
+            app:layout_constraintTop_toBottomOf="@+id/emailSentTextView"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
