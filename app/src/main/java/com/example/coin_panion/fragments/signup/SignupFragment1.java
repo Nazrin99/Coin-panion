@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -56,8 +57,38 @@ public class SignupFragment1 extends Fragment {
     long last_text_edit = 0;
     Handler handler = new Handler();
     ColorStateList RED = ColorStateList.valueOf(Color.RED);
-    ColorStateList DARK_BLUE = ColorStateList.valueOf(getResources().getColor(R.color.dark_blue));
+    ColorStateList DARK_BLUE = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.dark_blue));
 
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    public SignupFragment1() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment Signup_Fragment_2.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static SignupFragment1 newInstance(String param1, String param2) {
+        SignupFragment1 fragment = new SignupFragment1();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

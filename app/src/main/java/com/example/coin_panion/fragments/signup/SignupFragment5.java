@@ -163,6 +163,7 @@ public class SignupFragment5 extends Fragment {
 
         // Create Account object using userID, accountPicID, and accountCoverID as foreign keys. Return an Account object with updated accountID
         Account account = new Account(user, signupViewModel.get("password").toString(), signupViewModel.get("bio").toString(), accountPic, accountCover);
+        account.insertNewAccount(new Thread());
 
         finishingUp = true;
 

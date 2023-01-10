@@ -46,6 +46,7 @@ dependencies {
     // Fragment development
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
+    implementation "androidx.fragment:fragment:1.5.5"
 
     // MySQL Connector
     implementation 'mysql:mysql-connector-java:5.1.49'

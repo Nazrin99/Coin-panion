@@ -2,10 +2,11 @@ package com.example.coin_panion.classes.utility;
 
 import androidx.lifecycle.ViewModel;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
-public class BaseViewModel extends ViewModel {
+public class BaseViewModel extends ViewModel implements Serializable {
     private HashMap<String, Object> data = new HashMap<>();
     private HashMap<String, List<Object>> arrayData = new HashMap<>();
 

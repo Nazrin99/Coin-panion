@@ -177,6 +177,7 @@ public class SignupFragment4 extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if(data != null){
             Uri imageUri = data.getData();
             assert imageUri != null;
