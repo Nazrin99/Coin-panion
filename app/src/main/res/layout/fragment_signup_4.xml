@@ -1,78 +1,123 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout4"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/IBBack"
-        android:layout_width="84dp"
-        android:layout_height="82dp"
-        android:layout_gravity="top|left"
-        android:background="@color/white"
-        android:src="@drawable/backward_arrow_img"
-        android:contentDescription="Back to previous"
-        />
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/signupImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20sp"
-        android:layout_marginTop="100sp"
-        >
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/profilefriends_img"
+        app:layout_constraintBottom_toTopOf="@+id/textView35"
+        app:layout_constraintEnd_toEndOf="@+id/usernameLayout"
+        app:layout_constraintStart_toStartOf="@+id/usernameLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textView37" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/profilefriends_img"
-            />
-
-        <ImageButton
-            android:id="@+id/BtnUploadProfile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.6"
-            android:background="@color/white"
-            android:contentDescription="Upload your background profile image"
-            android:src="@drawable/upload_img" />
-    </FrameLayout>
-
-
-    <EditText
-        android:id="@+id/ETCreateUserName"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/signupUploadButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40sp"
-        android:layout_marginTop="20sp"
-        android:layout_marginRight="40sp"
-        android:layout_marginBottom="30sp"
-        android:hint="Username"
-        android:minHeight="48dp" />
-
-    <EditText
-        android:id="@+id/ETCreateBio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
-        android:layout_marginLeft="40sp"
-        android:layout_marginRight="40sp"
-        android:hint="Bio"
-        android:minHeight="48dp" />
+        android:alpha="0.6"
+        android:background="@color/white"
+        android:contentDescription="Upload your background profile image"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:src="@drawable/upload_img"
+        app:layout_constraintBottom_toBottomOf="@+id/signupImageView"
+        app:layout_constraintEnd_toEndOf="@+id/signupImageView"
+        app:layout_constraintStart_toStartOf="@+id/signupImageView"
+        app:layout_constraintTop_toTopOf="@+id/signupImageView" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/BtnCreateProfile"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="I want coin-panion"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/rounded_edge_button"
+        android:text="@string/take_me_to_coinpanion"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:background="@drawable/rounded_edge_button"
-        android:layout_marginTop="230sp"
-        android:layout_marginLeft="40sp"
-        android:layout_marginRight="40sp"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/usernameLayout"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@+id/usernameLayout" />
+
+    <TextView
+        android:id="@+id/textView35"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="264dp"
+        android:text="@string/signupUsername"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/usernameLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textView37" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/usernameLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="55dp"
+        android:hint="@string/what_should_we_call_you"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView35">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView36"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/bio"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/usernameLayout"
+        app:layout_constraintTop_toBottomOf="@+id/usernameLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/bioLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/usernameLayout"
+        app:layout_constraintStart_toStartOf="@+id/usernameLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textView36">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/tell_something_bout_u" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView37"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/fugaz_one"
+        android:text="@string/create_your_profile"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/usernameLayout"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="@+id/usernameLayout"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
