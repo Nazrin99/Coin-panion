@@ -10,6 +10,7 @@ import com.example.coin_panion.classes.utility.ThreadStatic;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Account{
+public class Account implements Serializable {
     private Integer accountID;
     private User user;
     private String password;
