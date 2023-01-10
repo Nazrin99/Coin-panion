@@ -1,55 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="390dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20sp"
+    android:orientation="horizontal"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    app:cardCornerRadius="20dp"
+    android:backgroundTint="@color/Biru_Muda"
+    >
 
-    <!-- A CardView that contains a TextView -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_gravity="top"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="4dp"
         >
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/IVProfileImage"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="10sp"
+            android:src="@drawable/img" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/TVContact_name"
+            android:layout_width="219dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20sp"
+            android:paddingTop="18sp"
+            android:text="Contact Name"
+            android:textSize="18sp" />
 
-            <ImageView
-                android:id="@+id/imageView16"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="25dp"
-                android:layout_gravity="left|center_vertical"
-                card_view:srcCompat="@drawable/icon_img" />
+        <ImageView
+            android:id="@+id/CBSelectContact"
+            android:layout_width="69dp"
+            android:layout_height="64dp"
+            android:layout_marginRight="50sp"
+            android:background="@color/white"
+            android:backgroundTint="@color/Biru_Muda"
+            android:src="@mipmap/ic_next_foreground" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:text="friends"
-                android:textSize="15dp"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/black"/>
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="end|center_vertical"
-                android:background="@android:color/transparent"
-                card_view:srcCompat="@drawable/forward_arrow_img" />
-
-            </TableRow>
-        </TableLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+</androidx.cardview.widget.CardView>

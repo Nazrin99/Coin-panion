@@ -32,4 +32,13 @@
         android:id="@+id/friendsSettleUpFragment2"
         android:name="com.example.coin_panion.fragments.friends.FriendsSettleUpFragment"
         android:label="FriendsSettleUpFragment" />
+    <fragment
+        android:id="@+id/addFriendsFragment"
+        android:name="com.example.coin_panion.addFriendsFragment"
+        android:label="addFriendsFragment" />
+    <activity
+        android:id="@+id/friendsProfileActivity"
+        android:name="com.example.coin_panion.FriendsProfileActivity"
+        android:label="activity_friends_profile"
+        tools:layout="@layout/activity_friends_profile" />
 </navigation>

@@ -29,4 +29,17 @@
         android:name="com.example.coin_panion.PrivacyActivity"
         android:label="activity_privacy"
         tools:layout="@layout/activity_privacy" />
+    <fragment
+        android:id="@+id/userEditProfileFragment"
+        android:name="com.example.coin_panion.UserEditProfileFragment"
+        android:label="UserEditProfileFragment" />
+    <activity
+        android:id="@+id/editProfileActivity"
+        android:name="com.example.coin_panion.EditProfileActivity"
+        android:label="activity_edit_profile"
+        tools:layout="@layout/activity_edit_profile" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.coin_panion.EditProfileFragment"
+        android:label="EditProfileFragment" />
 </navigation>

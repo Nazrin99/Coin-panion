@@ -1,6 +1,9 @@
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -15,12 +18,25 @@
         android:contentDescription="Back to previous"
         />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="345dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="40sp"
+        android:text="Let Coin-painion get to know you \n by providing the following information"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="20sp"
-        android:layout_marginTop="100sp"
+        android:layout_marginTop="70sp"
         >
 
         <ImageView
@@ -65,14 +81,16 @@
         android:id="@+id/BtnCreateProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="I want coin-panion"
+        android:text="Create Account"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:background="@drawable/rounded_edge_button"
-        android:layout_marginTop="230sp"
+        android:layout_marginTop="200sp"
         android:layout_marginLeft="40sp"
         android:layout_marginRight="40sp"
+        android:layout_marginBottom="20sp"
         />
 
 
 </LinearLayout>
+</ScrollView>

@@ -65,7 +65,7 @@
                 tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
         </LinearLayout>
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listfriends"
             android:layout_width="match_parent"
             android:layout_height="650dp"
@@ -78,6 +78,7 @@
             app:layout_constraintVertical_bias="0.347"
             android:layout_marginLeft="30sp"
             android:layout_marginRight="30sp"
+            tools:listitem="@layout/notification_item"
             />
 
         <TextView

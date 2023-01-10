@@ -1,73 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="vertical"
+    >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="230sp"
+        android:layout_marginBottom="10sp"
+        >
+        <ImageView
+            android:id="@+id/IVGroupBackground"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/background_img" />
+
+        <ImageView
+            android:layout_width="133dp"
+            android:layout_height="115dp"
+            android:layout_gravity="bottom|left"
+            android:src="@drawable/profilefriends_img" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:text="Group Name"
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/TVGroupDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:text="TextView"
+        android:textSize="30sp"
+        android:textStyle="normal"
+        />
+
+    <ScrollView
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/background_image"
-            android:layout_width="423dp"
-            android:layout_height="177dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/background_img"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            tools:listitem="@layout/notification_item"
+            />
 
-        <ImageView
-            android:id="@+id/profile_picture"
-            android:layout_width="136dp"
-            android:layout_height="139dp"
-            android:layout_gravity="bottom|start"
-            android:layout_marginTop="112dp"
-            android:src="@drawable/profilefriends_img"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.094"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="Group Name"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/profile_picture"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/profile_picture"
-            app:layout_constraintTop_toBottomOf="@+id/profile_picture" />
-
-        <ListView
-            android:id="@+id/list_notification"
-            android:layout_width="362dp"
-            android:layout_height="353dp"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginTop="40dp"
-            app:layout_constraintEnd_toEndOf="@+id/TVGroupDesc"
-            app:layout_constraintHorizontal_bias="0.013"
-            app:layout_constraintStart_toStartOf="@+id/TVGroupDesc"
-            app:layout_constraintTop_toBottomOf="@+id/TVGroupDesc" />
-
-        <TextView
-            android:id="@+id/TVGroupDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="TextView"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="@+id/textView5"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView5"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</LinearLayout>

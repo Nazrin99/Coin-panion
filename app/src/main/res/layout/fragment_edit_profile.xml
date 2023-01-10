@@ -15,61 +15,100 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/BtnCancelEditProfile"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginRight="40sp"
+                android:layout_marginBottom="10sp"
+                android:background="@drawable/rounded_edge_button"
+                android:text="Cancel"
+                android:textColor="@color/black" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/BtnSaveEditProfile"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginRight="10sp"
+                android:layout_marginBottom="10sp"
+                android:background="@drawable/rounded_edge_button"
+                android:text="Save"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        </LinearLayout>
         <!--make the item overlay to each other-->
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
-            android:layout_marginRight="30sp"
-            android:layout_marginLeft="30sp"
-            >
-
-            <ImageView
-                android:id="@+id/IVGroupBackground"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/background_img" />
-
-            <ImageButton
-                android:id="@+id/IBUploadGroupBackground"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="top|end"
-                android:alpha="0.6"
-                android:background="@color/white"
-                android:src="@drawable/upload_img"
-                android:contentDescription="Upload group background Image"
-                />
-
-        </FrameLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
             android:layout_marginRight="30sp"
             android:layout_marginLeft="30sp"
+            android:layout_marginBottom="10dp"
             >
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="150sp"
-                android:src="@drawable/profile_vector" />
-
-            <ImageButton
-                android:id="@+id/image_button"
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@color/white"
-                android:layout_gravity="top|end"
-                android:alpha="0.6"
-                android:src="@drawable/upload_img"
-                android:contentDescription="Upload group profile Image"
-                />
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="10sp">
+
+                <ImageView
+                    android:id="@+id/IVUserBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:src="@drawable/background_img" />
+
+                <ImageButton
+                    android:id="@+id/IBUploadBackgroundProfile"
+                    android:layout_width="177dp"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="30dp"
+                    android:alpha="0.4"
+                    android:background="@color/white"
+                    android:clickable="true"
+                    android:contentDescription="Upload group background profile image"
+                    android:src="@drawable/upload_img" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="130sp"
+                android:layout_marginBottom="10sp"
+                >
+
+                <ImageView
+                    android:id="@+id/IVProfileImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/profile_vector" />
+
+                <ImageButton
+                    android:id="@+id/IBUploadProfilePicture"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="top|end"
+                    android:alpha="0.5"
+                    android:background="@color/white"
+                    android:contentDescription="Upload group profile Image"
+                    android:src="@drawable/upload_img" />
+
+            </FrameLayout>
 
         </FrameLayout>
 
@@ -259,39 +298,6 @@
                 android:layout_gravity="center"
                 android:src="@drawable/upload_img"
                 />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/BtnCancelEditProfile"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edge_button"
-                android:layout_marginTop="20sp"
-                android:layout_marginRight="30sp"
-                android:layout_marginLeft="30sp"
-                android:layout_marginBottom="10sp"
-                android:text="Cancel"
-                android:textColor="@color/black" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/BtnSaveEditProfile"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edge_button"
-                android:layout_marginTop="20sp"
-                android:layout_marginRight="30sp"
-                android:layout_marginLeft="30sp"
-                android:layout_marginBottom="10sp"
-                android:text="Save"
-                android:textColor="@color/black" />
-
         </LinearLayout>
 
 
