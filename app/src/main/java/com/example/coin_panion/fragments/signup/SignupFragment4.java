@@ -1,21 +1,44 @@
 package com.example.coin_panion.fragments.signup;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.utility.BaseViewModel;
+import com.example.coin_panion.classes.utility.Picture;
+import com.google.android.material.textfield.TextInputLayout;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SignupFragment4#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+@SuppressWarnings("deprecation")
 public class SignupFragment4 extends Fragment {
+    BaseViewModel signupViewModel;
+    TextInputLayout usernameLayout, bioLayout;
+    ImageView signupImageView;
+    ImageButton signupUploadImageButton;
+    AppCompatButton createProfileButton;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,5 +85,107 @@ public class SignupFragment4 extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_signup_4, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
+        signupViewModel.put("picture", null);
+
+        // Bind views
+        bioLayout = view.findViewById(R.id.bioLayout);
+        usernameLayout = view.findViewById(R.id.usernameLayout);
+        signupImageView = view.findViewById(R.id.signupImageView);
+        signupUploadImageButton = view.findViewById(R.id.signupUploadImageButton);
+        createProfileButton = view.findViewById(R.id.createProfileButton);
+
+        usernameLayout.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length() <= 0){
+                    requireActivity().runOnUiThread(() -> usernameLayout.setError("Username can't be empty!"));
+                }
+                else{
+                    requireActivity().runOnUiThread(() -> usernameLayout.setError(null));
+
+                }
+            }
+        });
+
+        bioLayout.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length() <= 0){
+                    requireActivity().runOnUiThread(() -> bioLayout.setError("Bio can't be empty!"));
+                }
+                else{
+                    requireActivity().runOnUiThread(() -> bioLayout.setError(null));
+                }
+            }
+        });
+
+        createProfileButton.setOnClickListener(v -> {
+            if(bioLayout.getEditText().getText().toString().isEmpty()){
+                requireActivity().runOnUiThread(() -> bioLayout.setError("Bio can't be empty!"));
+                return;
+            }
+            if(usernameLayout.getEditText().getText().toString().isEmpty()){
+                requireActivity().runOnUiThread(() -> usernameLayout.setError("Username can't be empty!"));
+                return;
+            }
+            // Store username and bio and proceed to next fragment
+            signupViewModel.put("username", usernameLayout.getEditText().getText().toString());
+            signupViewModel.put("bio", bioLayout.getEditText().getText().toString());
+
+            NavDirections navDirections = SignupFragment4Directions.actionSignupFragment4ToSignupFragment5();
+            Navigation.findNavController(v).navigate(navDirections);
+        });
+
+        signupUploadImageButton.setOnClickListener(v -> imageChooser());
+    }
+
+    protected void imageChooser(){
+        new Thread(() -> {
+            Intent i = new Intent();
+            i.setType("image/*");
+            i.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(i, "Select Your Profile"), 1);
+        }).start();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(data != null){
+            Uri imageUri = data.getData();
+            assert imageUri != null;
+
+            Drawable drawable = Picture.constructDrawableFromUri(imageUri, getContext().getContentResolver());
+            requireActivity().runOnUiThread(() -> {
+                signupImageView.setImageDrawable(drawable);
+                signupViewModel.put("picture", drawable);
+            });
+        }
     }
 }
