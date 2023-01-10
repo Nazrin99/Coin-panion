@@ -78,5 +78,4 @@
     </string-array>
     <string name="member_name">Name</string>
     <string name="group_description">Group description</string>
-    <string name="create_a_group_expenses"> <u> Create a group / expenses </u> </string>
 </resources>

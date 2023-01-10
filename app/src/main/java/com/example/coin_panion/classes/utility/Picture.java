@@ -1,11 +1,13 @@
 package com.example.coin_panion.classes.utility;
 
 import android.content.ContentResolver;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.Blob;
@@ -98,6 +100,30 @@ public class Picture {
         return atomicReference.get();
     }
 
+    public static Picture insertPicIntoDB(Drawable drawable, Thread dataThread){
+        AtomicReference<Picture> atomicReference = new AtomicReference<>();
+        dataThread = new Thread(() -> {
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO picture(picture_data) VALUES(?)", Statement.RETURN_GENERATED_KEYS)
+                    ){
+                preparedStatement.setBlob(1, constructInputStreamFromDrawable(drawable));
+                preparedStatement.execute();
+
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                resultSet.next();
+
+                atomicReference.set(new Picture(resultSet.getInt(1), drawable));
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        });
+        ThreadStatic.run(dataThread);
+        return atomicReference.get();
+    }
+
     /**
      * Construct Drawable from Uri
      * @param imageUri
@@ -140,4 +166,17 @@ public class Picture {
         }
         return inputStream;
     }
+
+    public static InputStream constructInputStreamFromDrawable(Drawable drawable){
+        BitmapDrawable bitmapDrawable = ((BitmapDrawable) drawable);
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] imageInByte = stream.toByteArray();
+        System.out.println("........length......" + imageInByte);
+        ByteArrayInputStream bis = new ByteArrayInputStream(imageInByte);
+        return bis;
+    }
+
+
 }

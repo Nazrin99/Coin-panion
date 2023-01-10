@@ -5,6 +5,7 @@ import com.example.coin_panion.classes.general.SettleUpAccount;
 import com.example.coin_panion.classes.settleUp.PaymentApproval;
 import com.example.coin_panion.classes.transaction.Transaction;
 import com.example.coin_panion.classes.utility.Line;
+import com.example.coin_panion.classes.utility.Picture;
 import com.example.coin_panion.classes.utility.ThreadStatic;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -14,11 +15,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Account{
-    private String accountID;
+    private Integer accountID;
     private User user;
     private String password;
     private String bio;
@@ -29,6 +31,24 @@ public class Account{
 //    private List<PaymentApproval> paymentApprovalList;
     private SettleUpAccount settleUpAccount;
     private List<Notification> notifications;
+    private Picture accountPic;
+    private Picture accountCover;
+
+    /**
+     * Constructor to create new account prior database insertion
+     * @param user
+     * @param password
+     * @param bio
+     * @param accountPic
+     * @param accountCover
+     */
+    public Account(User user, String password, String bio, Picture accountPic, Picture accountCover) {
+        this.user = user;
+        this.password = password;
+        this.bio = bio;
+        this.accountPic = accountPic;
+        this.accountCover = accountCover;
+    }
 
     /**
      * Retrieve a list of UNSETTLED DEBTS from the transaction table
@@ -59,6 +79,36 @@ public class Account{
         return listAtomicReference.get();
     }
 
+    /**
+     * Inserts the details of the new Account in the database and updates this objects' accountID with the generated keys. Nulled fields remain for friends, debt limits, notifications, and settle up account
+     * @param dataThread
+     */
+    public void insertNewAccount(Thread dataThread){
+        dataThread = new Thread(() -> {
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO account(password, bio, account_pic, account_cover, user_id) VALUES(?, ?, ?, ?, ?)");
+            ){
+                preparedStatement.setString(1, new DigestUtils("SHA3-256").digestAsHex(this.getPassword()));
+                preparedStatement.setString(2,this.getBio());
+                preparedStatement.setInt(3, this.getAccountPic().getPictureID());
+                preparedStatement.setInt(4, this.getAccountCover().getPictureID());
+                preparedStatement.setInt(5, this.getUser().getUserID());
+                preparedStatement.execute();
+
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                if(resultSet.next()){
+                    // Key exists, update Account object
+                    this.setAccountID(resultSet.getInt(1));
+                }
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
+    }
+
     public static Account accountCredentialsValid( User user, String password, Thread dataThread){
         AtomicReference<Account> atomicReference = new AtomicReference<>();
         dataThread = new Thread(() -> {
@@ -71,7 +121,7 @@ public class Account{
 
                 if(resultSet.next()){
                     // TODO Account credentials match, proceed to construct account object from User and return Account object
-                    Account loggedAccount = new Account();
+                    Account loggedAccount = null;
                     loggedAccount.setUser(user);
                     atomicReference.set(loggedAccount);
                 }
@@ -83,12 +133,28 @@ public class Account{
         return atomicReference.get();
     }
 
-    public String getAccountID() {
+    public Integer getAccountID() {
         return accountID;
     }
 
-    public void setAccountID(String accountID) {
+    public void setAccountID(Integer accountID) {
         this.accountID = accountID;
+    }
+
+    public Picture getAccountPic() {
+        return accountPic;
+    }
+
+    public void setAccountPic(Picture accountPic) {
+        this.accountPic = accountPic;
+    }
+
+    public Picture getAccountCover() {
+        return accountCover;
+    }
+
+    public void setAccountCover(Picture accountCover) {
+        this.accountCover = accountCover;
     }
 
     public User getUser() {

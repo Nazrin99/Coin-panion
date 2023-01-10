@@ -33,11 +33,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/BtnAddNewFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:layout_marginTop="256dp"
+        android:layout_marginTop="360dp"
         android:background="@color/Biru_Muda"
         android:text="ADD FRIENDS"
         android:textColor="@color/black"

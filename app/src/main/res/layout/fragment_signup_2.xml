@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="@+id/textView28"
             app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/signupNextButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,9 +42,7 @@
             android:text="@string/next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:background="@drawable/rounded_edge_button"
-            />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView28"

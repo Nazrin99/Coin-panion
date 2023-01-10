@@ -1,91 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context=".GroupBalanceFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="300dp"
-            android:layout_height="100dp"
-            android:orientation="vertical"
-            card_view:cardCornerRadius = "30dp"
-            android:backgroundTint="@color/blue_omey"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            >
+            android:layout_width="250dp"
+            android:layout_height="51dp"
+            android:layout_gravity="top"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="#adcaff"
+            app:cardCornerRadius="40dp">
 
-            <LinearLayout
-                android:layout_width="300dp"
-                android:layout_height="100dp"
-                >
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_vertical|left"
+                android:layout_marginHorizontal="3dp"
+                android:src="@mipmap/ic_examplegroupprofile_foreground" />
 
-                <ImageView
-                    android:layout_width="95dp"
-                    android:layout_height="100dp"
-                    android:src="@mipmap/ic_examplegroupprofile_foreground" />
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginHorizontal="50dp"
+                android:layout_marginVertical="5dp"
+                android:text="Total Balance"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="219dp"
-                    android:layout_height="100dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/TVContact_name"
-                        android:layout_width="174dp"
-                        android:layout_height="47dp"
-                        android:paddingTop="10dp"
-                        android:text="Total Balance"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/TVContact_number"
-                        android:layout_width="175dp"
-                        android:layout_height="53dp"
-                        android:paddingTop="10dp"
-                        android:text="You owe RM "
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="50dp"
+                android:layout_marginVertical="6dp"
+                android:text="RM34.50"
+                android:textColor="@color/black" />
 
         </androidx.cardview.widget.CardView>
 
+<!--        TODO make it clickable-->
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:src="@mipmap/ic_addexpenses_foreground"/>
-
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="30dp">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="600dp"
-            tools:listitem="@layout/group_item" />
-
-    </ScrollView>
+            android:id="@+id/imageView10"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginVertical="15dp"
+            android:layout_marginHorizontal="300dp"
+            android:src="@drawable/ic_add_group_foreground" />
+    </RelativeLayout>
 
 
-
-
-</LinearLayout>
+    <ListView
+        android:id="@+id/listgroup"
+        android:layout_width="wrap_content"
+        android:layout_height="695dp"
+        android:layout_gravity="center_vertical" />
+</FrameLayout>

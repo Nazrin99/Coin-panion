@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <ImageButton
@@ -16,8 +16,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:background="@color/white"
-            android:contentDescription="Cancel"
             android:paddingLeft="20dp"
+            android:contentDescription="Cancel"
             android:src="@drawable/backward_arrow_img" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -30,41 +30,35 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/BtnSaveFriendContact"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:text="Save"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:text="Save"
+            android:textSize="20sp"
+            />
 
     </LinearLayout>
 
     <SearchView
         android:id="@+id/SVFriendContact"
-        android:layout_width="371dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/rounded_edge_button"
+        android:paddingEnd="20dp"
         android:contentDescription="Phone Number / Contact Number"
-        android:paddingEnd="20dp" />
+        />
 
-    <ScrollView
-        android:id="@+id/SVContactList"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RVContactList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RVContactList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:autofillHints="Phone Number / Contact Number"
-            tools:listitem="@layout/friend_from_contact_item" />
-
-    </ScrollView>
-
+        android:layout_height="match_parent"
+        android:autofillHints="Phone Number / Contact Number"
+        tools:listitem="@layout/friend_from_contact_item" />
 
 </LinearLayout>
 
