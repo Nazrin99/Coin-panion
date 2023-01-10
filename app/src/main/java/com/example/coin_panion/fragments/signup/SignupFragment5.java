@@ -144,7 +144,19 @@ public class SignupFragment5 extends Fragment {
         user.insertNewUser(new Thread());
 
         // Insert profile picture into database. Get a Picture object upon execution. Is a database execution
-        Picture accountPic = Picture.insertPicIntoDB((Drawable) signupViewModel.get("picture"), new Thread());
+        Drawable profilePic = (Drawable) signupViewModel.get("picture");
+        Picture accountPic = null;
+        if(profilePic == null){
+            accountPic = Picture.getPictureFromDB(2501);
+        }
+        else{
+            accountPic = Picture.insertPicIntoDB(profilePic, new Thread());
+        }
+        try{
+            assert accountPic != null;
+        } catch (AssertionError e) {
+            System.out.println("Account pic returns null");
+        }
 
         // Get default cover photo from the database
         Picture accountCover = Picture.getPictureFromDB(2500);
@@ -168,6 +180,6 @@ public class SignupFragment5 extends Fragment {
             public void run() {
                 startActivity(intent);
             }
-        }, 2000);
+        }, 3000);
     }
 }

@@ -11,6 +11,8 @@
         android:id="@+id/signupImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="center"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:src="@drawable/profilefriends_img"
@@ -20,7 +22,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView37" />
 
     <ImageButton
-        android:id="@+id/signupUploadButton"
+        android:id="@+id/signupUploadImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.6"
@@ -35,7 +37,7 @@
         app:layout_constraintTop_toTopOf="@+id/signupImageView" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/BtnCreateProfile"
+        android:id="@+id/createProfileButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
