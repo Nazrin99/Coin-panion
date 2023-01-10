@@ -11,7 +11,7 @@
         android:id="@+id/TVTitleLogin"
         android:layout_width="258dp"
         android:layout_height="90dp"
-        android:layout_marginTop="184dp"
+        android:layout_marginTop="100dp"
         android:fontFamily="@font/fugaz_one_regular"
         android:gravity="center_horizontal"
         android:text="@string/coin_panion_login"
@@ -19,7 +19,7 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,11 +59,14 @@
         android:id="@+id/BtnSignUp"
         android:layout_width="117dp"
         android:layout_height="48dp"
+        android:layout_marginStart="24dp"
         android:background="@drawable/rounded_edge_button"
         android:text="@string/sign_up"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/BtnLogin"
-        app:layout_constraintEnd_toEndOf="@+id/ETUserPass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/BtnLogin"
         app:layout_constraintTop_toTopOf="@+id/BtnLogin"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -71,10 +74,11 @@
         android:id="@+id/ForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="132dp"
         android:text="@string/forgot_password"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/ETUserInfo"
+        app:layout_constraintHorizontal_bias="0.378"
         app:layout_constraintStart_toStartOf="@+id/BtnLogin"
         app:layout_constraintTop_toBottomOf="@+id/ETUserPass" />
 
@@ -82,13 +86,14 @@
         android:id="@+id/BtnLogin"
         android:layout_width="117dp"
         android:layout_height="48dp"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="52dp"
         android:background="@drawable/rounded_edge_button"
         android:text="@string/login"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ETUserPass"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ETUserPass"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.003" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

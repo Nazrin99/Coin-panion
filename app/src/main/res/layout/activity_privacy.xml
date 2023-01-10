@@ -1,98 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PrivacyActivity">
+    tools:context=".PrivacyActivity"
+    android:orientation="vertical"
+    >
 
     <include
         android:id="@+id/include5"
         layout="@layout/appbar" />
 
-    <!--            TODO make it clickable-->
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.106"
-        app:srcCompat="@mipmap/ic_back_foreground" />
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:gravity="top"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26">
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp">
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginLeft="60dp"
-                android:text="Reset Password"
-                android:textColor="@color/black"
-                android:textSize="15dp" />
-
-            <!--            TODO make it clickable-->
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="110dp"
-                app:srcCompat="@mipmap/ic_next_foreground" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="10dp">
-
-            <TextView
-                android:id="@+id/textView24"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginLeft="60dp"
-                android:text="Blocked Accounts"
-                android:textColor="@color/black"
-                android:textSize="15dp" />
-
-            <!--            TODO make it clickable-->
-            <ImageView
-                android:id="@+id/imageView10"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="110dp"
-                app:srcCompat="@mipmap/ic_next_foreground" />
-        </TableRow>
-
-    </TableLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:foregroundGravity="bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav" />
+        app:srcCompat="@mipmap/ic_back_foreground" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/TVResetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="left|center_vertical"
+            android:paddingTop="15sp"
+            android:layout_marginLeft="60dp"
+            android:text="Reset Password"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/IVNextResetPassword"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="110dp"
+            app:srcCompat="@mipmap/ic_next_foreground" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/TV"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="left|center_vertical"
+            android:paddingTop="15sp"
+            android:layout_marginLeft="60dp"
+            android:text="Blocked Accounts"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="92dp"
+            app:srcCompat="@mipmap/ic_next_foreground" />
+
+    </LinearLayout>
+
+
+    <!--            TODO make it clickable-->
+
+
+</LinearLayout>

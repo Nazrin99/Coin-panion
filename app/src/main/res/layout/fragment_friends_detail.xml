@@ -1,155 +1,130 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.friends.FriendsDetailFragment">
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="80dp"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <ImageButton
+            android:id="@+id/image_button"
+            android:layout_width="84dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:background="@color/white"
+            android:contentDescription="Cancel"
+            android:paddingLeft="20dp"
+            android:src="@drawable/backward_arrow_img" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/BtnDummy"
+            android:layout_width="230dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="@color/white"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/BtnFriendSettings"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:text="Save"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:src="@drawable/setting_img"
+            android:contentDescription="Edit Friend Settings"
+            />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="230sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        >
+
+        <ImageView
+            android:id="@+id/IVGroupBackground"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/imageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageButton
-                android:id="@+id/imageButton3"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:src="@drawable/backward_arrow_img"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="260dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:src="@drawable/setting_img"
-                tools:ignore="SpeakableTextPresentCheck" />
-        </LinearLayout>
+            android:layout_height="200dp"
+            android:src="@drawable/background_img" />
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/background_img"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            android:layout_width="133dp"
+            android:layout_height="115dp"
+            android:layout_gravity="bottom|left"
+            android:src="@drawable/profilefriends_img" />
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="119dp"
-            android:layout_height="106dp"
-            android:src="@drawable/profilefriends_img"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.17"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.319" />
+    </FrameLayout>
 
-        <TableLayout
-            android:id="@+id/tableLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="1dp"
-            android:layout_marginBottom="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.18"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.00999999">
+    <TextView
+        android:id="@+id/TVFriendName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:textStyle="normal"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:text="User Name" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/TVFriendPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:textStyle="normal"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:text="User Phone Number" />
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Afiq@UM"
-                    android:textColor="@color/black"
-                    android:textSize="20dp" />
-            </TableRow>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/BtnDebtStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:background="@color/green"
+        android:text="YOU OWE ME RM " />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/BtnCreditStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:background="@color/red"
+        android:text="I OWE YOU RM " />
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+60198907896"
-                    android:textColor="@color/black"
-                    android:textSize="15dp" />
-            </TableRow>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/BtnSettleUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:background="@color/blue_omey"
+        android:text=" SETTLE UP " />
 
-        </TableLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/BtnRemind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:background="@color/blue_omey"
+        android:text=" Remind " />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.22"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.22000003">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textView6"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:background="@color/green"
-                android:gravity="center"
-                android:text="YOU OWE RM100"
-                android:textColor="@color/black" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button5"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:background="@drawable/round_btn"
-                android:text="SETTLE UP"
-                android:textColor="@color/black" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button6"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:background="@drawable/round_btn"
-                android:text="REMIND" />
-
-        </LinearLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</FrameLayout>
-
+</LinearLayout>

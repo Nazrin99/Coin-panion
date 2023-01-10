@@ -10,9 +10,23 @@
         android:id="@+id/include2"
         layout="@layout/appbar" />
 
+    <androidx.fragment.app.FragmentContainerView
+        android:name="com.example.coin_panion.GroupFirstFragment"
+        android:layout_width="412dp"
+        android:layout_height="727dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include2"
+        app:layout_constraintVertical_bias="0.357"
+        app:navGraph="@navigation/group_nav" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/bottomNavigationView2"
+        android:layout_width="411dp"
+        android:layout_height="70dp"
         android:foregroundGravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

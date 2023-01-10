@@ -1,78 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".GroupActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <!--make the item overlay to each other-->
+
+        <TextView
+            android:id="@+id/TVGroupBackGround"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"/>
-<!--make the item overlay to each other-->
-<!--        <FrameLayout-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content">-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/image"-->
-<!--                android:layout_width="100dp"-->
-<!--                android:layout_height="100dp"-->
-<!--                android:src="@drawable/profile_vector" />-->
-
-<!--            <ImageButton-->
-<!--                android:id="@+id/image_button"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="top|end"-->
-<!--                android:src="@drawable/ic_baseline_groups_24" />-->
-
-<!--        </FrameLayout>-->
-
-        <ImageView
-            android:id="@+id/image_view_profile_image"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:src="@drawable/profile_vector"
-
+            android:layout_marginTop="10sp"
+            android:layout_marginLeft="30sp"
+            android:layout_marginRight="30sp"
+            android:text="Group Background Profile"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             />
 
-        <ImageView
-            android:id="@+id/image_view_profile_background"
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30sp"
+            android:layout_marginRight="30sp"
+            android:layout_marginBottom="10sp">
+
+            <ImageView
+                android:id="@+id/IVGroupBackground"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/background_img" />
+
+            <ImageButton
+                android:id="@+id/IBUploadGroupBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="top|end"
+                android:alpha="0.6"
+                android:background="@color/white"
+                android:contentDescription="Upload group background Image"
+                android:src="@drawable/upload_img" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/TVGroupProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:layout_marginLeft="30sp"
+            android:layout_marginRight="30sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:text="Group Profile" />
+
+        <FrameLayout
+            android:layout_width="351dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30sp"
+            android:layout_marginRight="30sp"
+            android:layout_marginBottom="10sp">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="150sp"
+                android:src="@drawable/ic_baseline_groups_24" />
+
+            <ImageButton
+                android:id="@+id/image_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="top|end"
+                android:alpha="0.6"
+                android:background="@color/white"
+                android:contentDescription="Upload group profile Image"
+                android:src="@drawable/upload_img" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/TVGroupName"
             android:layout_width="match_parent"
-            android:layout_height="258dp"
-            android:src="@drawable/background_img"
-
-            />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:layout_marginLeft="30sp"
+            android:layout_marginRight="30sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="Group Name" />
 
         <EditText
-            android:id="@+id/edit_text_group_name"
+            android:id="@+id/ETGroupName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30sp"
+            android:layout_marginRight="30sp"
             android:hint="Enter Group Name"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:singleLine="true"
+            app:colorLine="#000000" />
 
-        <EditText
-            android:id="@+id/edit_text_group_description"
+        <TextView
+            android:id="@+id/textView20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:layout_marginLeft="30sp"
+            android:layout_marginRight="30sp"
+            android:text="Group Description"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+
+        <EditText
+            android:id="@+id/ETGroupDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30sp"
+            android:layout_marginRight="30sp"
             android:hint="Enter Group Description"
             android:inputType="textMultiLine"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:singleLine="true"
+            app:colorLine="#000000" />
+
+        <TextView
+            android:id="@+id/textView33"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30sp"
+            android:layout_marginRight="30sp"
+            android:layout_marginTop="20sp"
+           android:layout_marginBottom="10sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="Group Members"
+            android:textSize="20sp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RVRemoveAddFriendGroup"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_marginLeft="25sp"
+            android:layout_marginRight="25sp"
+            tools:listitem="@layout/remove_friend_item">
+        </androidx.recyclerview.widget.RecyclerView>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/BtnCreateGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create Group"
-            android:textColor="@color/black"
+            android:layout_marginLeft="30sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginRight="30sp"
             android:background="@drawable/rounded_edge_button"
-            />
+            android:text="Confirm"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
