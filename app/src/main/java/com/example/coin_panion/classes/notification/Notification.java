@@ -1,5 +1,6 @@
 package com.example.coin_panion.classes.notification;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 

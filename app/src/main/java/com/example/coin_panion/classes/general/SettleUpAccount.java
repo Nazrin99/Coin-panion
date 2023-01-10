@@ -7,6 +7,7 @@ import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.Picture;
 import com.example.coin_panion.classes.utility.ThreadStatic;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

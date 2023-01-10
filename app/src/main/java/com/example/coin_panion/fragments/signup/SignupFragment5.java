@@ -109,26 +109,23 @@ public class SignupFragment5 extends Fragment {
         progressBar.setIndeterminateDrawable(foldingCube);
         progressBar.setIndeterminate(true);
 
-        textCarouselRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if(finishingUp){
-
-                }
-                else{
-                    if(index == 5){
-                        index = 0;
-                        requireActivity().runOnUiThread(() -> progressTextView.setText(carouselItems[index]));
-                    }
-                    else{
-                        requireActivity().runOnUiThread(() -> {
-                            progressTextView.setText(carouselItems[index]);
-                            index++;
-                        });
-                    }
-                }
+        textCarouselRunnable = () -> {
+            if(finishingUp){
 
             }
+            else{
+                if(index == 5){
+                    index = 0;
+                    requireActivity().runOnUiThread(() -> progressTextView.setText(carouselItems[index]));
+                }
+                else{
+                    requireActivity().runOnUiThread(() -> {
+                        progressTextView.setText(carouselItems[index]);
+                        index++;
+                    });
+                }
+            }
+
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
@@ -140,12 +137,18 @@ public class SignupFragment5 extends Fragment {
         super.onResume();
 
         // Create User object and insert to database. Get complete User object upon execution of User.insertNewUser()
-        User user = new User(Long.getLong(signupViewModel.get("phoneNumber").toString()), signupViewModel.get("firstName").toString(), signupViewModel.get("lastName").toString(), signupViewModel.get("username").toString(), signupViewModel.get("email").toString());
+        User user = new User(Long.parseLong(signupViewModel.get("phoneNumber").toString()), signupViewModel.get("firstName").toString(), signupViewModel.get("lastName").toString(), signupViewModel.get("username").toString(), signupViewModel.get("email").toString());
+        try{
+            assert user != null;
+        } catch (AssertionError e) {
+            e.printStackTrace();
+            System.out.println("User is null");
+        }
         user.insertNewUser(new Thread());
 
         // Insert profile picture into database. Get a Picture object upon execution. Is a database execution
         Drawable profilePic = (Drawable) signupViewModel.get("picture");
-        Picture accountPic = null;
+        Picture accountPic;
         if(profilePic == null){
             accountPic = Picture.getPictureFromDB(2501);
         }
@@ -169,18 +172,13 @@ public class SignupFragment5 extends Fragment {
 
         // Everything is in order, pack everything in a Bundle and send to HomeActivity
         Bundle bundle = new Bundle();
-        bundle.putSerializable("account", account);
-        bundle.putSerializable("user", user);
+        bundle.putParcelable("account", account);
+        bundle.putParcelable("user", user);
 
         Intent intent = new Intent(requireActivity(), FriendsActivity.class);
         intent.putExtras(bundle);
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(intent);
-            }
-        }, 3000);
+        handler.postDelayed(() -> startActivity(intent), 3000);
     }
 }

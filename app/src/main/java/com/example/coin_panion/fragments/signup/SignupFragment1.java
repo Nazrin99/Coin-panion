@@ -46,18 +46,23 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link SignupFragment1#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class SignupFragment1 extends Fragment {
     private BaseViewModel signupViewModel;
     Button nextButton;
     TextInputEditText phoneNumberField;
     Thread dataThread;
     TextInputLayout layout;
-
+    Handler handler = new Handler();
     long delay = 2000; // 1 seconds after user stops typing
     long last_text_edit = 0;
-    Handler handler = new Handler();
+
     ColorStateList RED = ColorStateList.valueOf(Color.RED);
-    ColorStateList DARK_BLUE = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.dark_blue));
+    ColorStateList DARK_BLUE;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -106,6 +111,8 @@ public class SignupFragment1 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
+
+        ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.dark_blue));
 
         nextButton = view.findViewById(R.id.signupNextButton);
         phoneNumberField = view.findViewById(R.id.signupPhoneNumberEditText);
