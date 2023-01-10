@@ -1,5 +1,7 @@
 package com.example.coin_panion.fragments.signup;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,9 +14,15 @@ import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,6 +31,7 @@ import com.example.coin_panion.R;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.SendEmail;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -134,11 +143,13 @@ public class SignupFragment3 extends Fragment {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if(value.get() >= editTextIDs.length-1){
-                        System.out.println("Block entered");
                         codeEditTexts[value.get()].clearFocus();
+                        InputMethodManager imm = (InputMethodManager) requireParentFragment().requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(requireView().getApplicationWindowToken(), 0);
 
-                        if(verifyCode(compileCode())){
+                        if(verifyCode(signupViewModel.get("otp").toString())){
                             // Code is verified proceed to next fragment
+                            Navigation.findNavController(requireView()).navigate(R.id.action_signupFragment_3_to_signupFragment_4);
                         }
                         else{
                             // Display popup, wrong code entered
@@ -156,6 +167,21 @@ public class SignupFragment3 extends Fragment {
             });
         }
 
+        // Bind editor listeners
+        for(int i = 0; i < editTextIDs.length; i++){
+            codeEditTexts[i].setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if(actionId == EditorInfo.IME_ACTION_DONE){
+                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+
         // Set first edittext to be focused by default
         codeEditTexts[0].setFocusedByDefault(true);
     }
@@ -169,10 +195,17 @@ public class SignupFragment3 extends Fragment {
     }
 
     private boolean verifyCode(String otp){
-        return otp.equals(compileCode());
+        return otp.equalsIgnoreCase(compileCode());
     }
 
     private void createDialog(){
+        Animation fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
+        fadeIn.setDuration(1000);
+
+        Dialog dialog1 = new Dialog(requireContext());
+        dialog1.getLayoutInflater().inflate(R.layout.wrong_code_popup, null);
+
         dialogBuilder = new AlertDialog.Builder(requireActivity());
         final View popup = getLayoutInflater().inflate(R.layout.wrong_code_popup, null);
         popupTextView = popup.findViewById(R.id.popupTextView);

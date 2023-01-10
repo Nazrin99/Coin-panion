@@ -51,6 +51,10 @@ public class SignupFragment1 extends Fragment {
     Thread dataThread;
     TextInputLayout layout;
 
+    long delay = 700; // 1 seconds after user stops typing
+    long last_text_edit = 0;
+    Handler handler = new Handler();
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,7 @@ public class SignupFragment1 extends Fragment {
         });
 
         Drawable errorIcon = layout.getErrorIconDrawable();
+        AtomicReference<Drawable> atomicIcon = new AtomicReference<>(errorIcon);
         ColorStateList red = ColorStateList.valueOf(Color.RED);
         ColorStateList dark_blue = ColorStateList.valueOf(getResources().getColor(R.color.dark_blue));
 
@@ -89,45 +94,9 @@ public class SignupFragment1 extends Fragment {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Do something after 5s = 5000ms
-                            phoneNumberField.clearFocus();
-                        }
-                    }, 500);
-
                     return true;
                 }
                 return false;
-            }
-        });
-
-        phoneNumberField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    boolean exists = phoneNumberExists();
-                    if(exists){
-                        // Phone number already exists in database
-                        requireActivity().runOnUiThread(() -> {
-                            layout.setError(getResources().getString(R.string.signup_phone_already_exists));
-                            layout.setErrorIconDrawable(errorIcon);
-                        });
-                    }
-                    else{
-                        // Phone number is not in database, can proceed to next fragment for verification
-                        requireActivity().runOnUiThread(() -> {
-                            layout.setError(getResources().getString(R.string.signup_phone_is_available));
-                            layout.setErrorIconDrawable(0);
-                            layout.setBoxStrokeErrorColor(dark_blue);
-                            layout.setErrorTextColor(dark_blue);
-                            layout.setHintTextColor(dark_blue);
-                            nextButton.setEnabled(true);
-                        });
-                    }
-                }
             }
         });
 
@@ -139,7 +108,7 @@ public class SignupFragment1 extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                handler.removeCallbacks(input_finish_checker);
             }
 
             @Override
@@ -160,6 +129,8 @@ public class SignupFragment1 extends Fragment {
                 }
                 else{
                     // Phone number is in valid format, check existence in database
+                    last_text_edit = System.currentTimeMillis();
+                    handler.postDelayed(input_finish_checker, delay);
                     requireActivity().runOnUiThread(() -> {
                         layout.setError(getResources().getString(R.string.checking));
                     });
@@ -174,7 +145,7 @@ public class SignupFragment1 extends Fragment {
         });
     }
 
-    public boolean phoneNumberExists(){
+    private boolean phoneNumberExists(){
         // Assuming phone number format is valid, we check database if phone number already exists
         AtomicReference<Boolean> phoneNumberExists = new AtomicReference<>();
         dataThread = new Thread(() -> {
@@ -195,6 +166,9 @@ public class SignupFragment1 extends Fragment {
                     // Phone number does not exist, proceed to next fragment
                     phoneNumberExists.set(false);
                 }
+                resultSet.close();
+                preparedStatement.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -202,4 +176,35 @@ public class SignupFragment1 extends Fragment {
         ThreadStatic.run(dataThread);
         return phoneNumberExists.get();
     }
+
+    private final Runnable input_finish_checker = new Runnable() {
+        public void run() {
+            if (System.currentTimeMillis() > (last_text_edit + delay - 500)) {
+                boolean exists = phoneNumberExists();
+                if(exists){
+                    // Phone number already exists in database
+                    requireActivity().runOnUiThread(() -> {
+                        layout.setError(getResources().getString(R.string.signup_phone_already_exists));
+                        layout.setErrorIconDrawable(null);
+                    });
+                }
+                else{
+                    // Phone number is not in database, can proceed to next fragment for verification
+                    requireActivity().runOnUiThread(() -> {
+                        layout.setError(getResources().getString(R.string.signup_phone_is_available));
+                        layout.setErrorIconDrawable(0);
+                        layout.setBoxStrokeErrorColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_blue)));
+                        layout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_blue)));
+                        layout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_blue)));
+                        nextButton.setEnabled(true);
+                    });
+                }
+                requireActivity().runOnUiThread(() -> {
+                    InputMethodManager imm = (InputMethodManager) requireParentFragment().requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(requireView().getApplicationWindowToken(), 0);
+                });
+            }
+        }
+    };
+
 }
