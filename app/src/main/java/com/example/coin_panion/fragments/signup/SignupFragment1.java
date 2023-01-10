@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -45,19 +46,54 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link SignupFragment1#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class SignupFragment1 extends Fragment {
     private BaseViewModel signupViewModel;
     Button nextButton;
     TextInputEditText phoneNumberField;
     Thread dataThread;
     TextInputLayout layout;
-
+    Handler handler = new Handler();
     long delay = 2000; // 1 seconds after user stops typing
     long last_text_edit = 0;
-    Handler handler = new Handler();
-    ColorStateList RED = ColorStateList.valueOf(Color.RED);
-    ColorStateList DARK_BLUE = ColorStateList.valueOf(getResources().getColor(R.color.dark_blue));
 
+    ColorStateList RED = ColorStateList.valueOf(Color.RED);
+    ColorStateList DARK_BLUE;
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    public SignupFragment1() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment Signup_Fragment_2.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static SignupFragment1 newInstance(String param1, String param2) {
+        SignupFragment1 fragment = new SignupFragment1();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +111,8 @@ public class SignupFragment1 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
+
+        ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.dark_blue));
 
         nextButton = view.findViewById(R.id.signupNextButton);
         phoneNumberField = view.findViewById(R.id.signupPhoneNumberEditText);

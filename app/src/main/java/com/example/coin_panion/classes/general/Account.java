@@ -1,9 +1,15 @@
 package com.example.coin_panion.classes.general;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.example.coin_panion.classes.notification.Notification;
 import com.example.coin_panion.classes.general.SettleUpAccount;
 import com.example.coin_panion.classes.settleUp.PaymentApproval;
 import com.example.coin_panion.classes.transaction.Transaction;
+import com.example.coin_panion.classes.utility.Hashing;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.Picture;
 import com.example.coin_panion.classes.utility.ThreadStatic;
@@ -15,12 +21,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Account implements Serializable {
+public class Account implements Parcelable {
     private Integer accountID;
     private User user;
     private String password;
@@ -34,6 +41,45 @@ public class Account implements Serializable {
     private List<Notification> notifications;
     private Picture accountPic;
     private Picture accountCover;
+
+    protected Account(Parcel in) {
+        if (in.readByte() == 0) {
+            accountID = null;
+        } else {
+            accountID = in.readInt();
+        }
+        password = in.readString();
+        bio = in.readString();
+    }
+
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
+        @Override
+        public Account createFromParcel(Parcel in) {
+            return new Account(in);
+        }
+
+        @Override
+        public Account[] newArray(int size) {
+            return new Account[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        if (accountID == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(accountID);
+        }
+        dest.writeString(password);
+        dest.writeString(bio);
+    }
 
     /**
      * Constructor to create new account prior database insertion
@@ -88,9 +134,9 @@ public class Account implements Serializable {
         dataThread = new Thread(() -> {
             try(
                     Connection connection = Line.getConnection();
-                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO account(password, bio, account_pic, account_cover, user_id) VALUES(?, ?, ?, ?, ?)");
+                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO account(password, bio, account_pic, account_cover, user_id) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             ){
-                preparedStatement.setString(1, new DigestUtils("SHA3-256").digestAsHex(this.getPassword()));
+                preparedStatement.setString(1, Hashing.keccakHash(this.getPassword()));
                 preparedStatement.setString(2,this.getBio());
                 preparedStatement.setInt(3, this.getAccountPic().getPictureID());
                 preparedStatement.setInt(4, this.getAccountCover().getPictureID());
@@ -117,7 +163,7 @@ public class Account implements Serializable {
                 Connection connection = Line.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM account WHERE user_id = ? AND password = ?");
                 preparedStatement.setInt(1, user.getUserID());
-                preparedStatement.setString(2, new DigestUtils("'SHA3-256").digestAsHex(password));
+                preparedStatement.setString(2, Hashing.keccakHash(password));
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 if(resultSet.next()){

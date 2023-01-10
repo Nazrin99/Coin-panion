@@ -3,13 +3,14 @@ package com.example.coin_panion.classes.general;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.ThreadStatic;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.Instant;
 
 @SuppressWarnings("ALL")
-public class DebtLimit {
+public class DebtLimit{
     private Double debtLimitAmount;
     private Long debtLimitEndDate;
 

@@ -1,5 +1,10 @@
 package com.example.coin_panion.classes.general;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.ThreadStatic;
 
@@ -12,7 +17,7 @@ import java.sql.Statement;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.DataFormatException;
 
-public class User implements Serializable {
+public class User implements Parcelable {
     /*User info for account*/
     private Integer userID;
     private Long phoneNumber;
@@ -20,6 +25,62 @@ public class User implements Serializable {
     private String lastName;
     private String username;
     private String email;
+
+    protected User(Parcel in) {
+        if (in.readByte() == 0) {
+            userID = null;
+        } else {
+            userID = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            phoneNumber = null;
+        } else {
+            phoneNumber = in.readLong();
+        }
+        firstName = in.readString();
+        lastName = in.readString();
+        username = in.readString();
+        email = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        if (userID == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(userID);
+        }
+        if (phoneNumber == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(phoneNumber);
+        }
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(username);
+        dest.writeString(email);
+    }
+
+
 
     // Constructor to create User object for existing users from database. REQUIRE phoneNumber
     public User(Object queryKey, Thread dataThread) {
