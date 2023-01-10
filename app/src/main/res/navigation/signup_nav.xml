@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/signup_nav"
-    app:startDestination="@id/signup_Fragment_1">
+    app:startDestination="@id/signupFragment5">
 
     <fragment
         android:id="@+id/signup_Fragment_1"
@@ -36,5 +36,14 @@
         android:id="@+id/signupFragment_4"
         android:name="com.example.coin_panion.fragments.signup.SignupFragment4"
         android:label="fragment_signup_4"
-        tools:layout="@layout/fragment_signup_4" />
+        tools:layout="@layout/fragment_signup_4" >
+        <action
+            android:id="@+id/action_signupFragment_4_to_signupFragment5"
+            app:destination="@id/signupFragment5" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment5"
+        android:name="com.example.coin_panion.fragments.signup.SignupFragment5"
+        android:label="SignupFragment5"
+        tools:layout="@layout/loading_screen"/>
 </navigation>

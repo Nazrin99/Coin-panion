@@ -51,28 +51,26 @@ public class User{
     }
 
     // INSERT: new User object into database. Returns a complete database object
-    public User insertNewUser(User user, Thread dataThread){
+    public void insertNewUser(Thread dataThread){
         AtomicReference<User> userAtomicReference = new AtomicReference<>();
         dataThread = new Thread(() -> {
             try{
                 Connection connection = Line.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user(phone_number, email, first_name, last_name, username) VALUES(?, ?, ? ,? ,?)", Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setLong(1, user.getPhoneNumber());
-                preparedStatement.setString(2, user.getEmail());
-                preparedStatement.setString(3, user.getFirstName());
-                preparedStatement.setString(4, user.getLastName());
-                preparedStatement.setString(5, user.getUsername());
+                preparedStatement.setLong(1, this.getPhoneNumber());
+                preparedStatement.setString(2, this.getEmail());
+                preparedStatement.setString(3, this.getFirstName());
+                preparedStatement.setString(4, this.getLastName());
+                preparedStatement.setString(5, this.getUsername());
                 preparedStatement.execute();
                 ResultSet resultSet = preparedStatement.getGeneratedKeys();
                 resultSet.next();
-                user.setUserID(resultSet.getInt(1));
-                userAtomicReference.set(user);
+                this.setUserID(resultSet.getInt(1));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
         ThreadStatic.run(dataThread);
-        return userAtomicReference.get();
     }
 
     // DELETE: User info from database, required parameter is userID

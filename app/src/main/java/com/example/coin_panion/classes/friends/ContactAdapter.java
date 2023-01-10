@@ -46,7 +46,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         /*Get the contact object*/
         Contact contact = contacts.get(position);
 
-        /*Initialize the variable based on contact*/
+        /*Initialze the variable based on contact*/
         holder.TVContactName.setText(contact.getContactName());
         holder.TVContactNumber.setText(contact.getContactNumber());
 

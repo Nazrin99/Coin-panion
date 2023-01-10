@@ -1,145 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DebtLimitActivity"
-    android:orientation="vertical"
-    >
+    tools:context=".DebtLimitActivity">
 
 <!--    TODO make it clickable-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/imageView15"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.018"
+        app:srcCompat="@mipmap/ic_back_foreground" />
 
-        <ImageButton
-            android:id="@+id/IVBackButtonSetDebtLimit"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:background="@color/white"
-            android:contentDescription="Back"
-            android:paddingLeft="20dp"
-            android:src="@drawable/backward_arrow_img" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/BtnDummy"
-            android:layout_width="253dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:background="@color/white"
-            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/BtnSetDebtLimit"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:text="Save"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <!--    NOTE this is spinner-->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:text="SAVE"
+        android:textSize="15dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.018" />
 
     <TextView
-        android:id="@+id/TVDebtLimitQuote"
+        android:id="@+id/textView25"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Debt is like any other trap, easy enough to get into, but hard enough to get out of."
         android:textColor="@color/black"
         android:textSize="15dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="80dp"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName5"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/spinner_currency"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.127" />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
+<!--    NOTE this is spinner-->
+
+    <TextView
+        android:id="@+id/spinner_currency"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:cardCornerRadius="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="40dp"
-        android:backgroundTint="@color/blue_omey"
-        >
+        android:background="@color/blue_omey"
+        android:gravity="center"
+        android:text="MYR"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.359"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.238">
+        <!--        android:prompt="@string/spinn"-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            >
+    </TextView>
 
-            <TextView
-                android:layout_width="233dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Amount I want to spend"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="normal"
-                android:textAlignment="center"
-                />
+    <EditText
+        android:id="@+id/editTextTextPersonName5"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_omey"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:text="0.00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.128"
+        app:layout_constraintStart_toEndOf="@+id/spinner_currency"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.238"
+        tools:ignore="TouchTargetSizeCheck" />
 
-            <TextView
-                android:layout_width="134dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Duration"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="normal"
-                android:textAlignment="center"
-                />
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="per"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName5"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="@+id/spinner_currency"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.29" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            >
-
-            <TextView
-                android:layout_width="64dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10sp"
-                android:paddingTop="10dp"
-                android:text="MYR"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/ETDebtLimitAmount"
-                android:layout_width="160dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:hint="Enter Amount" />
-
-            <Spinner
-                android:id="@+id/SPDebtLimitDuration"
-                android:layout_width="132dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:entries="@array/sample_duration"
-                />
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spinner_duration"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_omey"
+        android:drawSelectorOnTop="true"
+        android:entries="@array/sample_duration"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView26"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="@+id/textView26"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.348"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="469dp"
+        android:foregroundGravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav" />
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
