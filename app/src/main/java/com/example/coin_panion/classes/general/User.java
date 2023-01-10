@@ -3,6 +3,7 @@ package com.example.coin_panion.classes.general;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.ThreadStatic;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +12,7 @@ import java.sql.Statement;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.DataFormatException;
 
-public class User{
+public class User implements Serializable {
     /*User info for account*/
     private Integer userID;
     private Long phoneNumber;

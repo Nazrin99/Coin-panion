@@ -12,6 +12,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.os.Handler;
@@ -51,9 +52,11 @@ public class SignupFragment1 extends Fragment {
     Thread dataThread;
     TextInputLayout layout;
 
-    long delay = 700; // 1 seconds after user stops typing
+    long delay = 2000; // 1 seconds after user stops typing
     long last_text_edit = 0;
     Handler handler = new Handler();
+    ColorStateList RED = ColorStateList.valueOf(Color.RED);
+    ColorStateList DARK_BLUE = ColorStateList.valueOf(getResources().getColor(R.color.dark_blue));
 
 
     @Override
@@ -85,8 +88,6 @@ public class SignupFragment1 extends Fragment {
 
         Drawable errorIcon = layout.getErrorIconDrawable();
         AtomicReference<Drawable> atomicIcon = new AtomicReference<>(errorIcon);
-        ColorStateList red = ColorStateList.valueOf(Color.RED);
-        ColorStateList dark_blue = ColorStateList.valueOf(getResources().getColor(R.color.dark_blue));
 
         phoneNumberField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -109,18 +110,22 @@ public class SignupFragment1 extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 handler.removeCallbacks(input_finish_checker);
+                handler.removeCallbacks(closeKeyboard);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if(Objects.requireNonNull(phoneNumberField.getText()).toString().isEmpty()){
-                    requireActivity().runOnUiThread(() -> layout.setError(null));
+                    requireActivity().runOnUiThread(() -> {
+                        layout.setError(null);
+                        layout.setHintTextColor(DARK_BLUE);
+                    });
                 }
                 else if(!Validifier.isPhoneNumber(phoneNumberField.getText().toString())){
                     requireActivity().runOnUiThread(() -> {
-                        layout.setBoxStrokeErrorColor(red);
-                        layout.setErrorTextColor(red);
-                        layout.setHintTextColor(red);
+                        layout.setBoxStrokeErrorColor(RED);
+                        layout.setErrorTextColor(RED);
+                        layout.setHintTextColor(RED);
                         layout.setError(getResources().getString(R.string.signup_phone_wrong_format));
                         layout.setErrorIconDrawable(errorIcon);
                         nextButton.setEnabled(false);
@@ -130,10 +135,8 @@ public class SignupFragment1 extends Fragment {
                 else{
                     // Phone number is in valid format, check existence in database
                     last_text_edit = System.currentTimeMillis();
+                    handler.postDelayed(closeKeyboard, 1000);
                     handler.postDelayed(input_finish_checker, delay);
-                    requireActivity().runOnUiThread(() -> {
-                        layout.setError(getResources().getString(R.string.checking));
-                    });
                 }
             }
         });
@@ -141,7 +144,8 @@ public class SignupFragment1 extends Fragment {
         nextButton.setOnClickListener(v ->{
             // Phone number is in order, proceed to enter next info
             signupViewModel.put("phoneNumber", Objects.requireNonNull(phoneNumberField.getText()).toString());
-            Navigation.findNavController(v).navigate(R.id.action_signup_Fragment_1_to_signup_Fragment_2);
+            NavDirections navDirections = SignupFragment1Directions.actionSignupFragment1ToSignupFragment2();
+            Navigation.findNavController(v).navigate(navDirections);
         });
     }
 
@@ -176,6 +180,17 @@ public class SignupFragment1 extends Fragment {
         ThreadStatic.run(dataThread);
         return phoneNumberExists.get();
     }
+
+    private final Runnable closeKeyboard = new Runnable() {
+        @Override
+        public void run() {
+            InputMethodManager imm = (InputMethodManager) requireView().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(requireView().getApplicationWindowToken(), 0);
+            requireActivity().runOnUiThread(() -> {
+                layout.setError(getResources().getString(R.string.checking));
+            });
+        }
+    };
 
     private final Runnable input_finish_checker = new Runnable() {
         public void run() {

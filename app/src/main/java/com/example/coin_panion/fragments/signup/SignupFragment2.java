@@ -7,8 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -41,10 +43,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class SignupFragment2 extends Fragment {
     private BaseViewModel signupViewModel;
-    TextInputEditText firstName, lastName, email, password;
     TextInputLayout firstNameLayout, lastNameLayout, emailLayout, passwordLayout;
     Button nextButton;
     Thread dataThread;
+    Handler handler = new Handler();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -101,10 +103,6 @@ public class SignupFragment2 extends Fragment {
         signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
 
         // Binding views
-        firstName = view.findViewById(R.id.signupFirstNameEditText);
-        lastName = view.findViewById(R.id.signupLastNameEditText);
-        email = view.findViewById(R.id.signupEmailEditText);
-        password = view.findViewById(R.id.signupPasswordEditText);
         nextButton = view.findViewById(R.id.signupNextButton2);
         firstNameLayout = view.findViewById(R.id.signupFirstNameLayout);
         lastNameLayout = view.findViewById(R.id.signupLastNameLayout);
@@ -114,7 +112,7 @@ public class SignupFragment2 extends Fragment {
         requireActivity().runOnUiThread(() ->{nextButton.setEnabled(false);});
 
         // Set listeners for EditText
-        email.addTextChangedListener(new TextWatcher() {
+        emailLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -122,25 +120,28 @@ public class SignupFragment2 extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                    handler.removeCallbacks(emailCheck);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!Validifier.isEmail(email.getText().toString())){
+                if(!Validifier.isEmail(emailLayout.getEditText().getText().toString())){
                     requireActivity().runOnUiThread(() -> {
                         emailLayout.setError(getResources().getString(R.string.email_format_error));
                         nextButton.setEnabled(false);
                     });
                 }
                 else{
-                    requireActivity().runOnUiThread(() -> {emailLayout.setError(null);});
                     // Email format is correct, search email availability in database
+                    requireActivity().runOnUiThread(() -> {
+                        emailLayout.setError(null);
+                    });
+                    handler.postDelayed(emailCheck,1500);
                 }
             }
         });
 
-        password.addTextChangedListener(new TextWatcher() {
+        passwordLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -149,7 +150,7 @@ public class SignupFragment2 extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 requireActivity().runOnUiThread(() -> {
-                    if(!Validifier.validPassword(password.getText().toString())){
+                    if(!Validifier.validPassword(passwordLayout.getEditText().getText().toString())){
                         // Password format is invalid
                         passwordLayout.setError(getResources().getString(R.string.password_hint));
                         nextButton.setEnabled(false);
@@ -157,7 +158,7 @@ public class SignupFragment2 extends Fragment {
                     else{
                         passwordLayout.setError(null);
                         // Password format is valid
-                        if(Validifier.isEmail(email.getText().toString())){
+                        if(Validifier.isEmail(emailLayout.getEditText().getText().toString())){
                             nextButton.setEnabled(true);
                         }
                         else{
@@ -180,13 +181,30 @@ public class SignupFragment2 extends Fragment {
             requireActivity().runOnUiThread(() -> {
                 InputMethodManager imm = (InputMethodManager) requireParentFragment().requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(requireView().getApplicationWindowToken(), 0);
+                // All data is correct and in order, store into model
+                signupViewModel.put("firstName", firstNameLayout.getEditText().getText().toString());
+                signupViewModel.put("lastName", lastNameLayout.getEditText().getText().toString());
+                signupViewModel.put("email", emailLayout.getEditText().getText().toString());
+                signupViewModel.put("password", passwordLayout.getEditText().getText().toString());
+                signupViewModel.put("otp", SendSMS.generateOTP());
+
+                // Proceed to email verification
+                NavDirections navDirections = SignupFragment2Directions.actionSignupFragment2ToSignupFragment3();
+                Navigation.findNavController(requireView()).navigate(navDirections);
             });
+        });
+    }
+
+    private final Runnable emailCheck = new Runnable() {
+        @Override
+        public void run() {
+            // User stopped typing email, check database for email validity
             AtomicBoolean emailExist = new AtomicBoolean(false);
             dataThread = new Thread(() -> {
                 try{
                     Connection connection = Objects.requireNonNull(Line.getConnection());
                     PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE email = ?");
-                    preparedStatement.setString(1, email.getText().toString());
+                    preparedStatement.setString(1, emailLayout.getEditText().getText().toString());
                     ResultSet resultSet = preparedStatement.executeQuery();
 
                     if(resultSet.next()){
@@ -204,30 +222,20 @@ public class SignupFragment2 extends Fragment {
             ThreadStatic.run(dataThread);
             if(emailExist.get()){
                 requireActivity().runOnUiThread(() -> {
-                    email.setError(getResources().getString(R.string.email_exists));
-                    email.requestFocus();
-                    email.getText().clear();
-                    InputMethodManager imm = (InputMethodManager) requireParentFragment().requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(requireView(), 0);
+                    emailLayout.getEditText().setError(getResources().getString(R.string.email_exists));
+                    emailLayout.getEditText().requestFocus();
+                    emailLayout.getEditText().getText().clear();
                     nextButton.setEnabled(false);
                 });
             }
             else{
-                if(Validifier.validPassword(password.getText().toString())){
-                    // All data is correct and in order, store into model
-                    signupViewModel.put("firstName", firstName.getText().toString());
-                    signupViewModel.put("lastName", lastName.getText().toString());
-                    signupViewModel.put("email", email.getText().toString());
-                    signupViewModel.put("password", password.getText().toString());
-                    signupViewModel.put("otp", SendSMS.generateOTP());
-
-                    // Proceed to email verification
-                    Navigation.findNavController(v).navigate(R.id.action_signup_Fragment_2_to_signupFragment_3);
+                if(Validifier.validPassword(passwordLayout.getEditText().getText().toString())){
+                    nextButton.setEnabled(true);
                 }
                 else{
                     nextButton.setEnabled(false);
                 }
             }
-        });
-    }
+        }
+    };
 }
