@@ -41,16 +41,15 @@
 
     <SearchView
         android:id="@+id/SVFriendContact"
-        android:layout_width="match_parent"
+        android:layout_width="371dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/rounded_edge_button"
-        android:paddingEnd="20dp"
         android:contentDescription="Phone Number / Contact Number"
-        />
+        android:paddingEnd="20dp" />
 
     <ScrollView
         android:id="@+id/SVContactList"
