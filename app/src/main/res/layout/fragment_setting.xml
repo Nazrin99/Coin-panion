@@ -177,7 +177,7 @@
             android:layout_height="80dp"
             android:layout_marginLeft="20sp"
             android:layout_marginRight="10sp"
-            android:src="@mipmap/ic_credit_checkList_foreground" />
+            android:src="@mipmap/ic_credit_checklist_foreground" />
 
         <TextView
             android:layout_width="172dp"

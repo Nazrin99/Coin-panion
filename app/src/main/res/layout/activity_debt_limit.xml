@@ -53,6 +53,7 @@
         android:text="Debt is like any other trap, easy enough to get into, but hard enough to get out of."
         android:textColor="@color/black"
         android:textSize="15dp"
+        android:fontFamily="@font/fugaz_one_regular"
         android:layout_marginTop="100dp"
         android:layout_marginLeft="80dp"
         />
@@ -113,6 +114,7 @@
                 android:layout_marginRight="10sp"
                 android:paddingTop="10dp"
                 android:text="MYR"
+                android:fontFamily="@font/fugaz_one_regular"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="20sp"

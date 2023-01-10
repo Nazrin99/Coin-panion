@@ -63,19 +63,20 @@
         </androidx.cardview.widget.CardView>
 
         <ImageView
+            android:id="@+id/IVCreateNewGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:src="@mipmap/ic_addexpenses_foreground"/>
+            android:src="@mipmap/ic_create_group_foreground"/>
 
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="30dp">
 
         <androidx.recyclerview.widget.RecyclerView

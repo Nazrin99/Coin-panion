@@ -33,6 +33,7 @@
             android:layout_marginLeft="60dp"
             android:text="Reset Password"
             android:textColor="@color/black"
+            android:fontFamily="@font/fugaz_one_regular"
             android:textSize="20dp" />
 
         <ImageView
@@ -61,6 +62,7 @@
             android:layout_marginLeft="60dp"
             android:text="Blocked Accounts"
             android:textColor="@color/black"
+            android:fontFamily="@font/fugaz_one_regular"
             android:textSize="20dp" />
 
         <ImageView

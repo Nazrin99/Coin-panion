@@ -3,7 +3,7 @@ package com.example.coin_panion.classes.friends;
 public class Contact {
 
     private String contactName;
-    private Integer contactNumber;
+    private String contactNumber;
     private Boolean isSelected;
     private Boolean hasAccount;
 
@@ -11,14 +11,26 @@ public class Contact {
 
     }
 
-    public Contact(String contactName, Integer contactNumber) {
+    public Contact(String contactName, String contactNumber) {
         this.contactName = contactName;
-        this.contactNumber = contactNumber;
+
+        if(contactNumber.matches("^\\d+$")){
+            this.contactNumber = contactNumber.replaceAll("[^\\d]", "");
+        }else {
+            this.contactNumber = contactNumber;
+        }
+
     }
 
-    public Contact(String contactName, Integer contactNumber, Boolean isSelected) {
+    public Contact(String contactName, String contactNumber, Boolean isSelected) {
         this.contactName = contactName;
-        this.contactNumber = contactNumber;
+
+        if(contactNumber.matches("^\\d+$")){
+            this.contactNumber = contactNumber.replaceAll("[^\\d]", "");
+        }else {
+            this.contactNumber = contactNumber;
+        }
+
         this.isSelected = isSelected;
     }
 
@@ -30,11 +42,11 @@ public class Contact {
         this.contactName = contactName;
     }
 
-    public Integer getContactNumber() {
+    public String getContactNumber() {
         return contactNumber;
     }
 
-    public void setContactNumber(Integer contactNumber) {
+    public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
 

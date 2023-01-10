@@ -2,6 +2,7 @@ package com.example.coin_panion;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,7 +28,7 @@ public class FriendsActivity extends AppCompatActivity {
     RecyclerView RVContactList;
     ArrayList<Contact> contacts = new ArrayList<>();
     ContactAdapter contactAdapter;
-
+    SearchView SVFriendContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +38,13 @@ public class FriendsActivity extends AppCompatActivity {
         callView();
 
         checkPermission();
+
+        searchContact();
     }
 
     public void callView() {
         RVContactList = findViewById(R.id.RVContactList);
+        SVFriendContact = findViewById(R.id.SVFriendContact);
     }
 
     public void checkPermission() {
@@ -57,6 +61,8 @@ public class FriendsActivity extends AppCompatActivity {
             getContactLog();
         }
     }
+
+
 
     private void getContactLog(){
         /*Initialize URI*/
@@ -86,7 +92,7 @@ public class FriendsActivity extends AppCompatActivity {
                     // When phone cursor move to next
                     @SuppressLint("Range") String number = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     //Initialize the contact object
-                    Contact contact = new Contact(name,Integer.valueOf(number));
+                    Contact contact = new Contact(name,number);
                     // add to arraylist to
                     contacts.add(contact);
                     // Close phone cursor
@@ -102,6 +108,27 @@ public class FriendsActivity extends AppCompatActivity {
         contactAdapter = new ContactAdapter(this,contacts);
         /*Set the adapter*/
         RVContactList.setAdapter(contactAdapter);
+        /*Notify Changes in adapter*/
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void searchContact(){
+
+        SVFriendContact.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                contactAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        contactAdapter.notifyDataSetChanged();
     }
 
     /*TODO check if permission access is required*/
@@ -121,5 +148,6 @@ public class FriendsActivity extends AppCompatActivity {
             checkPermission();
         }
     }
+
 }
 

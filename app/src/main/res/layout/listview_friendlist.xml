@@ -35,7 +35,7 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/CBSelectContact"
+            android:id="@+id/IVViewFriendProfile"
             android:layout_width="69dp"
             android:layout_height="64dp"
             android:layout_marginRight="50sp"

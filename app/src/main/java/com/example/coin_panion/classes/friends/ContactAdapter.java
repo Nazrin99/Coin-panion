@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,17 +18,20 @@ import com.example.coin_panion.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable {
 
     Activity readContactLog;
     List<Contact> contacts;
     List<Contact> selectedContacts;
+    List<Contact> filteredContacts;
 
     public ContactAdapter(Activity readContactLog, List<Contact> contacts) {
         this.readContactLog = readContactLog;
         this.contacts = contacts;
         selectedContacts = new ArrayList<>();
+        filteredContacts = new ArrayList<>();
         notifyDataSetChanged();
     }
 
@@ -80,6 +85,52 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     public int getItemCount() {
         return contacts.size();
     }
+
+    @Override
+    public Filter getFilter() {
+
+        return contactsFilter;
+    }
+
+    private final Filter contactsFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            ArrayList<Contact> filteredContacts = new ArrayList<>();
+
+            if(constraint == null || constraint.length() == 0){
+
+                filteredContacts.addAll(contacts);
+
+            } else {
+
+                String filterPattern = contactsFilter.toString().toLowerCase().trim();
+
+                for(Contact contact : contacts){
+
+                    if(contact.getContactName().contains(filterPattern)){
+                        filteredContacts.add(contact);
+                    }else if(contact.getContactNumber().contains(filterPattern)){
+                        filteredContacts.add(contact);
+                    }
+
+                }
+
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredContacts;
+            results.count = filteredContacts.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            contacts.clear();
+            contacts.addAll((ArrayList)results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
