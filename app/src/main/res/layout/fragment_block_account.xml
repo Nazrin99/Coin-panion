@@ -39,12 +39,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_height="700dp"
         android:layout_marginLeft="40sp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="40sp"
         android:layout_marginBottom="30sp"
-        tools:listitem="@layout/unblock_friend_item"
-        />
+        tools:listitem="@layout/unblock_friend_item" />
 
 </LinearLayout>
