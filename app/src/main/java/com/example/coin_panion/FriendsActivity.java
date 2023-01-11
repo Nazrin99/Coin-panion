@@ -15,6 +15,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.coin_panion.classes.friends.Contact;
@@ -29,7 +31,7 @@ public class FriendsActivity extends AppCompatActivity {
     ArrayList<Contact> contacts = new ArrayList<>();
     ContactAdapter contactAdapter;
     SearchView SVFriendContact;
-
+    Button BtnAddMoreFriend, BtnAddNewFriend;
 
 
     @Override
@@ -39,14 +41,31 @@ public class FriendsActivity extends AppCompatActivity {
 
         callView();
 
-        checkPermission();
-
         searchContact();
+
+        setupListeners();
     }
 
     public void callView() {
         RVContactList = findViewById(R.id.RVContactList);
         SVFriendContact = findViewById(R.id.SVFriendContact);
+        BtnAddMoreFriend = findViewById(R.id.BtnAddMoreFriend);
+        BtnAddNewFriend = findViewById(R.id.BtnAddNewFriend);
+    }
+
+    public void setupListeners(){
+        BtnAddNewFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPermission();
+            }
+        });
+        BtnAddMoreFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPermission();
+            }
+        });
     }
 
     public void checkPermission() {
@@ -110,6 +129,7 @@ public class FriendsActivity extends AppCompatActivity {
         RVContactList.setAdapter(contactAdapter);
         /*Notify Changes in adapter*/
     }
+
 
     @SuppressLint("NotifyDataSetChanged")
     public void searchContact(){

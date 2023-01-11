@@ -62,6 +62,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                 contact.setSelected(isChecked);
 
                 if (contact.getSelected()) {
+
                     if (contact.getHasAccount()) {
                         /*Add every selected contact to an arraylist if and only if they have an account*/
                         selectedContacts.add(contact);
@@ -75,6 +76,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                 }
             }
         });
+
+
 
         /*TODO onclick removed all the friend that is not selected*/
 //        selectedContacts.removeIf(friend -> !friend.isSelected());
@@ -151,5 +154,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             TVContactNumber = itemView.findViewById(R.id.TVContact_number);
             CBSelectContact = itemView.findViewById(R.id.CBSelectContact);
         }
+
+    }
+
+    public void getAllSelectedContact(){
+        contacts.removeIf(contact -> !contact.getSelected());
     }
 }

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,10 +56,23 @@ public class SettingFragment extends Fragment {
         }
     }
 
+    ImageView IVMoveToNextProfile, IVMoveToNextPrivacy, IVMoveToNextDebtLimit, IVMoveToNextDebtCheckList, IVMoveToNextCreditCheckList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false);
+        View view = inflater.inflate(R.layout.fragment_setting, container, false);
+
+        /*TODO safer way to navigate through the interface*/
+        IVMoveToNextProfile = view.findViewById(R.id.IVMoveToNextProfile);
+        IVMoveToNextPrivacy = view.findViewById(R.id.IVMoveToNextPrivacy);
+        IVMoveToNextDebtLimit = view.findViewById(R.id.IVMoveToNextDebtLimit);
+        IVMoveToNextDebtCheckList = view.findViewById(R.id.IVMoveToNextDebtCheckList);
+        IVMoveToNextCreditCheckList = view.findViewById(R.id.IVMoveToNextCreditCheckList);
+
+        return view;
     }
+
+
+
 }

@@ -1,5 +1,7 @@
 package com.example.coin_panion.classes.friends;
 
+import android.app.Fragment;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.utility.ConfirmationDialog;
 
@@ -21,6 +24,7 @@ public class RemoveFriendAdapter extends RecyclerView.Adapter<RemoveFriendAdapte
 
     /*Remove friend from a list of added friend*/
     List<User> users ;
+    Context context;
 
     public RemoveFriendAdapter() {
         this.users = new ArrayList<>();
@@ -28,6 +32,11 @@ public class RemoveFriendAdapter extends RecyclerView.Adapter<RemoveFriendAdapte
 
     public RemoveFriendAdapter(List<User> users) {
         this.users = users;
+    }
+
+    public RemoveFriendAdapter(List<User> users, Context context) {
+        this.users = users;
+        this.context = context;
     }
 
     @NonNull
@@ -45,7 +54,9 @@ public class RemoveFriendAdapter extends RecyclerView.Adapter<RemoveFriendAdapte
 
         User user = users.get(position);
 
-//        holder.IVRemoveFriendProfile.setImageDrawable(); TODO get profile image of other user
+//        Account userAccount = new Account(user.getUserID());
+
+//       holder.IVRemoveFriendProfile.setImageDrawable(); TODO get profile image of other user
 
         holder.TVRemoveFriendUserName.setText(user.getFirstName() + " " + user.getLastName());
 
@@ -82,8 +93,12 @@ public class RemoveFriendAdapter extends RecyclerView.Adapter<RemoveFriendAdapte
             IVRemoveFriendProfile = itemView.findViewById(R.id.IVRemoveFriendProfile);
             TVRemoveFriendUserName = itemView.findViewById(R.id.TVRemoveFriendUserName);
             BtnRemoveFriend = itemView.findViewById(R.id.BtnRemoveFriend);
-
         }
 
+    }
+
+    /*Get the remaining friend*/
+    public List<User> getUsers() {
+        return users;
     }
 }

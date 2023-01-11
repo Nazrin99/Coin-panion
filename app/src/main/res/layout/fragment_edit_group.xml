@@ -76,7 +76,7 @@
                 android:src="@drawable/ic_baseline_groups_24" />
 
             <ImageButton
-                android:id="@+id/image_button"
+                android:id="@+id/IBUploadGroupProfilePic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="top|end"
@@ -154,8 +154,7 @@
             android:layout_height="260dp"
             android:layout_marginLeft="25sp"
             android:layout_marginRight="25sp"
-            tools:listitem="@layout/remove_friend_item">
-        </androidx.recyclerview.widget.RecyclerView>
+            tools:listitem="@layout/remove_friend_item"></androidx.recyclerview.widget.RecyclerView>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/BtnCreateGroup"

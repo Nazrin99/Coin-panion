@@ -1,5 +1,6 @@
 package com.example.coin_panion;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,6 +58,8 @@ public class DebtChecklistFragment extends Fragment {
         }
     }
 
+    TextView TVContact_name, TVContact_number;
+    ImageView IVSelectContact;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +68,10 @@ public class DebtChecklistFragment extends Fragment {
 
         //TODO pass user data to get payment approval request
 
+        View view = inflater.inflate(R.layout.fragment_debt_checklist, container, false);
 
-        return inflater.inflate(R.layout.fragment_debt_checklist, container, false);
+        TVContact_name = view.findViewById(R.id.TVContact_name);
+
+        return view;
     }
 }

@@ -34,11 +34,10 @@
 <!--        TODO make it clickable -->
     <ImageView
         android:id="@+id/imageView25"
-        android:layout_width="97dp"
-        android:layout_height="90dp"
-        android:src="@drawable/setting_line_svgrepo_com"
+        android:layout_width="93dp"
+        android:layout_height="75dp"
         android:layout_gravity="right"
-       />
+        android:src="@drawable/setting_line_svgrepo_com" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -50,6 +49,21 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/TVGroupName"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="15dp"
+                android:textAlignment="center"
+                android:inputType="textMultiLine"
+                android:text="Group Name"
+                android:background="@color/Biru_Muda"
+                android:textSize="15dp" />
+
+            <TextView
                 android:id="@+id/TVGroupDescription"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
@@ -58,13 +72,16 @@
                 android:layout_marginBottom="10dp"
                 android:inputType="textMultiLine"
                 android:text="@string/group_description"
+                android:paddingLeft="10dp"
+                android:background="@color/Biru_Muda"
                 android:textSize="15dp" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="300dp"
                 android:layout_height="414dp"
                 android:layout_marginLeft="50dp"
-                tools:listitem="@layout/remove_friend_item" />
+                tools:listitem="@layout/notification_item" />
 
         </LinearLayout>
 

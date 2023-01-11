@@ -19,7 +19,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RVBlockedAccount"
+            android:id="@+id/RVDebtCheckList"
             android:layout_width="350dp"
             android:layout_height="600dp"
             android:layout_marginLeft="30sp"

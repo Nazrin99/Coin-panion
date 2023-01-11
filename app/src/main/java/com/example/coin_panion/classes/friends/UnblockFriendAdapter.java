@@ -1,5 +1,7 @@
 package com.example.coin_panion.classes.friends;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import java.util.List;
 public class UnblockFriendAdapter extends RecyclerView.Adapter<UnblockFriendAdapter.ViewHolder>{
 
     private List<User> blockedfriends;
+    Context context;
 
     public UnblockFriendAdapter() {
         blockedfriends = new ArrayList<>();
@@ -28,6 +31,11 @@ public class UnblockFriendAdapter extends RecyclerView.Adapter<UnblockFriendAdap
 
     public UnblockFriendAdapter(List<User> blockedfriends) {
         this.blockedfriends = blockedfriends;
+    }
+
+    public UnblockFriendAdapter(List<User> blockedfriends, Context context) {
+        this.blockedfriends = blockedfriends;
+        this.context = context;
     }
 
     @NonNull
@@ -57,6 +65,7 @@ public class UnblockFriendAdapter extends RecyclerView.Adapter<UnblockFriendAdap
                 if(confirmationDialog.isConfirmed()){
 
                     /*TODO if confirmed set the blocked status to false*/
+
 
                 }else{
 

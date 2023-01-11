@@ -27,17 +27,15 @@
             android:background="@color/white"
             tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
-        <ImageButton
-            android:id="@+id/BtnFriendSettings"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/BtnSaveFriendSettings"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:background="@color/white"
-            android:text="Save"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:src="@drawable/setting_img"
             android:contentDescription="Edit Friend Settings"
-            />
+            android:text="Save"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
