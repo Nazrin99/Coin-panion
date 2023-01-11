@@ -106,8 +106,7 @@
             android:layout_marginRight="30sp"
             android:hint="Enter Group Name"
             android:minHeight="48dp"
-            android:singleLine="true"
-            app:colorLine="#000000" />
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/textView20"
@@ -130,8 +129,7 @@
             android:hint="Enter Group Description"
             android:inputType="textMultiLine"
             android:minHeight="48dp"
-            android:singleLine="true"
-            app:colorLine="#000000" />
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/textView33"

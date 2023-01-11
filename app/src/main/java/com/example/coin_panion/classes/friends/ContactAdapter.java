@@ -35,12 +35,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         notifyDataSetChanged();
     }
 
+    public ContactAdapter(List<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
     @NonNull
     @Override
     public ContactAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         /*Initialize view item*/
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.friend_from_contact_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_from_contact_item,parent,false);
 
         /*Return the view inflated*/
         return new ViewHolder(view);
@@ -55,32 +58,28 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.TVContactName.setText(contact.getContactName());
         holder.TVContactNumber.setText(contact.getContactNumber());
 
+        // Check for each contact if they have an account, if they don't disable their respective checkboxes
+        if (Contact.hasAnAccount(Long.parseLong(contact.getContactNumber()), new Thread())){
+            // Has an account
+            holder.CBSelectContact.setEnabled(false);
+        }
+        else{
+            holder.CBSelectContact.setEnabled(true);
+        }
+
         /*Check if the contact is selected*/
         holder.CBSelectContact.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                contact.setSelected(isChecked);
-
-                if (contact.getSelected()) {
-
-                    if (contact.getHasAccount()) {
-                        /*Add every selected contact to an arraylist if and only if they have an account*/
-                        selectedContacts.add(contact);
-                    } else {
-                        /*Check if the contact selected is have conpainion account if not toast*/
-                        Toast.makeText(buttonView.getContext(), "This contact does not have a Companion account", Toast.LENGTH_SHORT).show();
-                    }
+                if (isChecked) {
+                    selectedContacts.add(contact);
+                    // Toast.makeText(buttonView.getContext(), "This contact does not have a Companion account", Toast.LENGTH_SHORT).show();
                 } else {
                     /*If the contact selected can be added but diselected*/
                     selectedContacts.remove(contact);
                 }
             }
         });
-
-
-
-        /*TODO onclick removed all the friend that is not selected*/
-//        selectedContacts.removeIf(friend -> !friend.isSelected());
 
     }
 
@@ -157,7 +156,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     }
 
-    public void getAllSelectedContact(){
-        contacts.removeIf(contact -> !contact.getSelected());
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public List<Contact> getSelectedContacts() {
+        return selectedContacts;
+    }
+
+    public void setSelectedContacts(List<Contact> selectedContacts) {
+        this.selectedContacts = selectedContacts;
     }
 }

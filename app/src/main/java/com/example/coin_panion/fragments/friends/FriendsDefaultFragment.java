@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.utility.BaseViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +23,7 @@ import com.example.coin_panion.R;
  * create an instance of this fragment.
  */
 public class FriendsDefaultFragment extends Fragment {
+    BaseViewModel friendsViewModel;
     AppCompatButton addFriendsDefaultButton;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -74,6 +77,7 @@ public class FriendsDefaultFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+            friendsViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
             addFriendsDefaultButton = view.findViewById(R.id.addFriendsDefaultButton);
 
             addFriendsDefaultButton.setOnClickListener(v -> {
