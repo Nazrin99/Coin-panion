@@ -6,24 +6,18 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.example.coin_panion.classes.notification.Notification;
-import com.example.coin_panion.classes.general.SettleUpAccount;
-import com.example.coin_panion.classes.settleUp.PaymentApproval;
 import com.example.coin_panion.classes.transaction.Transaction;
 import com.example.coin_panion.classes.utility.Hashing;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.Picture;
 import com.example.coin_panion.classes.utility.ThreadStatic;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 

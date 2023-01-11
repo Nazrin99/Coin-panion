@@ -68,15 +68,14 @@ public class SettleUpAccount {
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 Integer pictureID = 0;
-                SettleUpAccount settleUpAccount = null;
-                while(resultSet.next()){
-                    settleUpAccount = new SettleUpAccount(accountID, resultSet.getString(2), resultSet.getLong(3), null);
+                if(resultSet.next()){
+                    SettleUpAccount settleUpAccount = new SettleUpAccount(accountID, resultSet.getString(2), resultSet.getLong(3), null);
                     pictureID = resultSet.getInt(4);
+                    settleUpAccount.setQrImage(Picture.getPictureFromDB(pictureID));
+                    settleUpAccountAtomicReference.set(settleUpAccount);
                 }
                 resultSet.close();
-                assert settleUpAccount != null;
-                settleUpAccount.setQrImage(Picture.getPictureFromDB(pictureID));
-                settleUpAccountAtomicReference.set(settleUpAccount);
+
 
             } catch (SQLException e) {
                 e.printStackTrace();

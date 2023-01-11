@@ -67,6 +67,7 @@
                 android:ems="10"
                 android:hint="@string/signup_phone_hint"
                 android:inputType="number|phone"
+                android:text="+60"
                 android:textColorHint="#757575"
                 tools:ignore="SpeakableTextPresentCheck" />
 

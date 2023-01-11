@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.login.LoginFragment1">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/TVTitleLogin"
+            android:layout_width="258dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="180dp"
+            android:fontFamily="@font/fugaz_one_regular"
+            android:gravity="center_horizontal"
+            android:text="@string/coin_panion_login"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/signupButton"
+            android:layout_width="117dp"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_edge_button"
+            android:text="@string/sign_up"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/loginButton"
+            app:layout_constraintEnd_toEndOf="@+id/passwordLayout"
+            app:layout_constraintTop_toTopOf="@+id/loginButton"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/ForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/forgot_password"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/passwordLayout"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/passwordLayout"
+            app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/loginButton"
+            android:layout_width="117dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/rounded_edge_button"
+            android:text="@string/login"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/passwordLayout"
+            app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/loginLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="45dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TVTitleLogin">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_email_or_phone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="@+id/loginLayout"
+            app:layout_constraintStart_toStartOf="@+id/loginLayout"
+            app:layout_constraintTop_toBottomOf="@+id/loginLayout"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

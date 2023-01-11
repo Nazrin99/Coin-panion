@@ -2,6 +2,7 @@ package com.example.coin_panion.classes.general;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.PerformanceHintManager;
 
 import androidx.annotation.NonNull;
 
@@ -178,15 +179,15 @@ public class User implements Parcelable {
         dataThread = new Thread(() -> {
             try(
                     Connection connection = Line.getConnection();
-                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE ? = ?");
                     ){
+                PreparedStatement preparedStatement;
                 if(queryKey instanceof String){
-                    preparedStatement.setString(1, "email");
-                    preparedStatement.setString(2, (String) queryKey);
+                    preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE email = ?");
+                    preparedStatement.setString(1, (String) queryKey);
                 }
                 else if(queryKey instanceof Long){
-                    preparedStatement.setString(1, "phone_number");
-                    preparedStatement.setLong(2, (Long) queryKey);
+                    preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE phone_number = ?");
+                    preparedStatement.setLong(1, (Long) queryKey);
                 }
                 else{
                     throw new DataFormatException("Unexpected data type, expected String or Long");
@@ -202,6 +203,7 @@ public class User implements Parcelable {
             }
         });
         ThreadStatic.run(dataThread);
+        System.out.println(atomicReference.get());
         return atomicReference.get();
     }
 
@@ -255,7 +257,7 @@ public class User implements Parcelable {
             List<User> friends = new ArrayList<>();
             try(
                     Connection connection = Line.getConnection();
-                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM friends WHERE account_id = ?")
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM friend WHERE account_id = ?")
                     ){
                 preparedStatement.setInt(1, accountID);
                 ResultSet resultSet = preparedStatement.executeQuery();
