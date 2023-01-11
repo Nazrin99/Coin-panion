@@ -1,33 +1,28 @@
 package com.example.coin_panion;
 
-import androidx.annotation.NonNull;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.widget.Toast;
-
-import com.example.coin_panion.classes.friends.Contact;
-import com.example.coin_panion.classes.friends.ContactAdapter;
-
-import java.util.ArrayList;
 
 public class FriendsActivity extends AppCompatActivity {
+    Toolbar toolbar;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
         checkPermission();
+
+        toolbar = findViewById(R.id.friendActivityAppBar);
+        textView = findViewById(R.id.activity_name);
+        textView.setText("Friends");
 
     }
 
@@ -40,9 +35,7 @@ public class FriendsActivity extends AppCompatActivity {
             // Request permission from user
             ActivityCompat.requestPermissions(FriendsActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 100);
         } else {
-            // Permission exists
 
-            /*Read User's contact log*/
         }
     }
 }
