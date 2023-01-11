@@ -98,6 +98,32 @@ public class Account implements Parcelable {
     }
 
     /**
+     * Constructor to create complete Account object
+     * @param accountID
+     * @param user
+     * @param password
+     * @param bio
+     * @param friends
+     * @param debtLimit
+     * @param settleUpAccount
+     * @param notifications
+     * @param accountPic
+     * @param accountCover
+     */
+    public Account(Integer accountID, User user, String password, String bio, List<User> friends, DebtLimit debtLimit, SettleUpAccount settleUpAccount, List<Notification> notifications, Picture accountPic, Picture accountCover) {
+        this.accountID = accountID;
+        this.user = user;
+        this.password = password;
+        this.bio = bio;
+        this.friends = friends;
+        this.debtLimit = debtLimit;
+        this.settleUpAccount = settleUpAccount;
+        this.notifications = notifications;
+        this.accountPic = accountPic;
+        this.accountCover = accountCover;
+    }
+
+    /**
      * Retrieve a list of UNSETTLED DEBTS from the transaction table
      * @param accountID
      * @param dataThread
@@ -248,7 +274,7 @@ public class Account implements Parcelable {
         return settleUpAccount;
     }
 
-    public void setSettleUpAccount(SettleUpAccount settleUpAccount) {
+    public void setSettleUpAccounts(SettleUpAccount settleUpAccount) {
         this.settleUpAccount = settleUpAccount;
     }
 

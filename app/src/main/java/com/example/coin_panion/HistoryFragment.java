@@ -81,7 +81,6 @@ public class HistoryFragment extends Fragment {
         /*Dummy data into recycler view*/
         int i = 0;
         for(String str : desc){
-            noti.add(new Notification(title[i++],desc[i++]));
         }
 
         //TODO pass user data to get notifications
