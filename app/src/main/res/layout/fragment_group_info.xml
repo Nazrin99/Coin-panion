@@ -1,77 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".GroupInfoFragment">
+    tools:context=".GroupInfoFragment"
+    android:orientation="vertical"
+    >
+        <!--TODO make it editable-->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <!--            TODO make it editable-->
         <ImageView
             android:id="@+id/imageView6"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@mipmap/ic_background12_foreground" />
 
-        <!--            TODO make it editable-->
         <ImageView
             android:id="@+id/imageView7"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.202"
+            android:layout_gravity="bottom"
             app:srcCompat="@mipmap/ic_examplegroupprofile_foreground" />
 
+    </FrameLayout>
+
+
 <!--        TODO make it clickable -->
-        <ImageView
-            android:id="@+id/imageView25"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/setting_line_svgrepo_com"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.955"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.377" />
+    <ImageView
+        android:id="@+id/imageView25"
+        android:layout_width="93dp"
+        android:layout_height="75dp"
+        android:layout_gravity="right"
+        android:src="@drawable/setting_line_svgrepo_com" />
 
-        <TextView
-            android:id="@+id/textView28"
-            android:layout_width="200dp"
-            android:layout_height="80dp"
-            android:text="@string/group_description"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.218"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.499" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="290dp"
-            android:layout_height="300dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.414"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.883" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TVGroupName"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="15dp"
+                android:textAlignment="center"
+                android:inputType="textMultiLine"
+                android:text="Group Name"
+                android:background="@color/Biru_Muda"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/TVGroupDescription"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:inputType="textMultiLine"
+                android:text="@string/group_description"
+                android:paddingLeft="10dp"
+                android:background="@color/Biru_Muda"
+                android:textSize="15dp" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="300dp"
+                android:layout_height="414dp"
+                android:layout_marginLeft="50dp"
+                tools:listitem="@layout/notification_item" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

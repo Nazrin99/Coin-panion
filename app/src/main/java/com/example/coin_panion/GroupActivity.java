@@ -1,9 +1,11 @@
 package com.example.coin_panion;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class GroupActivity extends AppCompatActivity {
@@ -21,4 +23,6 @@ public class GroupActivity extends AppCompatActivity {
 
         textView2.setText("GROUP");
     }
+
+
 }

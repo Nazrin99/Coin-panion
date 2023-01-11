@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,24 +18,27 @@ import com.example.coin_panion.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable {
 
     Activity readContactLog;
     List<Contact> contacts;
     List<Contact> selectedContacts;
+    List<Contact> filteredContacts;
 
     public ContactAdapter(Activity readContactLog, List<Contact> contacts) {
         this.readContactLog = readContactLog;
         this.contacts = contacts;
         selectedContacts = new ArrayList<>();
+        filteredContacts = new ArrayList<>();
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ContactAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //Initialize view item
+        /*Initialize view item*/
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.friend_from_contact_item,parent,false);
 
@@ -57,6 +62,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                 contact.setSelected(isChecked);
 
                 if (contact.getSelected()) {
+
                     if (contact.getHasAccount()) {
                         /*Add every selected contact to an arraylist if and only if they have an account*/
                         selectedContacts.add(contact);
@@ -71,6 +77,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             }
         });
 
+
+
         /*TODO onclick removed all the friend that is not selected*/
 //        selectedContacts.removeIf(friend -> !friend.isSelected());
 
@@ -80,6 +88,58 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     public int getItemCount() {
         return contacts.size();
     }
+
+    @Override
+    public Filter getFilter() {
+
+        return contactsFilter;
+    }
+
+    private final Filter contactsFilter = new Filter() {
+        /*Filter the contact by number and name of contact that is to be added*/
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            ArrayList<Contact> filteredContacts = new ArrayList<>();
+
+            if(constraint == null || constraint.length() == 0){
+
+                filteredContacts.addAll(contacts);
+
+            } else {
+
+                String filterPattern = contactsFilter.toString().toLowerCase().trim();
+
+                for(Contact contact : contacts){
+
+                    if(contact.getContactName().contains(filterPattern)){
+
+                        filteredContacts.add(contact);
+
+                    }else if(contact.getContactNumber().contains(filterPattern)){
+
+                        filteredContacts.add(contact);
+
+                    }
+
+                }
+
+            }
+
+            /*Create filter results*/
+            FilterResults results = new FilterResults();
+            results.values = filteredContacts;
+            results.count = filteredContacts.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            contacts.clear();
+            contacts.addAll((ArrayList)results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -94,5 +154,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             TVContactNumber = itemView.findViewById(R.id.TVContact_number);
             CBSelectContact = itemView.findViewById(R.id.CBSelectContact);
         }
+
+    }
+
+    public void getAllSelectedContact(){
+        contacts.removeIf(contact -> !contact.getSelected());
     }
 }

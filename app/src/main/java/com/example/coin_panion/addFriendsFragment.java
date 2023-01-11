@@ -59,16 +59,6 @@ public class addFriendsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        ArrayList<String> name = new ArrayList<>();
-        name.add("User1");
-        name.add("User1");
-        name.add("User1");
-        name.add("User1");
-        name.add("User1");
-        name.add("User1");
-        name.add("User1");
-
-
     }
 
     @Override
