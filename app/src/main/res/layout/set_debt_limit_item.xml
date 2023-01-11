@@ -10,6 +10,7 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="10dp"
     android:backgroundTint="@color/blue_omey"
+    android:id="@+id/CVSetDebtLimit"
     >
 
     <LinearLayout
@@ -73,6 +74,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
+            android:backgroundTint="@color/black"
             android:entries="@array/sample_duration"
             />
 

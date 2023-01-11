@@ -38,7 +38,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @NonNull
     @Override
     public ContactAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //Initialize view item
+        /*Initialize view item*/
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.friend_from_contact_item,parent,false);
 
@@ -93,6 +93,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     }
 
     private final Filter contactsFilter = new Filter() {
+        /*Filter the contact by number and name of contact that is to be added*/
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
@@ -109,15 +110,20 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                 for(Contact contact : contacts){
 
                     if(contact.getContactName().contains(filterPattern)){
+
                         filteredContacts.add(contact);
+
                     }else if(contact.getContactNumber().contains(filterPattern)){
+
                         filteredContacts.add(contact);
+
                     }
 
                 }
 
             }
 
+            /*Create filter results*/
             FilterResults results = new FilterResults();
             results.values = filteredContacts;
             results.count = filteredContacts.size();

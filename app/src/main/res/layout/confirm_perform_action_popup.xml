@@ -39,14 +39,16 @@
             >
 
             <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="109dp"
+                android:id="@+id/BtnConfirmAction"
+                android:layout_width="110dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="30dp"
                 android:background="@drawable/rounded_edge_button"
-                android:text="Save"
+                android:text="Confirm"
                 android:textSize="20sp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/BtnCancelAction"
                 android:layout_width="112dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="110dp"

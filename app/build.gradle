@@ -63,4 +63,7 @@ dependencies {
 
     //Card View
     implementation "androidx.cardview:cardview:1.0.0"
+
+    //Image Pop up
+//    compile 'com.github.chathuralakmal:AndroidImagePopup:1.2.2'
 }

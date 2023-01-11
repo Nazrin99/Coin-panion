@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/block_friend_item"
+    android:id="@+id/CVRemove_friend_item"
     app:cardCornerRadius="20dp"
     android:backgroundTint="@color/Biru_Muda"
     android:layout_marginRight="10dp"

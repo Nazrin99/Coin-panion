@@ -48,7 +48,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/LLFriendInfo"
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="100dp"
         android:orientation="horizontal"
         android:layout_marginTop="30dp"
@@ -58,6 +58,7 @@
         >
 
         <ImageView
+            android:id="@+id/IVFriendPaymentApprovalProfile"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/profilefriends_img"
@@ -65,7 +66,7 @@
             />
 
         <TextView
-            android:layout_width="201dp"
+            android:layout_width="250dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="100dp"
             android:paddingLeft="20dp"

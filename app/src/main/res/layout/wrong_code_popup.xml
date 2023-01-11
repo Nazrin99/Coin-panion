@@ -9,6 +9,7 @@
     android:backgroundTint="@color/Biru_Muda"
     android:layout_marginLeft="60dp"
     android:layout_marginTop="20dp"
+    android:id="@+id/CVWrongCodePopup"
     >
 
     <LinearLayout
