@@ -3,10 +3,21 @@ package com.example.coin_panion;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+
+import com.example.coin_panion.classes.friends.ContactAdapter;
+import com.example.coin_panion.classes.friends.RemoveFriendAdapter;
+import com.example.coin_panion.classes.general.User;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +25,12 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class EditGroupFragment extends Fragment {
+
+    private List<User> groupMembers;
+
+    public EditGroupFragment(List<User> groupMembers) {
+        this.groupMembers = groupMembers;
+    }
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,12 +70,47 @@ public class EditGroupFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        /*Set layout manager*/
+        RVRemoveAddFriendGroup.setLayoutManager(new LinearLayoutManager(getContext()));
+        /*Initialize adapter*/
+        removeFriendAdapter = new RemoveFriendAdapter(groupMembers,getContext());
+        /*Set the adapter*/
+        RVRemoveAddFriendGroup.setAdapter(removeFriendAdapter);
+        /*Notify Changes in adapter*/
+        BtnCreateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*TODO create an object instance of group and place in database*/
+            }
+        });
     }
+
+    ImageButton IBUploadGroupBackground, IBUploadGroupProfilePic;
+    EditText ETGroupName, ETGroupDescription;
+    RecyclerView RVRemoveAddFriendGroup;
+    Button BtnCreateGroup;
+    RemoveFriendAdapter removeFriendAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_group, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_group, container, false);
+
+        IBUploadGroupBackground = view.findViewById(R.id.IBUploadGroupBackground);
+        IBUploadGroupProfilePic = view.findViewById(R.id.IBUploadGroupProfilePic);
+        ETGroupName = view.findViewById(R.id.ETGroupName);
+        ETGroupDescription = view.findViewById(R.id.ETGroupDescription);
+        RVRemoveAddFriendGroup = view.findViewById(R.id.RVRemoveAddFriendGroup);
+        BtnCreateGroup = view.findViewById(R.id.BtnCreateGroup);
+
+        /*TODO function to take all the variable instance and upload it*/
+
+
+        return view;
     }
+
+
+
 }

@@ -1,47 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20sp"
-    android:orientation="horizontal">
-
-    <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="30sp"
-        android:layout_marginRight="10sp"
-        android:src="@drawable/profile_vector" />
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/block_friend_item"
+    app:cardCornerRadius="20dp"
+    android:backgroundTint="@color/Biru_Muda"
+    android:layout_marginRight="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop = "10dp"
+    >
 
     <LinearLayout
-        android:layout_width="219dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/TVContact_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contact Name"
-            android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/IVRemoveFriendProfile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/profile_vector" />
 
-        <TextView
-            android:id="@+id/TVContact_number"
+        <LinearLayout
+            android:layout_width="219dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TVContact_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact Name"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/TVContact_number"
+                android:layout_width="112dp"
+                android:layout_height="wrap_content"
+                android:text="Contact Number"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/CBSelectContact"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contact Number"
-            android:textSize="14sp" />
+            android:layout_height="match_parent"
+            android:paddingLeft="30sp"
+            android:layout_marginRight="40sp" />
+
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/CBSelectContact"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:paddingLeft="30sp"
-        android:layout_marginRight="40sp" />
+</androidx.cardview.widget.CardView>
 
-</LinearLayout>
 

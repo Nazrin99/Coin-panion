@@ -12,7 +12,6 @@ public class DetailGroupActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_add_group_friends);
 //        textView = findViewById(R.id.activity_name);
-//
 //        textView.setText("New Groups & Expenses");
     }
 }

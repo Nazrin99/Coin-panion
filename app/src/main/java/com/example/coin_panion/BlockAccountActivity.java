@@ -17,6 +17,5 @@ public class BlockAccountActivity extends AppCompatActivity {
 
         textView.setText("BLOCKED ACCOUNTS");
 
-
     }
 }

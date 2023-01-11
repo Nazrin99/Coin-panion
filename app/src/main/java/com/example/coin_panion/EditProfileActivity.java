@@ -16,5 +16,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         textView = findViewById(R.id.activity_name);
         textView.setText("EDIT PROFILE");
+
+
     }
 }
