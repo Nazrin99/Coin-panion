@@ -74,6 +74,7 @@
     <string name="email_exists">Email already exists, please choose another email</string>
     <string name="good_to_go">You\'re good to go!</string>
     <string name="enter_details">Please enter your details and set your password below</string>
+    <string name="enter_email_or_phone">Please enter your phone number or email</string>
 
 
     <!--TODO include this into login page lead to privacy policy page only if checkbox is check then the login button can be activated-->

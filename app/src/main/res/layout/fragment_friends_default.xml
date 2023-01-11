@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".fragments.friends.FriendsDefaultFragment">
 
     <TextView
         android:id="@+id/TVDefaultFriendBottom"
@@ -23,7 +24,7 @@
         android:id="@+id/TVDefaultFriendTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="320dp"
+        android:layout_marginTop="276dp"
         android:text="Welcome to CoinPanion"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -36,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="200dp"
         android:background="@color/Biru_Muda"
         android:text="ADD FRIENDS"
         android:textColor="@color/black"

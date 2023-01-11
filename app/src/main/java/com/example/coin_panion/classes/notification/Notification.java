@@ -1,83 +1,81 @@
 package com.example.coin_panion.classes.notification;
 
+import android.speech.RecognitionService;
+
+import com.example.coin_panion.classes.utility.Line;
+import com.example.coin_panion.classes.utility.ThreadStatic;
+
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 
 public class Notification {
+    private Integer notiID;
+    private NotificationType notiType;
+    private Integer groupID;
+    private Integer transactionID;
+    private Integer senderID;
+    private Integer receiverID;
+    private Long notiEpoch;
 
-    /*Info for each notification created*/
-   private Integer transaction_id;
-   private Integer noti_id;
-   private Integer group_id;
-   private Timestamp epoch_noti;
-   private Integer sender_id;
-   private Integer receiver_id;
-   private String noti_title;
-   private String noti_desc;
-
-   /*TODO how notification is fetched when no desc is included*/
-    public Notification(Integer transaction_id, Integer noti_id, Integer group_id, Timestamp epoch_noti, Integer sender_id, Integer receiver_id) {
-        this.transaction_id = transaction_id;
-        this.noti_id = noti_id;
-        this.group_id = group_id;
-        this.epoch_noti = epoch_noti;
-        this.sender_id = sender_id;
-        this.receiver_id = receiver_id;
+    // Constructor to create complete notification object
+    public Notification(Integer notiID, String notiType, Integer groupID, Integer transactionID, Integer senderID, Integer receiverID, Long notiEpoch) {
+        this.notiID = notiID;
+        this.notiType = getNotiType(notiType);
+        this.groupID = groupID;
+        this.transactionID = transactionID;
+        this.senderID = senderID;
+        this.receiverID = receiverID;
+        this.notiEpoch = notiEpoch;
     }
 
-    public Notification(Integer transaction_id, Integer group_id, Timestamp epoch_noti, Integer sender_id, Integer receiver_id) {
-        this.transaction_id = transaction_id;
-        this.group_id = group_id;
-        this.epoch_noti = epoch_noti;
-        this.sender_id = sender_id;
-        this.receiver_id = receiver_id;
+    /**
+     * Returns a list of notifications based on the given accountID
+     * @param accountID
+     * @param dataThread
+     * @return
+     */
+    public static List<Notification> getNotifications(Integer accountID, Thread dataThread){
+        AtomicReference<List<Notification>> listAtomicReference = new AtomicReference<>(new ArrayList<>());
+        dataThread = new Thread(() -> {
+            List<Notification> notifications = new ArrayList<>();
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM notification WHERE sender = ? OR receiver = ?")
+            ){
+                preparedStatement.setInt(1, accountID);
+                preparedStatement.setInt(2, accountID);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while(resultSet.next()){
+                    notifications.add(new Notification(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getInt(4), resultSet.getInt(5), resultSet.getInt(6), resultSet.getLong(7)));
+                }
+                resultSet.close();
+                listAtomicReference.set(notifications);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
+        return listAtomicReference.get();
     }
 
-    /*Receiver Notification*/
-    public Notification(Integer receiver_id) {
-        this.receiver_id = receiver_id;
-    }
-
-    /*Sender Notification*/
-    public Notification(Integer group_id, Integer sender_id) {
-        this.group_id = group_id;
-        this.sender_id = sender_id;
-    }
-
-    /*Dummy*/
-
-    public Notification(String noti_title, String noti_desc) {
-        this.noti_title = noti_title;
-        this.noti_desc = noti_desc;
-    }
-
-    /*TODO Insert notification created into database based on this.variable*/
-    public void addNotification(){
-
-    }
-
-    /*Fetch relevant notification based on the user account id*/
-    public static void fetchUserNotification(){
-
-    }
-
-    /*Fetch relevant notification based on the groupID */
-    public static void fetchGroupNotification(){
-
-    }
-
-    /* Fetch general notification */
-    public List<Notification> fetchGeneralNotification(){
-        // Fetch from notification table for all user's notification
-        return null;
-    }
-
-    public String getNoti_title() {
-        return noti_title;
-    }
-
-    public String getNoti_desc() {
-        return noti_desc;
+    private static NotificationType getNotiType(String argument){
+        if(NotificationType.ADDED_INTO_GROUP.getType().equalsIgnoreCase(argument)){
+            return NotificationType.ADDED_INTO_GROUP;
+        }
+        else if(NotificationType.PAYMENT_APPROVAL.getType().equalsIgnoreCase(argument)){
+            return NotificationType.PAYMENT_APPROVAL;
+        }
+        else{
+            return NotificationType.GENERAL;
+        }
     }
 }

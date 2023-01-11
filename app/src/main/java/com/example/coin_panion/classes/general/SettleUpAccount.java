@@ -18,11 +18,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class SettleUpAccount {
     private Integer accountID;
     private String settleUpAccountName;
-    private Integer settleUpAccountNumber;
+    private Long settleUpAccountNumber;
     private Picture qrImage;
 
     // Constructor
-    public SettleUpAccount(Integer accountID, String settleUpAccountName, Integer settleUpAccountNumber, Picture qrImage) {
+    public SettleUpAccount(Integer accountID, String settleUpAccountName, Long settleUpAccountNumber, Picture qrImage) {
         this.accountID = accountID;
         this.settleUpAccountName = settleUpAccountName;
         this.settleUpAccountNumber = settleUpAccountNumber;
@@ -70,7 +70,7 @@ public class SettleUpAccount {
                 Integer pictureID = 0;
                 SettleUpAccount settleUpAccount = null;
                 while(resultSet.next()){
-                    settleUpAccount = new SettleUpAccount(accountID, resultSet.getString(2), resultSet.getInt(3), null);
+                    settleUpAccount = new SettleUpAccount(accountID, resultSet.getString(2), resultSet.getLong(3), null);
                     pictureID = resultSet.getInt(4);
                 }
                 resultSet.close();
@@ -96,7 +96,7 @@ public class SettleUpAccount {
      * @param dataThread
      * @return Returns an object of SettleUpAccount
      */
-    public static SettleUpAccount insertSettleUpAccount(Integer accountID, String settleUpAccountName, Integer settleUpAccountNumber, Uri imageUri, ContentResolver contentResolver, Thread dataThread){
+    public static SettleUpAccount insertSettleUpAccount(Integer accountID, String settleUpAccountName, Long settleUpAccountNumber, Uri imageUri, ContentResolver contentResolver, Thread dataThread){
         AtomicReference<SettleUpAccount> settleUpAccountAtomicReference = new AtomicReference<>();
         Picture qr = Picture.insertPicIntoDB(imageUri, contentResolver, dataThread);
         dataThread = new Thread(() -> {
@@ -106,7 +106,7 @@ public class SettleUpAccount {
                     ){
                 preparedStatement.setInt(1, accountID);
                 preparedStatement.setString(2, settleUpAccountName);
-                preparedStatement.setInt(3, settleUpAccountNumber);
+                preparedStatement.setLong(3, settleUpAccountNumber);
                 preparedStatement.setInt(4, qr.getPictureID());
                 preparedStatement.execute();
             } catch (SQLException e) {
@@ -133,11 +133,11 @@ public class SettleUpAccount {
         this.settleUpAccountName = settleUpAccountName;
     }
 
-    public Integer getSettleUpAccountNumber() {
+    public Long getSettleUpAccountNumber() {
         return settleUpAccountNumber;
     }
 
-    public void setSettleUpAccountNumber(Integer settleUpAccountNumber) {
+    public void setSettleUpAccountNumber(Long settleUpAccountNumber) {
         this.settleUpAccountNumber = settleUpAccountNumber;
     }
 

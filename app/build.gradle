@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'androidx.navigation.safeargs'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -50,6 +51,7 @@ dependencies {
 
     // MySQL Connector
     implementation 'mysql:mysql-connector-java:5.1.49'
+    implementation 'com.google.firebase:firebase-firestore:24.4.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

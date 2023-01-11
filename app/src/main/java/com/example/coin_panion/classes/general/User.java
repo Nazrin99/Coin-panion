@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.DataFormatException;
 
@@ -93,7 +95,7 @@ public class User implements Parcelable {
         getUserData(email, dataThread);
     }
 
-    // Constructor to create User object during runtime. Application data purpose
+    // Constructor to create complete User object
     public User(Integer userID, Long phoneNumber, String firstName, String lastName, String username, String email) {
         this.userID = userID;
         this.phoneNumber = phoneNumber;
@@ -165,6 +167,44 @@ public class User implements Parcelable {
         ThreadStatic.run(dataThread);
     }
 
+    /**
+     * Query database for the existence of a user using their credentials, returns a User object
+     * @param queryKey
+     * @param dataThread
+     * @return
+     */
+    public static User verifyUserLogin(Object queryKey, Thread dataThread){
+        AtomicReference<User> atomicReference = new AtomicReference<>(null);
+        dataThread = new Thread(() -> {
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE ? = ?");
+                    ){
+                if(queryKey instanceof String){
+                    preparedStatement.setString(1, "email");
+                    preparedStatement.setString(2, (String) queryKey);
+                }
+                else if(queryKey instanceof Long){
+                    preparedStatement.setString(1, "phone_number");
+                    preparedStatement.setLong(2, (Long) queryKey);
+                }
+                else{
+                    throw new DataFormatException("Unexpected data type, expected String or Long");
+                }
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if(resultSet.next()){
+                    // User exists, return a User object using AtomicReference
+                    atomicReference.set(new User(resultSet.getInt(1), resultSet.getLong(2), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(3)));
+                }
+                resultSet.close();
+            } catch (SQLException | DataFormatException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
+        return atomicReference.get();
+    }
+
     // SELECT: Get existing user data from the database. Require parameter queryKey which can be email or phone number, will be checked in method
     private void getUserData(Object queryKey, Thread dataThread){
         dataThread = new Thread(() -> {
@@ -201,6 +241,34 @@ public class User implements Parcelable {
             }
         });
         ThreadStatic.run(dataThread);
+    }
+
+    /**
+     * Retrieves list of friend associated with the accountID. Returns a list of User objects as friends
+     * @param accountID
+     * @param dataThread
+     * @return
+     */
+    public static List<User> getFriends(Integer accountID, Thread dataThread){
+        AtomicReference<List<User>> listAtomicReference = new AtomicReference<>(new ArrayList<>());
+        dataThread = new Thread(() -> {
+            List<User> friends = new ArrayList<>();
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM friends WHERE account_id = ?")
+                    ){
+                preparedStatement.setInt(1, accountID);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while(resultSet.next()){
+                    friends.add(new User(resultSet.getInt(1), resultSet.getLong(2), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(3)));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            listAtomicReference.set(friends);
+        });
+        ThreadStatic.run(dataThread);
+        return listAtomicReference.get();
     }
 
     // Getters and setters
