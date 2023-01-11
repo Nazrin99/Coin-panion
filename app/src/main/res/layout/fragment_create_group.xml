@@ -77,6 +77,8 @@
             android:outlineAmbientShadowColor="@color/black"
             android:paddingTop="15dp"
             android:paddingLeft="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight=""
             android:text="Group name"
             android:textColor="#80000000"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -104,14 +106,14 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_width="385dp"
-            android:layout_height="257dp"
+            android:layout_width="413dp"
+            android:layout_height="259dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.489"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.842"
+            app:layout_constraintVertical_bias="0.813"
             tools:listitem="@layout/friend_from_acc_item" />
 
         <androidx.appcompat.widget.AppCompatButton
