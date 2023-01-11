@@ -4,7 +4,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.example.coin_panion.R;
  * create an instance of this fragment.
  */
 public class FriendsDefaultFragment extends Fragment {
+    AppCompatButton addFriendsDefaultButton;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,6 +74,13 @@ public class FriendsDefaultFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+            addFriendsDefaultButton = view.findViewById(R.id.addFriendsDefaultButton);
+
+            addFriendsDefaultButton.setOnClickListener(v -> {
+                // Switch to contact view to add friends
+                NavDirections navDirections = FriendsDefaultFragmentDirections.actionFriendsDefaultFragmentToFriendsAddFragment();
+                Navigation.findNavController(view).navigate(navDirections);
+            });
 
     }
 }
