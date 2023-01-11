@@ -8,7 +8,11 @@
         android:id="@+id/friendsSettingsFragment"
         android:name="com.example.coin_panion.fragments.friends.FriendsSettingsFragment"
         android:label="fragment_friends_settings"
-        tools:layout="@layout/fragment_friends_settings" />
+        tools:layout="@layout/fragment_friends_settings" >
+        <action
+            android:id="@+id/action_friendsSettingsFragment_to_friendsDetailFragment2"
+            app:destination="@id/friendsDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/friendsSettleUpFragment"
         android:name="com.example.coin_panion.fragments.friends.FriendsSettleUpFragment"
@@ -22,6 +26,9 @@
         <action
             android:id="@+id/action_friendsDefaultFragment_to_friendsFragment"
             app:destination="@id/friendsFragment" />
+        <action
+            android:id="@+id/action_friendsDefaultFragment_to_friendsAddFragment"
+            app:destination="@id/friendsAddFragment" />
     </fragment>
     <fragment
         android:id="@+id/friendsFragment"
@@ -32,7 +39,14 @@
         android:id="@+id/friendsDetailFragment"
         android:name="com.example.coin_panion.fragments.friends.FriendsDetailFragment"
         android:label="fragment_friends_detail"
-        tools:layout="@layout/fragment_friends_detail" />
+        tools:layout="@layout/fragment_friends_detail" >
+        <action
+            android:id="@+id/action_friendsDetailFragment_to_friendsSettleUpFragment"
+            app:destination="@id/friendsSettleUpFragment" />
+        <action
+            android:id="@+id/action_friendsDetailFragment_to_friendsSettingsFragment"
+            app:destination="@id/friendsSettingsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/friendsAddFragment"
         android:name="com.example.coin_panion.fragments.friends.FriendsAddFragment"
