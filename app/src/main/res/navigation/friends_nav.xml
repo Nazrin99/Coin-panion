@@ -5,55 +5,51 @@
     android:id="@+id/friends_nav"
     app:startDestination="@id/friendsDefaultFragment">
     <fragment
-        android:id="@+id/friendsAddFragment"
-        android:name="com.example.coin_panion.fragments.friends.FriendsAddFragment"
-        android:label="fragment_add_friends"
-        tools:layout="@layout/fragment_friends_from_contact" >
+        android:id="@+id/friendsSettingsFragment"
+        android:name="com.example.coin_panion.fragments.friends.FriendsSettingsFragment"
+        android:label="fragment_friends_settings"
+        tools:layout="@layout/fragment_friends_settings" >
         <action
-            android:id="@+id/action_friendsAddFragment_to_friendsFragment"
+            android:id="@+id/action_friendsSettingsFragment_to_friendsDetailFragment2"
+            app:destination="@id/friendsDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsSettleUpFragment"
+        android:name="com.example.coin_panion.fragments.friends.FriendsSettleUpFragment"
+        android:label="fragment_friends_settle_up"
+        tools:layout="@layout/fragment_friends_settle_up" />
+    <fragment
+        android:id="@+id/friendsDefaultFragment"
+        android:name="com.example.coin_panion.fragments.friends.FriendsDefaultFragment"
+        android:label="fragment_friends_default"
+        tools:layout="@layout/fragment_friends_default" >
+        <action
+            android:id="@+id/action_friendsDefaultFragment_to_friendsFragment"
             app:destination="@id/friendsFragment" />
+        <action
+            android:id="@+id/action_friendsDefaultFragment_to_friendsAddFragment"
+            app:destination="@id/friendsAddFragment" />
     </fragment>
     <fragment
         android:id="@+id/friendsFragment"
         android:name="com.example.coin_panion.fragments.friends.FriendsFragment"
         android:label="fragment_friends"
-        tools:layout="@layout/fragment_friends" >
-        <action
-            android:id="@+id/action_friendsFragment_to_friendsDetailFragment"
-            app:destination="@id/friendsDetailFragment" />
-        <action
-            android:id="@+id/action_friendsFragment_to_friendsAddFragment"
-            app:destination="@id/friendsAddFragment" />
-    </fragment>
-     <fragment
-        android:id="@+id/friendsDefaultFragment"
-        android:name="com.example.coin_panion.fragments.friends.FriendsDefaultFragment"
-        android:label="fragment_friends_default"
-        tools:layout="@layout/fragment_friends_default" >
-         <action
-             android:id="@+id/action_friendsDefaultFragment_to_friendsAddFragment"
-             app:destination="@id/friendsAddFragment" />
-     </fragment>
+        tools:layout="@layout/fragment_friends" />
     <fragment
         android:id="@+id/friendsDetailFragment"
         android:name="com.example.coin_panion.fragments.friends.FriendsDetailFragment"
-        android:label="fragment_friends_settings"
-        tools:layout="@layout/fragment_friends_settings" />
+        android:label="fragment_friends_detail"
+        tools:layout="@layout/fragment_friends_detail" >
+        <action
+            android:id="@+id/action_friendsDetailFragment_to_friendsSettleUpFragment"
+            app:destination="@id/friendsSettleUpFragment" />
+        <action
+            android:id="@+id/action_friendsDetailFragment_to_friendsSettingsFragment"
+            app:destination="@id/friendsSettingsFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/friendsSettingsFragment3"
-        android:name="com.example.coin_panion.fragments.friends.FriendsSettingsFragment"
-        android:label="FriendsSettingsFragment" />
-    <fragment
-        android:id="@+id/friendsSettleUpFragment2"
-        android:name="com.example.coin_panion.fragments.friends.FriendsSettleUpFragment"
-        android:label="FriendsSettleUpFragment" />
-    <fragment
-        android:id="@+id/addFriendsFragment"
-        android:name="com.example.coin_panion.addFriendsFragment"
-        android:label="addFriendsFragment" />
-    <activity
-        android:id="@+id/friendsProfileActivity"
-        android:name="com.example.coin_panion.FriendsProfileActivity"
-        android:label="activity_friends_profile"
-        tools:layout="@layout/activity_friends_profile" />
+        android:id="@+id/friendsAddFragment"
+        android:name="com.example.coin_panion.fragments.friends.FriendsAddFragment"
+        android:label="fragment_friends_from_contact"
+        tools:layout="@layout/fragment_friends_from_contact" />
 </navigation>
