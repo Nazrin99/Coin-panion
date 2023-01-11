@@ -30,6 +30,8 @@ public class FriendsActivity extends AppCompatActivity {
     ContactAdapter contactAdapter;
     SearchView SVFriendContact;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +63,6 @@ public class FriendsActivity extends AppCompatActivity {
             getContactLog();
         }
     }
-
-
 
     private void getContactLog(){
         /*Initialize URI*/

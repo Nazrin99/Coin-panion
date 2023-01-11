@@ -21,7 +21,7 @@
         >
 
         <ImageView
-            android:id="@+id/imageView16"
+            android:id="@+id/IVGroupProfileItem"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
@@ -29,7 +29,7 @@
             card_view:srcCompat="@mipmap/ic_group_foreground" />
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/TVGroupNameItem"
             android:layout_width="148dp"
             android:layout_height="match_parent"
             android:layout_gravity="left|center_vertical"
@@ -41,9 +41,11 @@
             android:textSize="15dp" />
 
         <ImageView
+            android:id="@+id/IVGroupInfoItem"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:src="@mipmap/ic_next_foreground"
+            android:contentDescription="@string/group_info"
             />
 
     </LinearLayout>

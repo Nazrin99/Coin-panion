@@ -14,7 +14,7 @@
         android:name="com.example.coin_panion.fragments.friends.FriendsFragment"
         android:label="fragment_friends"
         tools:layout="@layout/fragment_friends" />
-    <fragment
+     <fragment
         android:id="@+id/friendsDefaultFragment"
         android:name="com.example.coin_panion.fragments.friends.FriendsDefaultFragment"
         android:label="fragment_friends_default"

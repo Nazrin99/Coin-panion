@@ -17,7 +17,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/profile_image"
+            android:id="@+id/IVRemoveFriendProfile"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="10sp"
@@ -27,7 +27,7 @@
             android:src="@drawable/profilefriends_img" />
 
         <TextView
-            android:id="@+id/username"
+            android:id="@+id/TVRemoveFriendUserName"
             android:layout_width="236dp"
             android:layout_height="50dp"
             android:layout_marginRight="10sp"
@@ -38,7 +38,7 @@
             android:textSize="18sp" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/unblock_button"
+            android:id="@+id/BtnRemoveFriend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_red_button"

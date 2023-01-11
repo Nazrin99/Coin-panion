@@ -79,4 +79,5 @@
     <string name="member_name">Name</string>
     <string name="group_description">Group description</string>
     <string name="create_a_group_expenses"> Create a group / expenses </string>
+    <string name="group_info">Group Info</string>
 </resources>

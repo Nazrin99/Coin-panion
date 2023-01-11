@@ -176,7 +176,7 @@ public class SignupFragment3 extends Fragment {
         dialogBuilder = new AlertDialog.Builder(requireActivity());
         final View popup = getLayoutInflater().inflate(R.layout.wrong_code_popup, null);
         popupTextView = popup.findViewById(R.id.popupTextView);
-        popupOkButton = popup.findViewById(R.id.popupOkButton);
+        popupOkButton = popup.findViewById(R.id.BtnPopupOkButton);
 
         dialogBuilder.setView(popup);
         dialog = dialogBuilder.create();

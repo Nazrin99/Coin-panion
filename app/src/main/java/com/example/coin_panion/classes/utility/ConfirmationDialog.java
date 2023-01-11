@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.coin_panion.R;
 
-class ConfirmationDialog extends DialogFragment {
+public class ConfirmationDialog extends DialogFragment {
 
     private boolean isConfirmed;
 
