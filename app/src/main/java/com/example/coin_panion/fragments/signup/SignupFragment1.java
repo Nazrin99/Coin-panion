@@ -55,13 +55,12 @@ public class SignupFragment1 extends Fragment {
     private BaseViewModel signupViewModel;
     Button nextButton;
     TextInputEditText phoneNumberField;
-    Thread dataThread;
+    Thread dataThread = new Thread();
     TextInputLayout layout;
     Handler handler = new Handler();
     long delay = 2000; // 1 seconds after user stops typing
     long last_text_edit = 0;
-
-    ColorStateList RED = ColorStateList.valueOf(Color.RED);
+    ColorStateList RED;
     ColorStateList DARK_BLUE;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -113,6 +112,7 @@ public class SignupFragment1 extends Fragment {
         signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
 
         ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.dark_blue));
+        ColorStateList.valueOf(Color.RED);
 
         nextButton = view.findViewById(R.id.signupNextButton);
         phoneNumberField = view.findViewById(R.id.signupPhoneNumberEditText);
@@ -215,7 +215,9 @@ public class SignupFragment1 extends Fragment {
                 e.printStackTrace();
             }
         });
-        ThreadStatic.run(dataThread);
+        dataThread.start();
+        while(dataThread.isAlive()){
+        }
         return phoneNumberExists.get();
     }
 
