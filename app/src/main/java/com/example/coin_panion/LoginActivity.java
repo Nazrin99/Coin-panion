@@ -157,7 +157,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 if(user != null && user.getUserID() > 0){
                     // User exists, check for password validity
-                    bundle.putParcelable("user", user);
                     boolean account_exists = false;
                     try(
                             Connection connection = Line.getConnection();
@@ -200,8 +199,11 @@ public class LoginActivity extends AppCompatActivity {
                                 // 2 : Close the result set and query picture object
                                 resultSet1.close();
 
-                                Picture accountPic = Picture.getPictureFromDB(accountPicID);
-                                Picture accountCover = Picture.getPictureFromDB(accountCoverID);
+//                                Picture accountPic = Picture.getPictureFromDB(accountPicID);
+//                                Picture accountCover = Picture.getPictureFromDB(accountCoverID);
+
+                                Picture accountPic = null;
+                                Picture accountCover = null;
 
                                 // 3 : Query account friends
                                 List<User> friends = User.getFriends(accountID, new Thread());
@@ -214,9 +216,10 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // 6 : Create account object, and pass to bundle then switch activity
                                 Account account = new Account(accountID, user, password, bio, friends, debtLimit, settleUpAccount, notifications, accountPic, accountCover);
-                                bundle.putParcelable("account", account);
+                                System.out.println(account == null);
+                                System.out.println(account.getFriends().size());
 
-                                switchToLoginActivity();
+                                switchToLoginActivity(account, user);
                             }
                         }
                         resultSet.close();
@@ -233,9 +236,10 @@ public class LoginActivity extends AppCompatActivity {
         ThreadStatic.run(dataThread);
     }
 
-    private void switchToLoginActivity(){
-        Intent intent = new Intent(getApplicationContext(), FriendsActivity.class);
-        intent.putExtras(bundle);
+    private void switchToLoginActivity(Account account, User user){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("account", account);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 

@@ -31,7 +31,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/TVContact_name"
+                android:id="@+id/contactNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10sp"
@@ -176,8 +176,7 @@
             android:layout_width="70dp"
             android:layout_height="80dp"
             android:layout_marginLeft="20sp"
-            android:layout_marginRight="10sp"
-            android:src="@mipmap/ic_credit_checklist_foreground" />
+            android:layout_marginRight="10sp" />
 
         <TextView
             android:layout_width="172dp"

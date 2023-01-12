@@ -84,7 +84,7 @@
                 android:layout_marginVertical="15dp">
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/createGroupNameTextView"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:text="Evidence               :"
@@ -105,7 +105,7 @@
                 android:layout_marginVertical="15dp">
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/createGroupDescTextView"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"

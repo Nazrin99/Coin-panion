@@ -171,12 +171,11 @@ public class SignupFragment5 extends Fragment {
         finishingUp = true;
 
         // Everything is in order, pack everything in a Bundle and send to HomeActivity
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("account", account);
-        bundle.putParcelable("user", user);
+
 
         Intent intent = new Intent(requireActivity(), FriendsActivity.class);
-        intent.putExtras(bundle);
+        intent.putExtra("account", account);
+        intent.putExtra("user", user);
 
         Handler handler = new Handler();
         handler.postDelayed(() -> startActivity(intent), 3000);

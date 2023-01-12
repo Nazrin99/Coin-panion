@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 
 @SuppressWarnings("ALL")
-public class DebtLimit{
+public class DebtLimit implements Serializable{
     private Double debtLimitAmount;
     private Long debtLimitEndDate;
 

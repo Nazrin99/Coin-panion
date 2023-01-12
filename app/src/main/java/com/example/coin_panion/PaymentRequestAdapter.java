@@ -42,7 +42,7 @@ public class PaymentRequestAdapter extends RecyclerView.Adapter<PaymentRequestAd
         TextView TVUser_name;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            TVUser_name = itemView.findViewById(R.id.TVUserName);
+            TVUser_name = itemView.findViewById(R.id.TVUser_name);
         }
     }
 }

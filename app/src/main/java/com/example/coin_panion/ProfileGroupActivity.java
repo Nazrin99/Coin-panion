@@ -13,7 +13,7 @@ public class ProfileGroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_group);
-        textView = findViewById(R.id.activity_name);
+        textView = findViewById(R.id.activityName);
 
         textView.setText("GROUPS");
     }

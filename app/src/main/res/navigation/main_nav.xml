@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/friendsFragment">
+
+    <fragment
+        android:id="@+id/friendsSettingsFragment"
+        android:name="com.example.coin_panion.fragments.friends.FriendsSettingsFragment"
+        android:label="fragment_friends_settings"
+        tools:layout="@layout/fragment_friends_settings" >
+        <action
+            android:id="@+id/action_friendsSettingsFragment_to_friendsDetailFragment2"
+            app:destination="@id/friendsDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsSettleUpFragment"
+        android:name="com.example.coin_panion.fragments.friends.FriendsSettleUpFragment"
+        android:label="fragment_friends_settle_up"
+        tools:layout="@layout/fragment_friends_settle_up" />
+    <fragment
+        android:id="@+id/friendsDefaultFragment"
+        android:name="com.example.coin_panion.fragments.friends.FriendsDefaultFragment"
+        android:label="fragment_friends_default"
+        tools:layout="@layout/fragment_friends_default" >
+        <action
+            android:id="@+id/action_friendsDefaultFragment_to_friendsFragment"
+            app:destination="@id/friendsFragment" />
+        <action
+            android:id="@+id/action_friendsDefaultFragment_to_friendsAddFragment"
+            app:destination="@id/friendsAddFragment" />
+        <action
+            android:id="@+id/action_friendsDefaultFragment_to_historyDefaultFragment2"
+            app:destination="@id/historyDefaultFragment2" />
+        <action
+            android:id="@+id/action_friendsDefaultFragment_to_groupBalanceFragment"
+            app:destination="@id/groupBalanceFragment" />
+        <action
+            android:id="@+id/action_friendsDefaultFragment_to_accountFirstActivity2"
+            app:destination="@id/accountFirstActivity2" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsFragment"
+        android:name="com.example.coin_panion.fragments.friends.FriendsFragment"
+        android:label="fragment_friends"
+        tools:layout="@layout/fragment_friends" >
+        <action
+            android:id="@+id/action_friendsFragment_to_friendsAddFragment"
+            app:destination="@id/friendsAddFragment" />
+        <action
+            android:id="@+id/action_friendsFragment_to_friendsDetailFragment"
+            app:destination="@id/friendsDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsDetailFragment"
+        android:name="com.example.coin_panion.fragments.friends.FriendsDetailFragment"
+        android:label="fragment_friends_detail"
+        tools:layout="@layout/fragment_friends_detail" >
+        <action
+            android:id="@+id/action_friendsDetailFragment_to_friendsSettleUpFragment"
+            app:destination="@id/friendsSettleUpFragment" />
+        <action
+            android:id="@+id/action_friendsDetailFragment_to_friendsSettingsFragment"
+            app:destination="@id/friendsSettingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsAddFragment"
+        android:name="com.example.coin_panion.fragments.friends.FriendsAddFragment"
+        android:label="fragment_friends_from_contact"
+        tools:layout="@layout/fragment_friends_from_contact" >
+        <action
+            android:id="@+id/action_friendsAddFragment_to_friendsDefaultFragment"
+            app:destination="@id/friendsDefaultFragment" />
+        <action
+            android:id="@+id/action_friendsAddFragment_to_friendsFragment"
+            app:destination="@id/friendsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyDefaultFragment2"
+        android:name="com.example.coin_panion.HistoryDefaultFragment"
+        android:label="fragment_history_default"
+        tools:layout="@layout/fragment_history_default" >
+        <action
+            android:id="@+id/action_historyDefaultFragment2_to_friendsDefaultFragment"
+            app:destination="@id/friendsDefaultFragment" />
+        <action
+            android:id="@+id/action_historyDefaultFragment2_to_accountFirstActivity2"
+            app:destination="@id/accountFirstActivity2" />
+        <action
+            android:id="@+id/action_historyDefaultFragment2_to_groupBalanceFragment"
+            app:destination="@id/groupBalanceFragment" />
+        <action
+            android:id="@+id/action_historyDefaultFragment2_to_friendsDefaultFragment2"
+            app:destination="@id/friendsDefaultFragment" />
+        <action
+            android:id="@+id/action_historyDefaultFragment2_to_friendsDefaultFragment3"
+            app:destination="@id/friendsDefaultFragment" />
+        <action
+            android:id="@+id/action_historyDefaultFragment2_to_accountFirstActivity22"
+            app:destination="@id/accountFirstActivity2" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupFirstFragment"
+        android:name="com.example.coin_panion.GroupFirstFragment"
+        android:label="fragment_group_first"
+        tools:layout="@layout/fragment_group_first" >
+        <action
+            android:id="@+id/action_groupFirstFragment_to_createGroupFragment"
+            app:destination="@id/createGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountFirstActivity2"
+        android:name="com.example.coin_panion.AccountFirstActivity"
+        android:label="activity_account_first"
+        tools:layout="@layout/activity_account_first" >
+        <action
+            android:id="@+id/action_accountFirstActivity2_to_friendsDefaultFragment"
+            app:destination="@id/friendsDefaultFragment" />
+        <action
+            android:id="@+id/action_accountFirstActivity2_to_historyDefaultFragment2"
+            app:destination="@id/historyDefaultFragment2" />
+        <action
+            android:id="@+id/action_accountFirstActivity2_to_friendsDefaultFragment2"
+            app:destination="@id/friendsDefaultFragment" />
+        <action
+            android:id="@+id/action_accountFirstActivity2_to_groupBalanceFragment"
+            app:destination="@id/groupBalanceFragment" />
+        <action
+            android:id="@+id/action_accountFirstActivity2_to_historyDefaultFragment22"
+            app:destination="@id/historyDefaultFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/createGroupFragment"
+        android:name="com.example.coin_panion.CreateGroupFragment"
+        android:label="fragment_create_group"
+        tools:layout="@layout/fragment_create_group" />
+    <fragment
+        android:id="@+id/groupBalanceFragment"
+        android:name="com.example.coin_panion.GroupBalanceFragment"
+        android:label="fragment_group_balance"
+        tools:layout="@layout/fragment_group_balance" >
+        <action
+            android:id="@+id/action_groupBalanceFragment_to_accountFirstActivity2"
+            app:destination="@id/accountFirstActivity2" />
+        <action
+            android:id="@+id/action_groupBalanceFragment_to_historyDefaultFragment2"
+            app:destination="@id/historyDefaultFragment2" />
+        <action
+            android:id="@+id/action_groupBalanceFragment_to_friendsDefaultFragment"
+            app:destination="@id/friendsDefaultFragment" />
+        <action
+            android:id="@+id/action_groupBalanceFragment_to_createGroupFragment"
+            app:destination="@id/createGroupFragment" />
+        <action
+            android:id="@+id/action_groupBalanceFragment_to_groupFirstFragment"
+            app:destination="@id/groupFirstFragment" />
+        <action
+            android:id="@+id/action_groupBalanceFragment_to_groupInfoFragment"
+            app:destination="@id/groupInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupInfoFragment"
+        android:name="com.example.coin_panion.GroupInfoFragment"
+        android:label="fragment_group_info"
+        tools:layout="@layout/fragment_group_info" >
+        <action
+            android:id="@+id/action_groupInfoFragment_to_editGroupFragment2"
+            app:destination="@id/editGroupFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/editGroupFragment2"
+        android:name="com.example.coin_panion.EditGroupFragment"
+        android:label="fragment_edit_group"
+        tools:layout="@layout/fragment_edit_group" />
+</navigation>

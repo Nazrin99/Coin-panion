@@ -4,6 +4,7 @@ package com.example.coin_panion.classes.group;
 import android.content.ContentResolver;
 import android.net.Uri;
 
+import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.Picture;
 import com.example.coin_panion.classes.utility.ThreadStatic;
@@ -26,8 +27,8 @@ public class Group {
     private String groupType;
     private List<Integer> groupMembers = new ArrayList<>();
     private List<Integer> groupTransactions = new ArrayList<>();
-    private Picture groupPic = Picture.getPictureFromDB(new Random().nextInt(5) + 1000);
-    private Picture groupCover = Picture.getPictureFromDB(1005);
+    private Picture groupPic = Picture.getPictureFromDB(2501);
+    private Picture groupCover = Picture.getPictureFromDB(2500);
 
     // Default constructor
     public Group(){
@@ -35,12 +36,11 @@ public class Group {
     }
 
     // Constructor to create new group (group pic not selected, use default)
-    public Group(String groupName, String groupDesc, String groupType, List<Integer> groupMembers, List<Integer> groupTransactions) {
+    public Group(String groupName, String groupDesc, String groupType, List<Integer> groupMembers) {
         this.groupName = groupName;
         this.groupDesc = groupDesc;
         this.groupType = groupType;
         this.groupMembers = groupMembers;
-        this.groupTransactions = groupTransactions;
     }
 
     // Constructor to create new group (group pic selected)
@@ -76,12 +76,12 @@ public class Group {
         dataThread = new Thread(() -> {
             try{
                 Connection connection = Line.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO group(group_name, group_type, group_desc, group_pic, group_cover) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO group_table(group_name, group_type, group_desc, group_pic, group_cover) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, newGroup.getGroupName());
                 preparedStatement.setString(2, newGroup.getGroupType());
                 preparedStatement.setString(3, newGroup.getGroupDesc());
-                preparedStatement.setInt(4, newGroup.getGroupCover().getPictureID());
-                preparedStatement.setInt(5, newGroup.getGroupPic().getPictureID());
+                preparedStatement.setInt(4, 2500);
+                preparedStatement.setInt(5, 2501);
                 preparedStatement.execute();
                 ResultSet resultSet = preparedStatement.getGeneratedKeys();
                 resultSet.next();
@@ -94,9 +94,10 @@ public class Group {
                 preparedStatement1.setInt(2, newGroup.getGroupID());
                 for(int i = 0; i < newGroup.getGroupMembers().size(); i++){
                     preparedStatement1.setInt(1, newGroup.getGroupMembers().get(i));
-                    preparedStatement1.execute();
+                    preparedStatement1.addBatch();
                 }
-                preparedStatement.close();
+                preparedStatement1.executeBatch();
+                preparedStatement1.close();
                 preparedStatement1.close();
                 resultSet.close();
 
@@ -105,10 +106,7 @@ public class Group {
             }
 
         });
-        dataThread.start();
-        while(dataThread.isAlive()){
-
-        }
+        ThreadStatic.run(dataThread);
         return groupAtomicReference.get();
     }
 
@@ -142,7 +140,7 @@ public class Group {
                     transactionIDs.add(resultSet.getInt(1));
                 }
                 // Already get transactions, next get the group info
-                PreparedStatement preparedStatement2 = connection.prepareStatement("SELECT * FROM group WHERE group_id = ?");
+                PreparedStatement preparedStatement2 = connection.prepareStatement("SELECT * FROM group_table WHERE group_id = ?");
                 preparedStatement2.setInt(1, groupID);
                 ResultSet resultSet2 = preparedStatement2.executeQuery();
 
@@ -156,6 +154,14 @@ public class Group {
         });
         ThreadStatic.run(dataThread);
         return retrievedGroup.get();
+    }
+
+    public static List<Group> retrieveGroupFromDB(List<Integer> groupID, Thread dataThread){
+        List<Group> group = new ArrayList<>();
+        for(int i = 0; i < groupID.size(); i++){
+            group.add(retrieveGroupFromDB(groupID.get(i), new Thread()));
+        }
+        return group;
     }
 
     /**
@@ -199,7 +205,7 @@ public class Group {
                     PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM ? WHERE group_id = ?");
             ){
                 preparedStatement.setInt(2, groupID);
-                preparedStatement.setString(1, "group");
+                preparedStatement.setString(1, "group_table");
                 preparedStatement.execute();
                 preparedStatement.setString(1, "account_group");
                 preparedStatement.execute();
@@ -208,6 +214,40 @@ public class Group {
             }
         });
         ThreadStatic.run(dataThread);
+    }
+
+    public static List<User> retrieveGroupParticipants(Integer groupID, Thread dataThread){
+        AtomicReference<List<User>> listAtomicReference = new AtomicReference<>();
+        dataThread = new Thread(() -> {
+            List<Integer> userIDs = new ArrayList<>();
+            List<User> users = new ArrayList<>();
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT account_id FROM account_group WHERE group_id = ?");
+                    ){
+                preparedStatement.setInt(1, groupID);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while(resultSet.next()){
+                    userIDs.add(resultSet.getInt(1));
+                }
+                resultSet.close();
+
+                PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM user WHERE " + User.getQueryString("user_id", userIDs.size()));
+                for(int i = 0; i < userIDs.size(); i++){
+                    preparedStatement1.setInt((i+1), userIDs.get(i));
+                }
+                ResultSet resultSet1 = preparedStatement1.executeQuery();
+                while(resultSet1.next()){
+                    users.add(new User(resultSet1.getInt(1), resultSet1.getLong(2), resultSet1.getString(4), resultSet1.getString(5), resultSet1.getString(6), resultSet1.getString(3)));
+                }
+                listAtomicReference.set(users);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
+        return listAtomicReference.get();
     }
 
     // Getters & Setters

@@ -1,28 +1,40 @@
 package com.example.coin_panion.fragments.friends;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
+import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.os.Bundle;
 
-import androidx.appcompat.widget.SearchView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.PackageManagerCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import android.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.example.coin_panion.R;
 import com.example.coin_panion.classes.friends.Contact;
 import com.example.coin_panion.classes.friends.ContactAdapter;
+import com.example.coin_panion.classes.general.Account;
+import com.example.coin_panion.classes.general.User;
+import com.example.coin_panion.classes.utility.BaseViewModel;
+import com.example.coin_panion.classes.utility.Line;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +42,12 @@ import java.util.Objects;
  * create an instance of this fragment.
  */
 public class FriendsAddFragment extends Fragment {
+    BaseViewModel friendsViewModel;
+    SearchView searchViewContactFriend;
+    RecyclerView contactsRecyclerView;
+    AppCompatButton saveContactButton;
+    ImageButton backButton;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,29 +89,92 @@ public class FriendsAddFragment extends Fragment {
         }
 
     }
-
-    SearchView SVContactFriend;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = getView();
-        SVContactFriend = view.findViewById(R.id.SVFriendContact);
-        SVContactFriend.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Perform the search and update the UI
-                return false;
-            }
+        return inflater.inflate(R.layout.fragment_friends_from_contact, container, false);
+    }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // Perform the search and update the UI
-                return false;
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        friendsViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
+        Account currentAccount = ((Account)friendsViewModel.get("account"));
+        System.out.println(currentAccount == null);
+
+        // View bindings
+        searchViewContactFriend = view.findViewById(R.id.searchViewContactFriend);
+        contactsRecyclerView = view.findViewById(R.id.contactsRecyclerView);
+        saveContactButton = view.findViewById(R.id.saveContactButton);
+        backButton = view.findViewById(R.id.backButton);
+
+        ArrayList<Contact> listOfContacts = Contact.getAllContacts(requireActivity().getContentResolver());
+
+        ContactAdapter contactAdapter = new ContactAdapter(listOfContacts, getContext());
+        contactsRecyclerView.setAdapter(contactAdapter);
+
+        backButton.setOnClickListener(v -> {
+            if(currentAccount.getFriends().size() == 0){
+                NavDirections navDirections = FriendsAddFragmentDirections.actionFriendsAddFragmentToFriendsFragment();
+                Navigation.findNavController(view).navigate(navDirections);
+            }
+            else{
+                NavDirections navDirections = FriendsAddFragmentDirections.actionFriendsAddFragmentToFriendsDefaultFragment();
+                Navigation.findNavController(view).navigate(navDirections);
             }
         });
 
-        return inflater.inflate(R.layout.fragment_friends_from_contact, container, false);
+        saveContactButton.setOnClickListener(v -> {
+            // Save all the contacts into database and close the window.
+
+            // 1 : Get list of selected contact and get their phone numbers
+            List<Contact> toSave = contactAdapter.getSelectedContacts();
+            List<Long> listOfPhoneNumbers = new ArrayList<>();
+            for(Contact c : toSave){
+                listOfPhoneNumbers.add(Long.parseLong(c.getContactNumber()));
+            }
+
+            // 2 : Query the database for all the User objects associated with the phone number
+            List<User> newFriends = new ArrayList<>();
+            for(int i = 0 ; i < listOfPhoneNumbers.size(); i++){
+                newFriends.add(User.verifyUserLogin(listOfPhoneNumbers.get(i), new Thread()));
+            }
+            // 3 : Insert the list of new friends inside the friend table in the database
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO friend VALUES(?, ?, ?)")
+                    ){
+                for(int i = 0 ; i < newFriends.size(); i++){
+                    preparedStatement.setInt(1, currentAccount.getAccountID());
+                    preparedStatement.setInt(2, newFriends.get(i).getUserID());
+                    preparedStatement.setBoolean(3, false);
+                    preparedStatement.addBatch();
+                }
+                preparedStatement.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            // 4 : Append the list of new friends to the existing list of friends for the current account update the data inside the viewmodel
+            for(int i = 0; i < newFriends.size(); i++){
+                currentAccount.getFriends().add(newFriends.get(i));
+            }
+            friendsViewModel.put("account", currentAccount);
+
+            // 5 : Navigate to the original fragment
+            if(currentAccount.getFriends().size() == 0){
+                NavDirections navDirections = FriendsAddFragmentDirections.actionFriendsAddFragmentToFriendsDefaultFragment();
+                Navigation.findNavController(view).navigate(navDirections);
+            }
+            else{
+                NavDirections navDirections = FriendsAddFragmentDirections.actionFriendsAddFragmentToFriendsFragment();
+                Navigation.findNavController(view).navigate(navDirections);
+            }
+
+        });
     }
+
 
 }

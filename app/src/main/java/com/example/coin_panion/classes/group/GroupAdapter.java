@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coin_panion.CreateGroupFragment;
+import com.example.coin_panion.GroupBalanceFragment;
+import com.example.coin_panion.MainActivity;
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.utility.BaseViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     Context activityGroup;
     private List<Group> groups;
+    int position;
 
     public GroupAdapter() {
         this.groups = new ArrayList<>();
@@ -65,27 +71,40 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView TVGroupName;
-        ImageView IVGroupProfile;
+        ImageView IVGroupProfile, IVGroupInfoItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             TVGroupName = itemView.findViewById(R.id.TVGroupNameItem);
             IVGroupProfile = itemView.findViewById(R.id.IVGroupProfileItem);
-            notifyDataSetChanged();
+            IVGroupInfoItem = itemView.findViewById(R.id.IVGroupInfoItem);
+            IVGroupInfoItem.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
 
-            int position = getAdapterPosition();
+            position = getAdapterPosition();
 
             Group group = groups.get(position);
 
-            Intent groupInfo = new Intent(activityGroup, CreateGroupFragment.class);
+            System.out.println("Bitch");
 
-            groupInfo.putExtra("groupID",group.getGroupID());
-            groupInfo.putExtra("groupName",group.getGroupName());
-            groupInfo.putExtra("groupDesc",group.getGroupDesc());
+//            MainActivity mainActivity = (MainActivity)(activityGroup.getApplicationContext());
+//            BaseViewModel baseViewModel = mainActivity.getMainViewModel();
+//            baseViewModel.put("groupID", group.getGroupID());
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("groupID", group.getGroupID());
+            Navigation.findNavController(v).navigate(R.id.groupInfoFragment, bundle);
         }
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

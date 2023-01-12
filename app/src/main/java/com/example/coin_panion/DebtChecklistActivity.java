@@ -13,7 +13,7 @@ public class DebtChecklistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debt_checklist);
 
-        textView = findViewById(R.id.activity_name);
+        textView = findViewById(R.id.activityName);
         textView.setText("DEBT CHECKLIST");
     }
 }
