@@ -2,11 +2,21 @@ package com.example.coin_panion;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.example.coin_panion.classes.general.Account;
+import com.example.coin_panion.classes.general.User;
+import com.example.coin_panion.classes.utility.BaseViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +24,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class GroupFirstFragment extends Fragment {
+    BaseViewModel mainViewModel;
+    Account account;
+    User user;
+    ImageView addGroupImageView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,5 +74,21 @@ public class GroupFirstFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_group_first, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mainViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
+        account = (Account) mainViewModel.get("account");
+        user = (User) mainViewModel.get("user");
+
+        addGroupImageView = view.findViewById(R.id.addGroupImageView);
+
+        addGroupImageView.setOnClickListener(v -> {
+            NavDirections navDirections = GroupFirstFragmentDirections.actionGroupFirstFragmentToCreateGroupFragment();
+            Navigation.findNavController(view).navigate(navDirections);
+        });
     }
 }

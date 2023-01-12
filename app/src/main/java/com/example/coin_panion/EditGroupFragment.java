@@ -2,7 +2,10 @@ package com.example.coin_panion;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +18,10 @@ import android.widget.ImageButton;
 
 import com.example.coin_panion.classes.friends.ContactAdapter;
 import com.example.coin_panion.classes.friends.RemoveFriendAdapter;
+import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
+import com.example.coin_panion.classes.group.Group;
+import com.example.coin_panion.classes.utility.BaseViewModel;
 
 import java.util.List;
 
@@ -25,6 +31,10 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class EditGroupFragment extends Fragment {
+    BaseViewModel mainViewModel;
+    Group currentGroup;
+    Account account;
+    User user;
 
     private List<User> groupMembers;
 
@@ -70,20 +80,6 @@ public class EditGroupFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        /*Set layout manager*/
-        RVRemoveAddFriendGroup.setLayoutManager(new LinearLayoutManager(getContext()));
-        /*Initialize adapter*/
-        removeFriendAdapter = new RemoveFriendAdapter(groupMembers,getContext());
-        /*Set the adapter*/
-        RVRemoveAddFriendGroup.setAdapter(removeFriendAdapter);
-        /*Notify Changes in adapter*/
-        BtnCreateGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*TODO create an object instance of group and place in database*/
-            }
-        });
     }
 
     ImageButton IBUploadGroupBackground, IBUploadGroupProfilePic;
@@ -98,6 +94,17 @@ public class EditGroupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_group, container, false);
 
+        /*TODO function to take all the variable instance and upload it*/
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mainViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
+        currentGroup = (Group) mainViewModel.get("currentGroup");
+
         IBUploadGroupBackground = view.findViewById(R.id.IBUploadGroupBackground);
         IBUploadGroupProfilePic = view.findViewById(R.id.IBUploadGroupProfilePic);
         ETGroupName = view.findViewById(R.id.ETGroupName);
@@ -105,12 +112,27 @@ public class EditGroupFragment extends Fragment {
         RVRemoveAddFriendGroup = view.findViewById(R.id.RVRemoveAddFriendGroup);
         BtnCreateGroup = view.findViewById(R.id.BtnCreateGroup);
 
-        /*TODO function to take all the variable instance and upload it*/
+        groupMembers = Group.retrieveGroupParticipants(currentGroup.getGroupID(), new Thread());
+
+        /*Set layout manager*/
+        RVRemoveAddFriendGroup.setLayoutManager(new LinearLayoutManager(getContext()));
+        /*Initialize adapter*/
+        removeFriendAdapter = new RemoveFriendAdapter(groupMembers,getContext());
+        /*Set the adapter*/
+        RVRemoveAddFriendGroup.setAdapter(removeFriendAdapter);
+        /*Notify Changes in adapter*/
+        BtnCreateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*TODO create an object instance of group and place in database*/
+            }
+        });
+
+        ETGroupName.setText(currentGroup.getGroupName());
+        ETGroupDescription.setText(currentGroup.getGroupDesc());
+        IBUploadGroupProfilePic.setImageDrawable(currentGroup.getGroupPic().getPicture());
+        IBUploadGroupBackground.setImageDrawable(currentGroup.getGroupCover().getPicture());
 
 
-        return view;
     }
-
-
-
 }

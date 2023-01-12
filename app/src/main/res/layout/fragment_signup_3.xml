@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView25"
+            android:id="@+id/groupInfoSettingsImageView"
             android:layout_width="300dp"
             android:layout_height="268dp"
             android:layout_marginTop="150dp"
@@ -28,10 +28,10 @@
             android:gravity="center"
             android:text="@string/email_sent_to"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="@+id/imageView25"
+            app:layout_constraintEnd_toEndOf="@+id/groupInfoSettingsImageView"
             app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="@+id/imageView25"
-            app:layout_constraintTop_toBottomOf="@+id/imageView25" />
+            app:layout_constraintStart_toStartOf="@+id/groupInfoSettingsImageView"
+            app:layout_constraintTop_toBottomOf="@+id/groupInfoSettingsImageView" />
 
         <EditText
             android:id="@+id/codeEditText1"

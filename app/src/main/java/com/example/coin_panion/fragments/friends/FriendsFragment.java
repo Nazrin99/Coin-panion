@@ -2,7 +2,14 @@ package com.example.coin_panion.fragments.friends;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
@@ -10,6 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.friends.Contact;
+import com.example.coin_panion.classes.friends.ContactAdapter;
+import com.example.coin_panion.classes.friends.FriendAdapter;
+import com.example.coin_panion.classes.general.Account;
+import com.example.coin_panion.classes.general.User;
+import com.example.coin_panion.classes.utility.BaseViewModel;
+
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +34,10 @@ import com.example.coin_panion.R;
  * create an instance of this fragment.
  */
 public class FriendsFragment extends Fragment {
+    BaseViewModel friendsViewModel;
+    Account account;
+    User user;
+    RecyclerView contactRecyclerView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,5 +88,29 @@ public class FriendsFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_friends, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        friendsViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
+        account = (Account) friendsViewModel.get("account");
+        user = (User) friendsViewModel.get("user");
+
+        // Binding views
+        contactRecyclerView = view.findViewById(R.id.contactRecyclerView);
+
+        // Get list of friends from Account object into a List of Contacts
+        List<User> friends = account.getFriends();
+        List<Contact> contactList = new ArrayList<>();
+        for(int i = 0; i < friends.size(); i++){
+            contactList.add(new Contact(friends.get(i).getUsername(), friends.get(i).getPhoneNumber().toString()));
+        }
+        FriendAdapter friendAdapter = new FriendAdapter(contactList, friendsViewModel, view);
+        contactRecyclerView.setAdapter(friendAdapter);
+        contactRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+
     }
 }

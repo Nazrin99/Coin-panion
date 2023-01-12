@@ -8,7 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.SearchView;
+import android.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
@@ -102,6 +102,7 @@ public class FriendsAddFragment extends Fragment {
 
         friendsViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
         Account currentAccount = ((Account)friendsViewModel.get("account"));
+        System.out.println(currentAccount == null);
 
         // View bindings
         searchViewContactFriend = view.findViewById(R.id.searchViewContactFriend);
@@ -111,7 +112,7 @@ public class FriendsAddFragment extends Fragment {
 
         ArrayList<Contact> listOfContacts = Contact.getAllContacts(requireActivity().getContentResolver());
 
-        ContactAdapter contactAdapter = new ContactAdapter(listOfContacts);
+        ContactAdapter contactAdapter = new ContactAdapter(listOfContacts, getContext());
         contactsRecyclerView.setAdapter(contactAdapter);
 
         backButton.setOnClickListener(v -> {

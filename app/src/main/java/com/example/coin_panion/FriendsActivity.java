@@ -1,11 +1,13 @@
 package com.example.coin_panion;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -13,36 +15,68 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.coin_panion.classes.general.Account;
+import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.utility.BaseViewModel;
-import com.example.coin_panion.fragments.friends.FriendsDefaultFragment;
 import com.example.coin_panion.fragments.friends.FriendsDefaultFragmentDirections;
-
-import org.bouncycastle.jcajce.provider.symmetric.ARC4;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class FriendsActivity extends AppCompatActivity {
     BaseViewModel friendsViewModel;
     Toolbar toolbar;
     TextView textView;
     Bundle bundle;
+    BottomNavigationView bottomNavigationView;
+    Account account;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-        checkPermission();
 
         toolbar = findViewById(R.id.friendActivityAppBar);
-        textView = findViewById(R.id.activity_name);
+        textView = toolbar.findViewById(R.id.activityName);
         textView.setText("Friends");
+        bottomNavigationView = findViewById(R.id.friendsBottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.ITprofile:
+                        Intent intent = new Intent(getApplicationContext(), AccountFirstActivity.class);
+                        intent.putExtra("account", account);
+                        intent.putExtra("user", user);
+                        startActivity(intent);
+                        break;
+                    case R.id.IThistory:
+                        Intent intent1 = new Intent(getApplicationContext(), HistoryActivity.class);
+                        intent1.putExtra("account", account);
+                        intent1.putExtra("user", user);
+                        startActivity(intent1);
+                        break;
+                    case R.id.ITgroups:
+                        Intent intent2 = new Intent(getApplicationContext(), GroupActivity.class);
+                        intent2.putExtra("account", account);
+                        intent2.putExtra("user", user);
+                        startActivity(intent2);
+                        break;
+                }
+                return false;
+            }
+        });
 
         friendsViewModel = new ViewModelProvider(this).get(BaseViewModel.class);
 
-        bundle = getIntent().getExtras();
-        Account account = (Account) bundle.getParcelable("account");
+        Intent intent = getIntent();
+        account = (Account) intent.getSerializableExtra("account");
+        user = (User) intent.getSerializableExtra("user");
+
+        friendsViewModel.put("account", account);
+        friendsViewModel.put("user", user);
+
         if(account.getFriends().size() == 0){
             // User has no friends, display default screen
         }

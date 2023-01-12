@@ -1,6 +1,7 @@
 package com.example.coin_panion.classes.friends;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,25 +18,16 @@ import com.example.coin_panion.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
-    Activity readContactLog;
     List<Contact> contacts;
+    Context context;
     List<Contact> selectedContacts;
-    List<Contact> filteredContacts;
 
-    public ContactAdapter(Activity readContactLog, List<Contact> contacts) {
-        this.readContactLog = readContactLog;
+    public ContactAdapter(List<Contact> contacts, Context context) {
         this.contacts = contacts;
-        selectedContacts = new ArrayList<>();
-        filteredContacts = new ArrayList<>();
-        notifyDataSetChanged();
-    }
-
-    public ContactAdapter(List<Contact> contacts) {
-        this.contacts = contacts;
+        this.context = context;
     }
 
     @NonNull
@@ -88,57 +79,57 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         return contacts.size();
     }
 
-    @Override
-    public Filter getFilter() {
-
-        return contactsFilter;
-    }
-
-    private final Filter contactsFilter = new Filter() {
-        /*Filter the contact by number and name of contact that is to be added*/
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-
-            ArrayList<Contact> filteredContacts = new ArrayList<>();
-
-            if(constraint == null || constraint.length() == 0){
-
-                filteredContacts.addAll(contacts);
-
-            } else {
-
-                String filterPattern = contactsFilter.toString().toLowerCase().trim();
-
-                for(Contact contact : contacts){
-
-                    if(contact.getContactName().contains(filterPattern)){
-
-                        filteredContacts.add(contact);
-
-                    }else if(contact.getContactNumber().contains(filterPattern)){
-
-                        filteredContacts.add(contact);
-
-                    }
-
-                }
-
-            }
-
-            /*Create filter results*/
-            FilterResults results = new FilterResults();
-            results.values = filteredContacts;
-            results.count = filteredContacts.size();
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            contacts.clear();
-            contacts.addAll((ArrayList)results.values);
-            notifyDataSetChanged();
-        }
-    };
+//    @Override
+//    public Filter getFilter() {
+//
+//        return contactsFilter;
+//    }
+//
+//    private final Filter contactsFilter = new Filter() {
+//        /*Filter the contact by number and name of contact that is to be added*/
+//        @Override
+//        protected FilterResults performFiltering(CharSequence constraint) {
+//
+//            ArrayList<Contact> filteredContacts = new ArrayList<>();
+//
+//            if(constraint == null || constraint.length() == 0){
+//
+//                filteredContacts.addAll(contacts);
+//
+//            } else {
+//
+//                String filterPattern = contactsFilter.toString().toLowerCase().trim();
+//
+//                for(Contact contact : contacts){
+//
+//                    if(contact.getContactName().contains(filterPattern)){
+//
+//                        filteredContacts.add(contact);
+//
+//                    }else if(contact.getContactNumber().contains(filterPattern)){
+//
+//                        filteredContacts.add(contact);
+//
+//                    }
+//
+//                }
+//
+//            }
+//
+//            /*Create filter results*/
+//            FilterResults results = new FilterResults();
+//            results.values = filteredContacts;
+//            results.count = filteredContacts.size();
+//            return results;
+//        }
+//
+//        @Override
+//        protected void publishResults(CharSequence constraint, FilterResults results) {
+//            contacts.clear();
+//            contacts.addAll((ArrayList)results.values);
+//            notifyDataSetChanged();
+//        }
+//    };
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -149,7 +140,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             /*Assign the variable*/
-            TVContactName = itemView.findViewById(R.id.TVContact_name);
+            TVContactName = itemView.findViewById(R.id.contactNameTextView);
             TVContactNumber = itemView.findViewById(R.id.TVContact_number);
             CBSelectContact = itemView.findViewById(R.id.CBSelectContact);
         }

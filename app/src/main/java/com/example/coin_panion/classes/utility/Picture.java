@@ -2,6 +2,7 @@ package com.example.coin_panion.classes.utility;
 
 import android.content.ContentResolver;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -20,7 +21,7 @@ import java.sql.Statement;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.DoubleAccumulator;
 
-public class Picture {
+public class Picture implements Serializable{
     private int pictureID;
     private Drawable picture;
 
@@ -144,7 +145,7 @@ public class Picture {
         try{
             byte[] data = toDrawable.getBytes(1, (int) toDrawable.length());
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
-            Drawable drawable = new BitmapDrawable(byteArrayInputStream);
+            Drawable drawable = Drawable.createFromStream(byteArrayInputStream, null);
             return drawable;
         } catch (SQLException e) {
             e.printStackTrace();

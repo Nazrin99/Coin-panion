@@ -26,7 +26,7 @@
             android:src="@drawable/img" />
 
         <TextView
-            android:id="@+id/TVContact_name"
+            android:id="@+id/contactNameTextView"
             android:layout_width="190dp"
             android:layout_height="match_parent"
             android:layout_marginRight="20sp"
@@ -35,7 +35,7 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/CBSelectContact"
+            android:id="@+id/selectContactImageView"
             android:layout_width="69dp"
             android:layout_height="64dp"
             android:layout_marginRight="50sp"
