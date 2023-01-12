@@ -66,6 +66,13 @@
     <string name="email_exists">Email already exists, please choose another email</string>
     <string name="good_to_go">You\'re good to go!</string>
     <string name="enter_details">Please enter your details and set your password below</string>
+    <string name="enter_email_or_phone">Please enter your email or phone number</string>
+    <string name="take_me_to_coinpanion">Take me to Coin-panion!</string>
+    <string name="signupUsername">Username</string>
+    <string name="what_should_we_call_you">What should we call you</string>
+    <string name="bio">Bio</string>
+    <string name="tell_something_bout_u">Tell us something about you</string>
+    <string name="create_your_profile">Create your profile</string>
 
     <!--TODO include this into login page lead to privacy policy page only if checkbox is check then the login button can be activated-->
     <string name="terms_text">By using our app, you acknowledge and agree to our terms and privacy policy.

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
-public class Notification {
+public class Notification implements Serializable{
     private Integer notiID;
     private NotificationType notiType;
     private Integer groupID;

@@ -12,6 +12,7 @@ import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.Picture;
 import com.example.coin_panion.classes.utility.ThreadStatic;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,59 +22,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Account implements Parcelable {
+public class Account implements Serializable {
     private Integer accountID;
     private User user;
     private String password;
     private String bio;
-    private List<User> friends;
+    private List<User> friends = new ArrayList<>();
     private DebtLimit debtLimit;
 //    private List<Transaction> debts;
 //    private List<Transaction> credits;
 //    private List<PaymentApproval> paymentApprovalList;
     private SettleUpAccount settleUpAccount;
-    private List<Notification> notifications;
+    private List<Notification> notifications = new ArrayList<>();
     private Picture accountPic;
     private Picture accountCover;
-
-    protected Account(Parcel in) {
-        if (in.readByte() == 0) {
-            accountID = null;
-        } else {
-            accountID = in.readInt();
-        }
-        password = in.readString();
-        bio = in.readString();
-    }
-
-    public static final Creator<Account> CREATOR = new Creator<Account>() {
-        @Override
-        public Account createFromParcel(Parcel in) {
-            return new Account(in);
-        }
-
-        @Override
-        public Account[] newArray(int size) {
-            return new Account[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        if (accountID == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(accountID);
-        }
-        dest.writeString(password);
-        dest.writeString(bio);
-    }
 
     /**
      * Constructor to create new account prior database insertion

@@ -1,6 +1,5 @@
 package com.example.coin_panion;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -69,8 +68,6 @@ public class DebtChecklistFragment extends Fragment {
         //TODO pass user data to get payment approval request
 
         View view = inflater.inflate(R.layout.fragment_debt_checklist, container, false);
-
-        TVContact_name = view.findViewById(R.id.TVContact_name);
 
         return view;
     }

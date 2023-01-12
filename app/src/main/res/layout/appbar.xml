@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:background="@drawable/gradient"
-    android:id="@+id/myToolBar"
+    android:id="@+id/mainToolbar"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     >
 
     <TextView
-        android:id="@+id/activity_name"
+        android:id="@+id/activityName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="AppBar"
+        android:text="FRIENDS"
         android:textColor="@color/black"
         android:textSize="30dp"
         android:textStyle="bold" />

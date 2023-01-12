@@ -21,10 +21,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.172" />
 
-    <include
-        android:id="@+id/include3"
-        layout="@layout/appbar" />
-
 
     <TableLayout
         android:layout_width="345dp"
@@ -45,16 +41,15 @@
                 android:layout_height="75dp"
                 app:srcCompat="@mipmap/ic_examplegroupprofile_foreground" />
 
+            <!--            TODO make it clickable-->
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/profileUsernameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:layout_marginVertical="17dp"
-                android:text="Afiq@UM\n+60125676542"
                 android:textColor="@color/black" />
 
-            <!--            TODO make it clickable-->
             <ImageView
                 android:id="@+id/imageView18"
                 android:layout_width="45dp"
@@ -166,14 +161,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.729"
         android:background="@drawable/round_btn"/>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:foregroundGravity="bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

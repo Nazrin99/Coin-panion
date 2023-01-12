@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.ThreadStatic;
+import com.sun.mail.imap.protocol.ID;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.DataFormatException;
 
-public class User implements Parcelable {
+public class User implements Serializable {
     /*User info for account*/
     private Integer userID;
     private Long phoneNumber;
@@ -45,45 +46,6 @@ public class User implements Parcelable {
         username = in.readString();
         email = in.readString();
     }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        if (userID == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(userID);
-        }
-        if (phoneNumber == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(phoneNumber);
-        }
-        dest.writeString(firstName);
-        dest.writeString(lastName);
-        dest.writeString(username);
-        dest.writeString(email);
-    }
-
-
 
     // Constructor to create User object for existing users from database. REQUIRE phoneNumber
     public User(Object queryKey, Thread dataThread) {
@@ -255,15 +217,32 @@ public class User implements Parcelable {
         AtomicReference<List<User>> listAtomicReference = new AtomicReference<>(new ArrayList<>());
         dataThread = new Thread(() -> {
             List<User> friends = new ArrayList<>();
+            List<Integer> friendIDs = new ArrayList<>();
             try(
                     Connection connection = Line.getConnection();
-                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM friend WHERE account_id = ?")
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT friend_id FROM friend WHERE account_id = ?");
                     ){
                 preparedStatement.setInt(1, accountID);
                 ResultSet resultSet = preparedStatement.executeQuery();
-                while(resultSet.next()){
-                    friends.add(new User(resultSet.getInt(1), resultSet.getLong(2), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(3)));
+                while (resultSet.next()){
+                    friendIDs.add(resultSet.getInt(1));
                 }
+                resultSet.close();
+
+                if(friendIDs.size() == 0){
+                    return;
+                }
+
+                PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM user WHERE " + getQueryString("user_id", friendIDs.size()));
+                for(int i = 0; i < friendIDs.size(); i++){
+                    preparedStatement1.setInt((i+1), friendIDs.get(i));
+                }
+                ResultSet resultSet1 = preparedStatement1.executeQuery();
+
+                while(resultSet1.next()){
+                    friends.add(new User(resultSet1.getInt(1), resultSet1.getLong(2), resultSet1.getString(4), resultSet1.getString(5), resultSet1.getString(6), resultSet1.getString(3)));
+                }
+                resultSet1.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -271,6 +250,31 @@ public class User implements Parcelable {
         });
         ThreadStatic.run(dataThread);
         return listAtomicReference.get();
+    }
+
+    public static List<Integer> getListOfIDs(List<Long> phoneNumber, Thread dataThread){
+        AtomicReference<List<Integer>> atomicReference = new AtomicReference<>(new ArrayList<>());
+        dataThread = new Thread(() -> {
+            List<Integer> IDs = new ArrayList<>();
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT user_id FROM user WHERE " + getQueryString("phone_number", phoneNumber.size()))
+                    ){
+                for(int i = 0; i < phoneNumber.size() ;i++){
+                    preparedStatement.setLong((i+1), phoneNumber.get(i));
+                }
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while(resultSet.next()){
+                    IDs.add(resultSet.getInt(1));
+                }
+                resultSet.close();
+                atomicReference.set(IDs);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
+        return atomicReference.get();
     }
 
     // Getters and setters
@@ -320,5 +324,14 @@ public class User implements Parcelable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public static String getQueryString(String columnName, Integer length){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(columnName + "= ? ");
+        for(int i = 0 ; i < length-1; i++){
+            stringBuilder.append("OR " + columnName + "= ?");
+        }
+        return stringBuilder.toString();
     }
 }

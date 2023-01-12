@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SettleUpAccount {
+public class SettleUpAccount implements Serializable{
     private Integer accountID;
     private String settleUpAccountName;
     private Long settleUpAccountNumber;

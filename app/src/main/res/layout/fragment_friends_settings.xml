@@ -10,7 +10,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/image_button"
+            android:id="@+id/backButton"
             android:layout_width="84dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"

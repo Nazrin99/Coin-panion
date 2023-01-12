@@ -1,43 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout8"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GroupFirstFragment"
-    android:orientation="vertical"
-    >
+    tools:context=".GroupFirstFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="195dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="250dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="252dp"
         android:gravity="center"
         android:text="Oopps, you don't have any group yet"
         android:textSize="20dp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="@+id/TVCreateGroupExpansesDefault"
+        app:layout_constraintStart_toStartOf="@+id/TVCreateGroupExpansesDefault"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/IVAddExpanses"
-        android:layout_width="140dp"
-        android:layout_height="121dp"
-        android:layout_marginLeft="150dp"
+        android:id="@+id/addGroupImageView"
+        android:layout_width="124dp"
+        android:layout_height="114dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/rounded_edge_button"
-        android:src="@mipmap/ic_create_group_foreground" />
+        android:src="@mipmap/ic_create_group_foreground"
+        app:layout_constraintEnd_toEndOf="@+id/TVCreateGroupExpansesDefault"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@+id/TVCreateGroupExpansesDefault"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/TVCreateGroupExpansesDefault"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:fontFamily="@font/fugaz_one_regular"
         android:paddingTop="20dp"
-        android:layout_marginLeft="80dp"
         android:text="@string/create_a_group_expenses"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addGroupImageView" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

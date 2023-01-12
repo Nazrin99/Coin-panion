@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.friends.FriendsAddFragment">
+    tools:context=".HistoryDefaultFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imageView25"
+                android:id="@+id/groupInfoSettingsImageView"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
@@ -58,10 +58,11 @@
                 android:id="@+id/imageButton4"
                 android:layout_width="35dp"
                 android:layout_height="48dp"
-                android:layout_weight="1"
                 android:layout_marginTop="10dp"
+                android:layout_weight="1"
                 android:background="@color/Biru_Muda"
-                android:src="@drawable/forward_arrow_img" />
+                android:src="@drawable/forward_arrow_img"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
         </LinearLayout>
 
         <ListView

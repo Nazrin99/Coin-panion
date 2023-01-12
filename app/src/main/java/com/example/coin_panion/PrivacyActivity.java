@@ -13,7 +13,7 @@ public class PrivacyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy);
 
-        textView = findViewById(R.id.activity_name);
+        textView = findViewById(R.id.activityName);
         textView.setText("PRIVACY");
     }
 }
