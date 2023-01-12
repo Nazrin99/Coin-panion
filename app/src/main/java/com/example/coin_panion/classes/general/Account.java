@@ -162,6 +162,22 @@ public class Account implements Serializable {
         return atomicReference.get();
     }
 
+    public static void changePassword(Integer accountID, String password, Thread dataThread){
+        dataThread = new Thread(() -> {
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("UPDATE account SET password = ? WHERE account_id = ?")
+                    ){
+                preparedStatement.setString(1, password);
+                preparedStatement.setInt(2, accountID);
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
+    }
+
     public Integer getAccountID() {
         return accountID;
     }

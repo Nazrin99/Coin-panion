@@ -1,11 +1,16 @@
 package com.example.coin_panion;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.pdf.PdfRenderer;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TableRow;
 
 import com.example.coin_panion.classes.friends.ContactAdapter;
 import com.example.coin_panion.classes.friends.RemoveFriendAdapter;
@@ -22,7 +29,14 @@ import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.group.Group;
 import com.example.coin_panion.classes.utility.BaseViewModel;
+import com.example.coin_panion.classes.utility.Line;
+import com.example.coin_panion.classes.utility.Picture;
+import com.example.coin_panion.classes.utility.ThreadStatic;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,11 +96,12 @@ public class EditGroupFragment extends Fragment {
         }
     }
 
-    ImageButton IBUploadGroupBackground, IBUploadGroupProfilePic;
+    ImageView IBUploadGroupBackground, IBUploadGroupProfilePic;
     EditText ETGroupName, ETGroupDescription;
     RecyclerView RVRemoveAddFriendGroup;
     Button BtnCreateGroup;
     RemoveFriendAdapter removeFriendAdapter;
+    boolean pictureChanged = false, coverChanged = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,18 +128,29 @@ public class EditGroupFragment extends Fragment {
         BtnCreateGroup = view.findViewById(R.id.BtnCreateGroup);
 
         groupMembers = Group.retrieveGroupParticipants(currentGroup.getGroupID(), new Thread());
-
-        /*Set layout manager*/
-        RVRemoveAddFriendGroup.setLayoutManager(new LinearLayoutManager(getContext()));
         /*Initialize adapter*/
-        removeFriendAdapter = new RemoveFriendAdapter(groupMembers,getContext());
-        /*Set the adapter*/
-        RVRemoveAddFriendGroup.setAdapter(removeFriendAdapter);
+        removeFriendAdapter = new RemoveFriendAdapter(groupMembers,requireActivity());
+
+        requireActivity().runOnUiThread(() -> {
+            /*Set the adapter*/
+            RVRemoveAddFriendGroup.setAdapter(removeFriendAdapter);
+
+            /*Set layout manager*/
+            RVRemoveAddFriendGroup.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        });
         /*Notify Changes in adapter*/
         BtnCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*TODO create an object instance of group and place in database*/
+               List<User> removedUser = removeFriendAdapter.getRemovedUser();
+               if(removedUser.size() > 0){
+                   Group.removeUsersFromGroup(removedUser, currentGroup.getGroupID(), new Thread());
+               }
+               currentGroup.setGroupName(ETGroupName.getText().toString());
+               currentGroup.setGroupDesc(ETGroupDescription.getText().toString());
+               storeGroupEdits(currentGroup, new Thread());
+
+                Navigation.findNavController(v).navigate(R.id.groupBalanceFragment);
             }
         });
 
@@ -133,6 +159,22 @@ public class EditGroupFragment extends Fragment {
         IBUploadGroupProfilePic.setImageDrawable(currentGroup.getGroupPic().getPicture());
         IBUploadGroupBackground.setImageDrawable(currentGroup.getGroupCover().getPicture());
 
+    }
 
+    public void storeGroupEdits(Group group, Thread dataThread ){
+        dataThread = new Thread(() -> {
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("UPDATE group_table SET group_name = ?, group_desc = ? WHERE group_id = ?");
+                    ){
+                preparedStatement.setString(1, group.getGroupName());
+                preparedStatement.setString(2, group.getGroupDesc());
+                preparedStatement.setInt(3, group.getGroupID());
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
     }
 }

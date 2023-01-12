@@ -81,7 +81,7 @@
     <string name="paid_by">Name</string>
     <string-array name="split_expenses">
         <item>Equally</item>
-        <item>Custom</item>
+        <item>Unequally</item>
     </string-array>
     <string name="member_name">Name</string>
     <string name="group_description">Group description</string>

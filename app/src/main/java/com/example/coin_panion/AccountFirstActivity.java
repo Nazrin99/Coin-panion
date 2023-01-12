@@ -8,11 +8,13 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.coin_panion.classes.general.Account;
@@ -25,6 +27,7 @@ public class AccountFirstActivity extends Fragment {
     Account account;
     User user;
     BaseViewModel mainViewModel;
+    ImageView profileImageView, profileUsernameNextImageView, profilePrivacyNextImageView, profileDebtNextImageView, profileDebtLimitNextImageView;
 
     private TextView textView;
 
@@ -49,8 +52,33 @@ public class AccountFirstActivity extends Fragment {
         user = (User) mainViewModel.get("user");
 
         textView = view.findViewById(R.id.profileUsernameTextView);
+        profileImageView = view.findViewById(R.id.profileImageView);
+        profileDebtLimitNextImageView = view.findViewById(R.id.profileDebtLimitNextImageView);
+        profileDebtNextImageView = view.findViewById(R.id.profileDebtNextImageView);
+        profilePrivacyNextImageView = view.findViewById(R.id.profilePrivacyNextImageView);
+        profileUsernameNextImageView = view.findViewById(R.id.profileUsernameNextImageView);
+
         requireActivity().runOnUiThread(() -> {
             textView.setText(account.getUser().getUsername());
+            profileImageView.setImageDrawable(account.getAccountPic().getPicture());
         });
+
+        profileDebtLimitNextImageView.setOnClickListener(v -> {
+
+        });
+
+        profileDebtNextImageView.setOnClickListener(v -> {
+
+        });
+
+        profilePrivacyNextImageView.setOnClickListener(v -> {
+
+        });
+
+        profileUsernameNextImageView.setOnClickListener(v -> {
+
+        });
+
+
     }
 }

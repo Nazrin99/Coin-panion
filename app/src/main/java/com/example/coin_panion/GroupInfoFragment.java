@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class GroupInfoFragment extends Fragment {
     TextView groupNameTextView, groupDescTextView;
     Group selected;
     RecyclerView groupActivityRecyclerView;
+    Button createExpensesButton;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -100,6 +102,7 @@ public class GroupInfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        createExpensesButton = view.findViewById(R.id.createExpensesButton);
         groupInfoPicImageView = view.findViewById(R.id.groupInfoPicImageView);
         groupInfoCoverImageView = view.findViewById(R.id.groupInfoCoverImageView);
         groupInfoSettingsImageView = view.findViewById(R.id.groupInfoSettingsImageView);
@@ -117,6 +120,12 @@ public class GroupInfoFragment extends Fragment {
         groupInfoSettingsImageView.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.editGroupFragment2);
             mainViewModel.put("currentGroup", selected);
+        });
+
+        createExpensesButton.setOnClickListener(v -> {
+            mainViewModel.put("currentGroup", selected);
+            Navigation.findNavController(v).navigate(R.id.createExpensesButton);
+
         });
 
 

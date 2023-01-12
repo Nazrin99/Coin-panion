@@ -11,19 +11,19 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/createGroupBackButton"
+            android:id="@+id/expensesBackButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:layout_constraintBottom_toBottomOf="@+id/createGroupFinishButton"
+            app:layout_constraintBottom_toBottomOf="@+id/expensesFinishButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/createGroupFinishButton"
+            app:layout_constraintTop_toTopOf="@+id/expensesFinishButton"
             app:layout_constraintVertical_bias="0.115"
             app:srcCompat="@mipmap/ic_back_foreground" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/createGroupFinishButton"
+            android:id="@+id/expensesFinishButton"
             android:layout_width="79dp"
             android:layout_height="40dp"
             android:background="@android:color/transparent"
@@ -40,26 +40,29 @@
             app:layout_constraintVertical_bias="0.018"
             tools:ignore="TouchTargetSizeCheck" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/createGroupNameTextView"
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/transactionNameEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="72dp"
             android:layout_marginBottom="728dp"
             android:background="#8AB1F8"
             android:elevation="10dp"
+            android:minHeight="48dp"
             android:outlineAmbientShadowColor="@color/black"
             android:paddingHorizontal="70dp"
             android:paddingVertical="10dp"
             android:text="Enter a expenses title"
             android:textColor="#80000000"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!--        TODO make spinner here-->
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/editTextPersonName2"
-            android:layout_width="60dp"
-            android:layout_height="20dp"
+            android:id="@+id/creditorEditText"
+            android:layout_width="127dp"
+            android:layout_height="48dp"
             android:background="@color/blue_omey"
             android:elevation="10dp"
             android:ems="10"
@@ -70,18 +73,16 @@
             android:textSize="13dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.601"
+            app:layout_constraintHorizontal_bias="0.742"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.295"
             tools:ignore="TouchTargetSizeCheck" />
 
-        <!--        TODO make spinner here-->
-
         <TextView
             android:id="@+id/textView4"
             android:layout_width="60dp"
-            android:layout_height="20dp"
+            android:layout_height="48dp"
             android:gravity="center"
             android:text="Split"
             android:textColor="@color/black"
@@ -97,7 +98,7 @@
         <TextView
             android:id="@+id/textView21"
             android:layout_width="60dp"
-            android:layout_height="20dp"
+            android:layout_height="48dp"
             android:background="@color/blue_omey"
             android:gravity="center"
             android:text="MYR"
@@ -111,9 +112,9 @@
             app:layout_constraintVertical_bias="0.229" />
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/editTextPersonName"
+            android:id="@+id/amountEditText"
             android:layout_width="60dp"
-            android:layout_height="20dp"
+            android:layout_height="48dp"
             android:background="@color/blue_omey"
             android:elevation="10dp"
             android:ems="10"
@@ -133,7 +134,7 @@
         <TextView
             android:id="@+id/textView9"
             android:layout_width="60dp"
-            android:layout_height="20dp"
+            android:layout_height="48dp"
             android:gravity="center"
             android:text="Paid by"
             android:textColor="@color/black"
@@ -147,9 +148,9 @@
             app:layout_constraintVertical_bias="0.295" />
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinner0"
+            android:id="@+id/splitSpinner"
             android:layout_width="70dp"
-            android:layout_height="20dp"
+            android:layout_height="48dp"
             android:background="@color/blue_omey"
             android:elevation="10dp"
             android:entries="@array/split_expenses"
@@ -164,6 +165,7 @@
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/debtorRecyclerView"
             android:layout_width="300dp"
             android:layout_height="400dp"
             app:layout_constraintBottom_toBottomOf="parent"

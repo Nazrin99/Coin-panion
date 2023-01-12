@@ -25,27 +25,16 @@
             android:textStyle="bold" />
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_width="351dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30sp"
             android:layout_marginRight="30sp"
             android:layout_marginBottom="10sp">
 
             <ImageView
-                android:id="@+id/IVGroupBackground"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/background_img" />
-
-            <ImageButton
                 android:id="@+id/IBUploadGroupBackground"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="top|end"
-                android:alpha="0.6"
-                android:background="@color/white"
-                android:contentDescription="Upload group background Image"
-                android:src="@drawable/upload_img" />
+                android:layout_height="200dp" />
 
         </FrameLayout>
 
@@ -69,20 +58,9 @@
             android:layout_marginBottom="10sp">
 
             <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="150sp"
-                android:src="@drawable/ic_baseline_groups_24" />
-
-            <ImageButton
                 android:id="@+id/IBUploadGroupProfilePic"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="top|end"
-                android:alpha="0.6"
-                android:background="@color/white"
-                android:contentDescription="Upload group profile Image"
-                android:src="@drawable/upload_img" />
+                android:layout_height="150sp" />
 
         </FrameLayout>
 

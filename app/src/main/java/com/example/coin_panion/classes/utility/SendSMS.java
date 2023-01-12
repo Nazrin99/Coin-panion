@@ -39,4 +39,16 @@ public class SendSMS {
         }
         return String.valueOf(otp);
     }
+
+    public static String generate4DigitOTP(){
+        String numbers = "0123456789";
+        Random random = new Random();
+
+        char[] otp = new char[4];
+
+        for(int i = 0; i < 4; i++){
+            otp[i] = numbers.charAt(random.nextInt(numbers.length()));
+        }
+        return String.valueOf(otp);
+    }
 }
