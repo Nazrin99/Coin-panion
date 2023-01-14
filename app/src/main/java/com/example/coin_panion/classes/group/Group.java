@@ -217,9 +217,10 @@ public class Group {
     }
 
     public static List<User> retrieveGroupParticipants(Integer groupID, Thread dataThread){
-        AtomicReference<List<User>> listAtomicReference = new AtomicReference<>();
+        AtomicReference<List<User>> listAtomicReference = new AtomicReference<>(new ArrayList<>());
         dataThread = new Thread(() -> {
             List<Integer> userIDs = new ArrayList<>();
+            List<Integer> accountIDs = new ArrayList<>();
             List<User> users = new ArrayList<>();
             try(
                     Connection connection = Line.getConnection();
@@ -228,18 +229,29 @@ public class Group {
                 preparedStatement.setInt(1, groupID);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while(resultSet.next()){
-                    userIDs.add(resultSet.getInt(1));
+                    accountIDs.add(resultSet.getInt(1));
                 }
                 resultSet.close();
 
-                PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM user WHERE " + User.getQueryString("user_id", userIDs.size()));
-                for(int i = 0; i < userIDs.size(); i++){
-                    preparedStatement1.setInt((i+1), userIDs.get(i));
+                PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT user_id FROM account WHERE " + User.getQueryString("account_id", accountIDs.size()));
+                for(int i = 0; i < accountIDs.size(); i++){
+                    preparedStatement1.setInt((i+1), accountIDs.get(i));
                 }
                 ResultSet resultSet1 = preparedStatement1.executeQuery();
                 while(resultSet1.next()){
-                    users.add(new User(resultSet1.getInt(1), resultSet1.getLong(2), resultSet1.getString(4), resultSet1.getString(5), resultSet1.getString(6), resultSet1.getString(3)));
+                    userIDs.add(resultSet1.getInt(1));
                 }
+                resultSet1.close();
+
+                PreparedStatement preparedStatement2 = connection.prepareStatement("SELECT * FROM user WHERE " + User.getQueryString("user_id", userIDs.size()));
+                for(int i = 0; i < userIDs.size(); i++){
+                    preparedStatement2.setInt((i+1), userIDs.get(i));
+                }
+                ResultSet resultSet2 = preparedStatement2.executeQuery();
+                while(resultSet2.next()){
+                    users.add(new User(resultSet2.getInt(1), resultSet2.getLong(2), resultSet2.getString(4), resultSet2.getString(5), resultSet2.getString(6), resultSet2.getString(3)));
+                }
+                resultSet2.close();
                 listAtomicReference.set(users);
 
             } catch (SQLException e) {
@@ -248,6 +260,37 @@ public class Group {
         });
         ThreadStatic.run(dataThread);
         return listAtomicReference.get();
+    }
+
+    public static void removeUsersFromGroup(List<User> users, Integer groupID, Thread dataThread){
+        dataThread = new Thread(() -> {
+            List<Integer> accountIDs = new ArrayList<>();
+            try(
+                    Connection connection = Line.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT account_id FROM account WHERE " + User.getQueryString("user_id", users.size()))
+                    ){
+                for(int i = 0; i < users.size(); i++){
+                    preparedStatement.setInt((i+1), users.get(i).getUserID());
+                }
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while(resultSet.next()){
+                    accountIDs.add(resultSet.getInt(1));
+                }
+                resultSet.close();
+
+                PreparedStatement preparedStatement1 = connection.prepareStatement("DELETE FROM account_group WHERE account_id = ? AND group_id = ?");
+                preparedStatement1.setInt(2, groupID);
+                for(int i = 0; i < accountIDs.size(); i++) {
+                    preparedStatement1.setInt(1, accountIDs.get(i));
+                    preparedStatement1.addBatch();
+                }
+                preparedStatement1.executeBatch();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        ThreadStatic.run(dataThread);
     }
 
     // Getters & Setters

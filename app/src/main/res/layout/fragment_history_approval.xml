@@ -84,7 +84,7 @@
                 android:layout_marginVertical="15dp">
 
                 <TextView
-                    android:id="@+id/createGroupNameTextView"
+                    android:id="@+id/transactionNameEditText"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:text="Evidence               :"

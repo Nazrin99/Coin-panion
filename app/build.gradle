@@ -56,7 +56,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // Hashing implementation
-        implementation 'org.bouncycastle:bcprov-jdk15on:1.60'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.60'
 
     // Email
     implementation 'com.sun.mail:android-mail:1.5.6'

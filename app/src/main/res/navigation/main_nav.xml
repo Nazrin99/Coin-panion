@@ -129,6 +129,9 @@
         <action
             android:id="@+id/action_accountFirstActivity2_to_historyDefaultFragment22"
             app:destination="@id/historyDefaultFragment2" />
+        <action
+            android:id="@+id/action_accountFirstActivity2_to_privacyActivity"
+            app:destination="@id/privacyActivity" />
     </fragment>
     <fragment
         android:id="@+id/createGroupFragment"
@@ -167,10 +170,40 @@
         <action
             android:id="@+id/action_groupInfoFragment_to_editGroupFragment2"
             app:destination="@id/editGroupFragment2" />
+        <action
+            android:id="@+id/action_groupInfoFragment_to_createExpensesFragment"
+            app:destination="@id/createExpensesFragment" />
     </fragment>
     <fragment
         android:id="@+id/editGroupFragment2"
         android:name="com.example.coin_panion.EditGroupFragment"
         android:label="fragment_edit_group"
         tools:layout="@layout/fragment_edit_group" />
+    <fragment
+        android:id="@+id/blockAccountFragment"
+        android:name="com.example.coin_panion.BlockAccountFragment"
+        android:label="fragment_block_account"
+        tools:layout="@layout/fragment_block_account" />
+    <fragment
+        android:id="@+id/privacyActivity"
+        android:name="com.example.coin_panion.PrivacyActivity"
+        android:label="activity_privacy"
+        tools:layout="@layout/activity_privacy" >
+        <action
+            android:id="@+id/action_privacyActivity_to_blockAccountFragment"
+            app:destination="@id/blockAccountFragment" />
+        <action
+            android:id="@+id/action_privacyActivity_to_forgotPassword"
+            app:destination="@id/forgotPassword" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPassword"
+        android:name="com.example.coin_panion.ForgotPassword"
+        android:label="activity_forgot_password"
+        tools:layout="@layout/activity_forgot_password" />
+    <fragment
+        android:id="@+id/createExpensesFragment"
+        android:name="com.example.coin_panion.CreateExpensesFragment"
+        android:label="fragment_create_expenses"
+        tools:layout="@layout/fragment_create_expenses" />
 </navigation>

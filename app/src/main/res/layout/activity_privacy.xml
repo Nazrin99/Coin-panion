@@ -8,10 +8,6 @@
     android:orientation="vertical"
     >
 
-    <include
-        android:id="@+id/include5"
-        layout="@layout/appbar" />
-
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"

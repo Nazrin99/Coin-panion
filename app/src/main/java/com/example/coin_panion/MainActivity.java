@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.utility.BaseViewModel;
+import com.example.coin_panion.classes.utility.Picture;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 

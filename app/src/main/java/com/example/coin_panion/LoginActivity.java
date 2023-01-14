@@ -5,6 +5,7 @@ import static com.example.coin_panion.classes.utility.Validifier.isPhoneNumber;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -29,6 +30,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -37,8 +39,9 @@ public class LoginActivity extends AppCompatActivity {
     TextInputLayout loginLayout, passwordLayout;
     Button BtnLogin;
     Button BtnSignUp;
-    Thread dataThread;
+    Runnable dataThread;
     Bundle bundle = new Bundle();
+    Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,14 +150,16 @@ public class LoginActivity extends AppCompatActivity {
             runOnUiThread(() -> loginLayout.setError("Make sure your phone number is in the following format (eg +60179916645)"));
             return;
         }
+        System.out.println("Before");
         AtomicReference<Object> objectAtomicReference = new AtomicReference<>(data);
-        dataThread = new Thread(new Runnable() {
+        dataThread = new Runnable() {
             AtomicReference<User> userAtomicReference = new AtomicReference<>();
             @Override
             public void run() {
                 // Getting User from the database
+                System.out.println("Entered thread");
                 User user = User.verifyUserLogin(objectAtomicReference.get(), new Thread());
-
+                System.out.println("Verifying");
                 if(user != null && user.getUserID() > 0){
                     // User exists, check for password validity
                     boolean account_exists = false;
@@ -232,8 +237,9 @@ public class LoginActivity extends AppCompatActivity {
                     runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Credentials does not exists", Toast.LENGTH_SHORT).show());
                 }
             }
-        });
-        ThreadStatic.run(dataThread);
+        };
+        handler.post(dataThread);
+        System.out.println("Exited program");
     }
 
     private void switchToLoginActivity(Account account, User user){

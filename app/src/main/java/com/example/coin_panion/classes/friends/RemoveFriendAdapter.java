@@ -23,8 +23,9 @@ import java.util.List;
 public class RemoveFriendAdapter extends RecyclerView.Adapter<RemoveFriendAdapter.ViewHolder>{
 
     /*Remove friend from a list of added friend*/
-    List<User> users ;
+    List<User> users = new ArrayList<>();
     Context context;
+    List<User> removedUser = new ArrayList<>();
 
     public RemoveFriendAdapter() {
         this.users = new ArrayList<>();
@@ -37,6 +38,14 @@ public class RemoveFriendAdapter extends RecyclerView.Adapter<RemoveFriendAdapte
     public RemoveFriendAdapter(List<User> users, Context context) {
         this.users = users;
         this.context = context;
+    }
+
+    public List<User> getRemovedUser() {
+        return removedUser;
+    }
+
+    public void setRemovedUser(List<User> removedUser) {
+        this.removedUser = removedUser;
     }
 
     @NonNull
@@ -58,18 +67,14 @@ public class RemoveFriendAdapter extends RecyclerView.Adapter<RemoveFriendAdapte
 
 //       holder.IVRemoveFriendProfile.setImageDrawable(); TODO get profile image of other user
 
-        holder.TVRemoveFriendUserName.setText(user.getFirstName() + " " + user.getLastName());
+        holder.TVRemoveFriendUserName.setText(user.getUsername());
 
         holder.BtnRemoveFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfirmationDialog confirmationDialog = new ConfirmationDialog();
-
-                if(confirmationDialog.isConfirmed()){
-
-                    users.remove(user);
-
-                }
+                users.remove(user);
+                removedUser.add(user);
+                notifyItemRemoved(holder.getAdapterPosition());
             }
         });
 

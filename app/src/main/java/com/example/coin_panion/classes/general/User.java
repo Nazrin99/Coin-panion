@@ -137,6 +137,7 @@ public class User implements Serializable {
      * @return
      */
     public static User verifyUserLogin(Object queryKey, Thread dataThread){
+        System.out.println("Verify login");
         AtomicReference<User> atomicReference = new AtomicReference<>(null);
         dataThread = new Thread(() -> {
             try(
@@ -164,7 +165,10 @@ public class User implements Serializable {
                 e.printStackTrace();
             }
         });
-        ThreadStatic.run(dataThread);
+        dataThread.start();
+        while (dataThread.isAlive()){
+
+        }
         System.out.println(atomicReference.get());
         return atomicReference.get();
     }
