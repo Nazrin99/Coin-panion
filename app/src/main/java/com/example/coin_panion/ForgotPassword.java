@@ -81,7 +81,9 @@ public class ForgotPassword extends Fragment {
             public void onClick(View v) {
                 otpNum = SendSMS.generate4DigitOTP();
                 String email = user.getEmail();
-                SendEmail.sendEmail(email, otpNum);
+                new Thread(() -> {
+                    SendEmail.sendEmail(email, otpNum);
+                }).start();
             }
         });
 

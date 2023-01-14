@@ -24,8 +24,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         TextView TVNotiDesc;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            TVNotiTitle = itemView.findViewById(R.id.TVTitle);
-            TVNotiDesc = itemView.findViewById(R.id.TVNotiDesc);
+            TVNotiTitle = itemView.findViewById(R.id.notiTitle);
+            TVNotiDesc = itemView.findViewById(R.id.notiDesc);
         }
     }
 

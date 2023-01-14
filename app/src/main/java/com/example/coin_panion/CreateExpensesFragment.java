@@ -9,6 +9,8 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
@@ -20,6 +22,7 @@ import android.widget.ImageView;
 
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
+import com.example.coin_panion.classes.group.FriendExpansesItemAdapter;
 import com.example.coin_panion.classes.group.Group;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Line;
@@ -27,8 +30,10 @@ import com.example.coin_panion.classes.utility.Line;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -112,17 +117,23 @@ public class CreateExpensesFragment extends Fragment {
         splitSpinner = view.findViewById(R.id.splitSpinner);
         debtorRecyclerView = view.findViewById(R.id.debtorRecyclerView);
 
+        List<User> userIDs = Group.retrieveGroupParticipants(currentGroup.getGroupID(), new Thread());
+
         creditorEditText.setEnabled(false);
+        FriendExpansesItemAdapter friendExpansesItemAdapter = new FriendExpansesItemAdapter(requireActivity(), userIDs);
+        debtorRecyclerView.setAdapter(friendExpansesItemAdapter);
+        debtorRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         expensesFinishButton.setOnClickListener(v -> {
             if(Double.parseDouble(Objects.requireNonNull(amountEditText.getText()).toString()) > 0){
+                amountEditText.setError(null);
                 splitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         String selectedItem = (String) parent.getItemAtPosition(position);
+                        String transactionName = transactionNameEditText.getText().toString();
+                        Long epochIssued = System.currentTimeMillis();
                         if(selectedItem.equals("Equally")){
-                            List<User> userIDs = Group.retrieveGroupParticipants(currentGroup.getGroupID(), new Thread());
-
                             Double amount = Double.parseDouble(amountEditText.getText().toString());
                             Double netAmount = amount*1.0/userIDs.size();
 
@@ -130,8 +141,6 @@ public class CreateExpensesFragment extends Fragment {
                                     Connection connection = Line.getConnection();
                                     PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO transaction(group_id, creditor, debtor, trans_name, amount, epoch_issued, trans_type) VALUES(?, ?, ?, ?, ?,?,?)")
                                     ){
-                                String transactionName = transactionNameEditText.getText().toString();
-                                Long epochIssued = System.currentTimeMillis();
                                 preparedStatement.setInt(1, currentGroup.getGroupID());
                                 preparedStatement.setInt(2, user.getUserID());
                                 preparedStatement.setString(4, transactionName);
@@ -146,9 +155,30 @@ public class CreateExpensesFragment extends Fragment {
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
+                            Navigation.findNavController(v).navigate(R.id.groupInfoFragment);
                         }
                         else{
-
+                            HashMap<Integer, Double> unequalUsers = friendExpansesItemAdapter.getSelectedGroupMembers();
+                            List<User> userObjects = friendExpansesItemAdapter.getUserObjects();
+                            try(
+                                    Connection connection = Line.getConnection();
+                                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO transaction(group_id, creditor, debtor, trans_name, amount, epoch_issued, trans_type) VALUES(?, ?, ?, ?, ?,?,?)")
+                                    ){
+                                preparedStatement.setInt(1, currentGroup.getGroupID());
+                                preparedStatement.setInt(2, user.getUserID());
+                                preparedStatement.setString(4, transactionName);
+                                preparedStatement.setLong(6, epochIssued);
+                                preparedStatement.setString(7, "PAYMENT_ISSUE");
+                                for(int i = 0 ; i  < userObjects.size(); i++){
+                                    preparedStatement.setInt(3, userObjects.get(i).getUserID());
+                                    preparedStatement.setDouble(5, unequalUsers.get(userObjects.get(i).getUserID()));
+                                    preparedStatement.addBatch();
+                                }
+                                preparedStatement.executeBatch();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                            Navigation.findNavController(v).navigate(R.id.groupInfoFragment);
                         }
                     }
 
@@ -157,6 +187,9 @@ public class CreateExpensesFragment extends Fragment {
 
                     }
                 });
+            }
+            else{
+                amountEditText.setError("Amount cannot be empty!");
             }
         });
     }

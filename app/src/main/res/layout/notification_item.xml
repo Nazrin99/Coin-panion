@@ -25,7 +25,7 @@
 
         <!--    Notification type-->
         <TextView
-            android:id="@+id/TVTitle"
+            android:id="@+id/notiTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Title"
@@ -37,7 +37,7 @@
 
         <!--    Notification desc-->
         <TextView
-            android:id="@+id/TVNotiDesc"
+            android:id="@+id/notiDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Description"

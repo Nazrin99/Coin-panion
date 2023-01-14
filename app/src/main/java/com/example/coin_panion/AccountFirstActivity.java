@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.content.Intent;
 import android.media.Image;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.utility.BaseViewModel;
+import com.example.coin_panion.classes.utility.Picture;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AccountFirstActivity extends Fragment {
@@ -60,7 +62,7 @@ public class AccountFirstActivity extends Fragment {
 
         requireActivity().runOnUiThread(() -> {
             textView.setText(account.getUser().getUsername());
-            profileImageView.setImageDrawable(account.getAccountPic().getPicture());
+            profileImageView.setImageDrawable(Picture.getPictureFromDB(2501).getPicture());
         });
 
         profileDebtLimitNextImageView.setOnClickListener(v -> {
@@ -72,11 +74,10 @@ public class AccountFirstActivity extends Fragment {
         });
 
         profilePrivacyNextImageView.setOnClickListener(v -> {
-
+            Navigation.findNavController(v).navigate(R.id.privacyActivity);
         });
 
         profileUsernameNextImageView.setOnClickListener(v -> {
-
         });
 
 

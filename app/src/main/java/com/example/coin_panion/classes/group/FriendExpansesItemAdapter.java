@@ -17,6 +17,7 @@ import com.example.coin_panion.R;
 import com.example.coin_panion.classes.friends.ContactAdapter;
 import com.example.coin_panion.classes.general.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,12 +25,12 @@ public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpans
 
     Context context;
     List<User> allGroupMembers;
-    HashMap<Integer, Double> selectedGroupMembers;
+    HashMap<Integer, Double> selectedGroupMembers = new HashMap<>();
+    List<User> userObjects = new ArrayList<>();
 
-    public FriendExpansesItemAdapter(Context context, List<User> allGroupMembers, HashMap<Integer, Double> selectedGroupMembers) {
+    public FriendExpansesItemAdapter(Context context, List<User> allGroupMembers) {
         this.context = context;
         this.allGroupMembers = allGroupMembers;
-        this.selectedGroupMembers = selectedGroupMembers;
     }
 
     @NonNull
@@ -60,8 +61,10 @@ public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpans
                 if(isChecked){
                     Double amount = Double.parseDouble(holder.ETCustomExpansesItemAmount.getText().toString());
                     selectedGroupMembers.put(user.getUserID(), amount);
+                    userObjects.add(user);
                 }else {
                     selectedGroupMembers.remove(user.getUserID());
+                    userObjects.remove(user);
                 }
             }
         });
@@ -104,6 +107,14 @@ public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpans
 
     public void setAllGroupMembers(List<User> allGroupMembers) {
         this.allGroupMembers = allGroupMembers;
+    }
+
+    public List<User> getUserObjects() {
+        return userObjects;
+    }
+
+    public void setUserObjects(List<User> userObjects) {
+        this.userObjects = userObjects;
     }
 
     public HashMap<Integer, Double> getSelectedGroupMembers() {
