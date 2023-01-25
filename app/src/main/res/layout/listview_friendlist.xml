@@ -18,7 +18,7 @@
         >
 
         <ImageView
-            android:id="@+id/IVProfileImage"
+            android:id="@+id/contactProfileImageView"
             android:layout_width="56dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="20sp"

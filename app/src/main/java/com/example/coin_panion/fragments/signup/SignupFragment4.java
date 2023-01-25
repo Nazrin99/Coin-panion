@@ -1,6 +1,17 @@
 package com.example.coin_panion.fragments.signup;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +50,8 @@ public class SignupFragment4 extends Fragment {
     ImageView signupImageView;
     ImageButton signupUploadImageButton;
     AppCompatButton createProfileButton;
+    int imageViewHeight, imageViewWidth;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -100,6 +113,9 @@ public class SignupFragment4 extends Fragment {
         signupImageView = view.findViewById(R.id.signupImageView);
         signupUploadImageButton = view.findViewById(R.id.signupUploadImageButton);
         createProfileButton = view.findViewById(R.id.createProfileButton);
+        int width = (int) Math.round(requireActivity().getWindow().getDecorView().getWidth()*0.5);
+        signupImageView.setMinimumHeight(width);
+        signupImageView.setMinimumWidth(width);
 
         usernameLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -178,15 +194,23 @@ public class SignupFragment4 extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data != null){
+        if(data != null && requestCode == 1 && resultCode == RESULT_OK){
             Uri imageUri = data.getData();
-            assert imageUri != null;
-
-            Drawable drawable = Picture.constructDrawableFromUri(imageUri, getContext().getContentResolver());
-            requireActivity().runOnUiThread(() -> {
-                signupImageView.setImageDrawable(drawable);
-                signupViewModel.put("picture", drawable);
-            });
+            if(imageUri != null){
+                Drawable drawable = Picture.constructDrawableFromUri(imageUri, getContext().getContentResolver());
+                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+                Drawable round = new BitmapDrawable(getResources(), Picture.getRoundedCroppedBitmap(bitmap));
+                requireActivity().runOnUiThread(() -> {
+                    signupImageView.setImageDrawable(round);
+                });
+                signupViewModel.put("picture", imageUri);
+            }
+            else{
+                System.out.println("Image uri is null");
+            }
+        }
+        else{
+            System.out.println("Intent data is null");
         }
     }
 }

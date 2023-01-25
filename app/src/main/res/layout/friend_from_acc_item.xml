@@ -1,48 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="380dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="30dp"
     android:layout_marginTop="20sp"
-    android:layout_marginLeft="20dp"
-    android:orientation="horizontal"
     android:layout_marginRight="30dp"
-    app:cardCornerRadius="20dp"
     android:backgroundTint="@color/Biru_Muda"
-    >
+    android:orientation="horizontal"
+    app:cardCornerRadius="20dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout12"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/IVProfileImage"
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20sp"
-            android:layout_marginRight="10sp"
-            android:src="@drawable/img" />
+            android:id="@+id/contactProfileImageView"
+            android:layout_width="27dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="30dp"
+            android:src="@drawable/img"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/contactNameTextView"
-            android:layout_width="190dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="20sp"
-            android:paddingTop="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:gravity="center_vertical"
             android:text="Contact Name"
-            android:textSize="18sp" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/contactProfileImageView"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/selectContactImageView"
-            android:layout_width="69dp"
-            android:layout_height="64dp"
-            android:layout_marginRight="50sp"
+            android:layout_width="48dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="20dp"
             android:background="@color/white"
             android:backgroundTint="@color/Biru_Muda"
-            android:src="@mipmap/ic_next_foreground" />
-    </LinearLayout>
+            android:src="@mipmap/ic_next_foreground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.cardview.widget.CardView>

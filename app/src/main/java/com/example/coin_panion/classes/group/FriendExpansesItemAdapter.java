@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coin_panion.R;
 import com.example.coin_panion.classes.friends.ContactAdapter;
+import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,11 +26,13 @@ import java.util.List;
 public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpansesItemAdapter.ViewHolder> {
 
     Context context;
-    List<User> allGroupMembers;
-    HashMap<Integer, Double> selectedGroupMembers = new HashMap<>();
-    List<User> userObjects = new ArrayList<>();
+    List<Account> allGroupMembers;
+    HashMap<String, Double> selectedGroupMembers = new HashMap<>();
+    List<Account> accounts = new ArrayList<>();
+    boolean allSelected = false;
+    double amount;
 
-    public FriendExpansesItemAdapter(Context context, List<User> allGroupMembers) {
+    public FriendExpansesItemAdapter(Context context, List<Account> allGroupMembers) {
         this.context = context;
         this.allGroupMembers = allGroupMembers;
     }
@@ -38,33 +42,54 @@ public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpans
     public FriendExpansesItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         /*Initialize view item*/
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_expenses_friend_item,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.custom_expenses_friend_item,parent,false);
 
         /*Return the view inflated*/
         return new FriendExpansesItemAdapter.ViewHolder(view);
 
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull FriendExpansesItemAdapter.ViewHolder holder, int position) {
 
-        User user = allGroupMembers.get(position);
+        Account account = allGroupMembers.get(position);
 
         /*Initialze the variable based on Friend Expanses*/
-        holder.TVCustomExpansesFriendName.setText(user.getFirstName());
+        holder.TVCustomExpansesFriendName.setText(account.getUser().getFirstName());
 
-//        Integer expansesAmount = Integer.valueOf(holder.ETCustomExpansesItemAmount.getText().toString().replaceAll("[^0-9]", ""));
+        if(allSelected){
+            holder.ETCustomExpansesItemAmount.setText(Double.toString(amount));
+            holder.CBCustomExpansesItem.setChecked(true);
+            holder.CBCustomExpansesItem.setEnabled(false);
+            holder.ETCustomExpansesItemAmount.setEnabled(false);
+        }
+        else{
+            holder.CBCustomExpansesItem.setChecked(false);
+            holder.CBCustomExpansesItem.setEnabled(true);
+            holder.ETCustomExpansesItemAmount.setEnabled(false);
+            holder.ETCustomExpansesItemAmount.setText(null);
+        }
 
         holder.CBCustomExpansesItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(holder.ETCustomExpansesItemAmount.getText().toString().isEmpty()){
+                    return;
+                }
                 if(isChecked){
                     Double amount = Double.parseDouble(holder.ETCustomExpansesItemAmount.getText().toString());
-                    selectedGroupMembers.put(user.getUserID(), amount);
-                    userObjects.add(user);
+
+                    selectedGroupMembers.put(account.getUser().getUserID(), amount);
+                    accounts.add(account);
+                    holder.ETCustomExpansesItemAmount.setEnabled(true);
                 }else {
-                    selectedGroupMembers.remove(user.getUserID());
-                    userObjects.remove(user);
+                    selectedGroupMembers.remove(account.getUser().getUserID());
+                    accounts.remove(account);
+                    holder.ETCustomExpansesItemAmount.setText(null);
+                    holder.ETCustomExpansesItemAmount.setEnabled(false);
+                    holder.ETCustomExpansesItemAmount.setText(null);
                 }
             }
         });
@@ -73,7 +98,7 @@ public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpans
 
     @Override
     public int getItemCount() {
-        return selectedGroupMembers.size();
+        return allGroupMembers.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -101,27 +126,43 @@ public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpans
         this.context = context;
     }
 
-    public List<User> getAllGroupMembers() {
+    public List<Account> getAllGroupMembers() {
         return allGroupMembers;
     }
 
-    public void setAllGroupMembers(List<User> allGroupMembers) {
+    public void setAllGroupMembers(List<Account> allGroupMembers) {
         this.allGroupMembers = allGroupMembers;
     }
 
-    public List<User> getUserObjects() {
-        return userObjects;
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
-    public void setUserObjects(List<User> userObjects) {
-        this.userObjects = userObjects;
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 
-    public HashMap<Integer, Double> getSelectedGroupMembers() {
+    public HashMap<String, Double> getSelectedGroupMembers() {
         return selectedGroupMembers;
     }
 
-    public void setSelectedGroupMembers(HashMap<Integer, Double> selectedGroupMembers) {
+    public void setSelectedGroupMembers(HashMap<String, Double> selectedGroupMembers) {
         this.selectedGroupMembers = selectedGroupMembers;
+    }
+
+    public boolean isAllSelected() {
+        return allSelected;
+    }
+
+    public void setAllSelected(boolean allSelected) {
+        this.allSelected = allSelected;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }

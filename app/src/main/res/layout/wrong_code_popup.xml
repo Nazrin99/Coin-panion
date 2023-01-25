@@ -1,46 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="20dp"
-    android:backgroundTint="@color/Biru_Muda"
-    android:layout_marginLeft="60dp"
-    android:layout_marginTop="20dp"
     android:id="@+id/CVWrongCodePopup"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginVertical="20dp"
+    android:backgroundTint="@color/Biru_Muda"
+    app:cardCornerRadius="20dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout22"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:paddingHorizontal="50dp"
+        android:paddingVertical="20dp">
 
         <TextView
             android:id="@+id/popupTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="50dp"
-            android:text="@string/wrong_code"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="Are you sure you want to delete this group?"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
-            />
+            app:layout_constraintBottom_toTopOf="@+id/popupYesButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/BtnPopupOkButton"
-            android:layout_width="110dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="90dp"
+            android:id="@+id/popupYesButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/rounded_edge_button"
-            android:text="Ok"
-            />
+            android:text="Yes"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/popupNoButton"
+            app:layout_constraintStart_toStartOf="@+id/popupTextView"
+            app:layout_constraintTop_toBottomOf="@+id/popupTextView" />
 
-    </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/popupNoButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/rounded_edge_button"
+            android:text="No"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/popupTextView"
+            app:layout_constraintStart_toEndOf="@+id/popupYesButton"
+            app:layout_constraintTop_toTopOf="@+id/popupYesButton"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

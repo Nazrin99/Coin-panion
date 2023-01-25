@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 
 /**
@@ -25,6 +26,7 @@ import com.example.coin_panion.classes.utility.BaseViewModel;
 public class FriendsDefaultFragment extends Fragment {
     BaseViewModel friendsViewModel;
     AppCompatButton addFriendsDefaultButton;
+    Account account;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

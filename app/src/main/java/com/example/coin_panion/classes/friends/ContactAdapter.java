@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
@@ -17,16 +18,58 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.coin_panion.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable{
 
     List<Contact> contacts;
+    List<Contact> otherContacts;
+    ContactAdapter otherAdapter;
+    List<Contact> backupContacts = new ArrayList<>();
     Context context;
-    List<Contact> selectedContacts;
+    Boolean toAdd;
 
-    public ContactAdapter(List<Contact> contacts, Context context) {
+    public ContactAdapter(List<Contact> contacts, List<Contact> otherContacts, ContactAdapter otherAdapter, Context context, Boolean toAdd) {
         this.contacts = contacts;
+        this.otherContacts = otherContacts;
+        this.otherAdapter = otherAdapter;
+        this.context = context;
+        this.toAdd = toAdd;
+        this.backupContacts = new ArrayList<>(contacts);
+    }
+
+    public ContactAdapter(List<Contact> contacts, List<Contact> otherContacts, Context context, Boolean toAdd) {
+        this.contacts = contacts;
+        this.otherContacts = otherContacts;
+        this.context = context;
+        this.toAdd = toAdd;
+        this.backupContacts = contacts;
+    }
+
+    public List<Contact> getOtherContacts() {
+        return otherContacts;
+    }
+
+    public void setOtherContacts(List<Contact> otherContacts) {
+        this.otherContacts = otherContacts;
+    }
+
+    public ContactAdapter getOtherAdapter() {
+        return otherAdapter;
+    }
+
+    public void setOtherAdapter(ContactAdapter otherAdapter) {
+        this.otherAdapter = otherAdapter;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
         this.context = context;
     }
 
@@ -43,33 +86,22 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ContactAdapter.ViewHolder holder, int position) {
         /*Get the contact object*/
-        Contact contact = contacts.get(position);
+        Contact contact = contacts.get(holder.getAdapterPosition());
 
         /*Initialze the variable based on contact*/
         holder.TVContactName.setText(contact.getContactName());
         holder.TVContactNumber.setText(contact.getContactNumber());
+        holder.removeContactButton.setText(toAdd == true ? "Add" : "Remove");
 
         // Check for each contact if they have an account, if they don't disable their respective checkboxes
-        if (Contact.hasAnAccount(Long.parseLong(contact.getContactNumber()), new Thread())){
-            // Has an account
-            holder.CBSelectContact.setEnabled(false);
-        }
-        else{
-            holder.CBSelectContact.setEnabled(true);
-        }
-
         /*Check if the contact is selected*/
-        holder.CBSelectContact.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    selectedContacts.add(contact);
-                    // Toast.makeText(buttonView.getContext(), "This contact does not have a Companion account", Toast.LENGTH_SHORT).show();
-                } else {
-                    /*If the contact selected can be added but diselected*/
-                    selectedContacts.remove(contact);
-                }
-            }
+        holder.removeContactButton.setOnClickListener(v -> {
+            otherContacts.add(contact);
+            otherContacts.sort(Comparator.comparing(Contact::getContactName));
+            contacts.remove(contact);
+            contacts.sort(Comparator.comparing(Contact::getContactName));
+            notifyDataSetChanged();
+            otherAdapter.notifyDataSetChanged();
         });
 
     }
@@ -79,7 +111,39 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         return contacts.size();
     }
 
-//    @Override
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString = constraint.toString();
+                if (charString.isEmpty()) {
+                    contacts = backupContacts;
+                } else {
+                    List<Contact> filteredList = new ArrayList<>();
+                    for (Contact contact : backupContacts) {
+                        if (contact.getContactName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(contact);
+                        }
+                    }
+                    contacts = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = contacts;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                contacts = (List<Contact>) results.values;
+
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+    //    @Override
 //    public Filter getFilter() {
 //
 //        return contactsFilter;
@@ -135,16 +199,24 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
         /*Variable that will hold contact info from cardview*/
         TextView TVContactName, TVContactNumber;
-        CheckBox CBSelectContact;
+        Button removeContactButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             /*Assign the variable*/
             TVContactName = itemView.findViewById(R.id.contactNameTextView);
             TVContactNumber = itemView.findViewById(R.id.TVContact_number);
-            CBSelectContact = itemView.findViewById(R.id.CBSelectContact);
+            removeContactButton = itemView.findViewById(R.id.removeContactButton);
         }
 
+    }
+
+    public List<Contact> getBackupContacts() {
+        return backupContacts;
+    }
+
+    public void setBackupContacts(List<Contact> backupContacts) {
+        this.backupContacts = backupContacts;
     }
 
     public List<Contact> getContacts() {
@@ -153,13 +225,5 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
-    }
-
-    public List<Contact> getSelectedContacts() {
-        return selectedContacts;
-    }
-
-    public void setSelectedContacts(List<Contact> selectedContacts) {
-        this.selectedContacts = selectedContacts;
     }
 }

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
@@ -32,7 +33,7 @@ import java.util.List;
 public class GroupBalanceFragment extends Fragment {
     BaseViewModel mainViewModel;
     Account account;
-    User user;
+    List<Group> groups;
     RecyclerView groupListRecyclerView;
     Button createGroupButton;
 
@@ -89,8 +90,11 @@ public class GroupBalanceFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        TextView textView = requireActivity().findViewById(R.id.activityName);
         account = (Account) mainViewModel.get("account");
-        user = (User) mainViewModel.get("user");
+        groups = account.getGroups();
+
+        mainViewModel.put("groups", groups);
 
         groupListRecyclerView = view.findViewById(R.id.groupListRecyclerView);
         createGroupButton = view.findViewById(R.id.createNewGroupButton);
@@ -102,13 +106,8 @@ public class GroupBalanceFragment extends Fragment {
             });
         });
 
-        List<Integer> groupIDs = Group.retrieveGroupIDsFromDB(account.getAccountID(), new Thread());
-        System.out.println(groupIDs.size());
-        List<Group> groups = Group.retrieveGroupFromDB(groupIDs, new Thread());
 
-        mainViewModel.put("groups", groups);
-
-        GroupAdapter groupAdapter = new GroupAdapter(getActivity(), groups);
+        GroupAdapter groupAdapter = new GroupAdapter(requireActivity().getApplicationContext(), groups, mainViewModel);
         System.out.println("Adapter applied");
 
         requireActivity().runOnUiThread(() -> {

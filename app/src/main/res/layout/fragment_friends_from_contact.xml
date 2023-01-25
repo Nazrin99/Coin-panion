@@ -9,73 +9,81 @@
 
 
     <ImageButton
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
+        android:id="@+id/friendsSettingsBackButton"
+        android:layout_width="24dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:background="@color/white"
         android:contentDescription="Cancel"
         android:paddingLeft="20dp"
         android:src="@drawable/backward_arrow_img"
-        app:layout_constraintBottom_toTopOf="@+id/searchViewContactFriend"
-        app:layout_constraintEnd_toStartOf="@+id/BtnDummy"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/BtnDummy"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/saveContactButton"
-        app:layout_constraintStart_toEndOf="@+id/backButton"
-        app:layout_constraintTop_toTopOf="@+id/backButton"
-        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/saveContactButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="88dp"
+        android:layout_width="76dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
         android:background="@color/white"
         android:text="Save"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/contactsRecyclerView"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/BtnDummy"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <SearchView
-        android:id="@+id/searchViewContactFriend"
+        android:id="@+id/contactSearchView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
         android:background="@drawable/rounded_edge_button"
         android:contentDescription="Phone Number / Contact Number"
         android:paddingEnd="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/contactsRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButton" />
+        app:layout_constraintTop_toBottomOf="@+id/friendsSettingsBackButton" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactsRecyclerView"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="225dp"
         android:autofillHints="Phone Number / Contact Number"
         android:paddingTop="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveContactButton"
+        app:layout_constraintTop_toBottomOf="@+id/contactSearchView"
         tools:listitem="@layout/friend_from_contact_item" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/selectedContactsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        tools:listitem="@layout/friend_from_contact_item" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Selected Contacts"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="@+id/contactSearchView"
+        app:layout_constraintTop_toBottomOf="@+id/contactsRecyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

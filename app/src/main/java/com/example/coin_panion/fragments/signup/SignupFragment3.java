@@ -26,6 +26,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.coin_panion.R;
 import com.example.coin_panion.classes.utility.BaseViewModel;
@@ -53,6 +54,7 @@ public class SignupFragment3 extends Fragment {
             R.id.codeEditText5,
             R.id.codeEditText6
     };
+    String otp;
     BaseViewModel signupViewModel;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -110,7 +112,7 @@ public class SignupFragment3 extends Fragment {
         signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
 
         //Send verification email
-        String otp = signupViewModel.get("otp").toString();
+        otp = signupViewModel.get("otp").toString();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -147,14 +149,13 @@ public class SignupFragment3 extends Fragment {
                         InputMethodManager imm = (InputMethodManager) requireParentFragment().requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(requireView().getApplicationWindowToken(), 0);
 
-                        if(verifyCode(signupViewModel.get("otp").toString())){
+                        if(verifyCode(otp)){
                             // Code is verified proceed to next fragment
                             Navigation.findNavController(requireView()).navigate(R.id.action_signupFragment_3_to_signupFragment_4);
                         }
                         else{
                             // Display popup, wrong code entered
-                            System.out.println("Wrong code");
-                            createDialog();
+                            Toast.makeText(requireContext(), "Verification code incorrect", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else{
@@ -196,27 +197,5 @@ public class SignupFragment3 extends Fragment {
 
     private boolean verifyCode(String otp){
         return otp.equalsIgnoreCase(compileCode());
-    }
-
-    private void createDialog(){
-        Animation fadeIn = new AlphaAnimation(0, 1);
-        fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
-        fadeIn.setDuration(1000);
-
-        Dialog dialog1 = new Dialog(requireContext());
-        dialog1.getLayoutInflater().inflate(R.layout.wrong_code_popup, null);
-
-        dialogBuilder = new AlertDialog.Builder(requireActivity());
-        final View popup = getLayoutInflater().inflate(R.layout.wrong_code_popup, null);
-        popupTextView = popup.findViewById(R.id.popupTextView);
-        popupOkButton = popup.findViewById(R.id.BtnPopupOkButton);
-
-        dialogBuilder.setView(popup);
-        dialog = dialogBuilder.create();
-        dialog.show();
-
-        popupOkButton.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
     }
 }

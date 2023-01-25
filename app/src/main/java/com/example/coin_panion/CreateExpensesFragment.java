@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +27,22 @@ import com.example.coin_panion.classes.group.FriendExpansesItemAdapter;
 import com.example.coin_panion.classes.group.Group;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Line;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -91,13 +102,14 @@ public class CreateExpensesFragment extends Fragment {
 
     BaseViewModel mainViewModel;
     Account account;
-    User user;
-    Group currentGroup;
+    Group selectedGroup;
     ImageView expensesBackButton;
     AppCompatButton expensesFinishButton;
     AppCompatEditText transactionNameEditText, amountEditText, creditorEditText;
     AppCompatSpinner splitSpinner;
     RecyclerView debtorRecyclerView;
+    FriendExpansesItemAdapter friendExpansesItemAdapter;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
 
     @Override
@@ -106,8 +118,7 @@ public class CreateExpensesFragment extends Fragment {
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
         account = (Account) mainViewModel.get("account");
-        user = (User) mainViewModel.get("user");
-        currentGroup = (Group) mainViewModel.get("selected");
+        selectedGroup = (Group) mainViewModel.get("selectedGroup");
 
         expensesBackButton = view.findViewById(R.id.expensesBackButton);
         expensesFinishButton = view.findViewById(R.id.expensesFinishButton);
@@ -116,81 +127,121 @@ public class CreateExpensesFragment extends Fragment {
         creditorEditText = view.findViewById(R.id.creditorEditText);
         splitSpinner = view.findViewById(R.id.splitSpinner);
         debtorRecyclerView = view.findViewById(R.id.debtorRecyclerView);
+        amountEditText.setText("0");
+        df.setRoundingMode(RoundingMode.UP);
 
-        List<User> userIDs = Group.retrieveGroupParticipants(currentGroup.getGroupID(), new Thread());
+        List<Account> groupMembers = selectedGroup.getGroupMembers();
+        List<Account> potentialDebtors = new ArrayList<>(groupMembers);
+        for(int i = 0; i < potentialDebtors.size(); i++){
+            if(potentialDebtors.get(i).getAccountID().equalsIgnoreCase(account.getAccountID())){
+                potentialDebtors.remove(i);
+                break;
+            }
+        }
 
+        System.out.println("groupMembers.size()" + groupMembers.size());
         creditorEditText.setEnabled(false);
-        FriendExpansesItemAdapter friendExpansesItemAdapter = new FriendExpansesItemAdapter(requireActivity(), userIDs);
-        debtorRecyclerView.setAdapter(friendExpansesItemAdapter);
-        debtorRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        creditorEditText.setText(account.getUser().getUsername());
+        friendExpansesItemAdapter = new FriendExpansesItemAdapter(requireActivity().getApplicationContext(), potentialDebtors);
+        requireActivity().runOnUiThread(() -> {
+            debtorRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+            debtorRecyclerView.setAdapter(friendExpansesItemAdapter);
+        });
+
+        amountEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length() <= 0){
+                    return;
+                }
+                else{
+                    if(splitSpinner.getSelectedItem().toString().equalsIgnoreCase("Equally")){
+                       Double amount = Double.parseDouble(amountEditText.getText().toString());
+                       friendExpansesItemAdapter.setAmount(Double.parseDouble(df.format(amount/potentialDebtors.size())));
+                       friendExpansesItemAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
+
+        splitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0){
+                    friendExpansesItemAdapter.setAllSelected(true);
+                    friendExpansesItemAdapter.setAmount(Double.parseDouble(amountEditText.getText().toString())/potentialDebtors.size());
+                    friendExpansesItemAdapter.notifyDataSetChanged();
+                }
+                else if(position == 1){
+                    friendExpansesItemAdapter.setAllSelected(false);
+                    friendExpansesItemAdapter.notifyDataSetChanged();
+                    friendExpansesItemAdapter.setAmount(-1);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        expensesBackButton.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.groupInfoFragment);
+        });
 
         expensesFinishButton.setOnClickListener(v -> {
-            if(Double.parseDouble(Objects.requireNonNull(amountEditText.getText()).toString()) > 0){
-                amountEditText.setError(null);
-                splitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String selectedItem = (String) parent.getItemAtPosition(position);
-                        String transactionName = transactionNameEditText.getText().toString();
-                        Long epochIssued = System.currentTimeMillis();
-                        if(selectedItem.equals("Equally")){
-                            Double amount = Double.parseDouble(amountEditText.getText().toString());
-                            Double netAmount = amount*1.0/userIDs.size();
+            Double amount = Double.parseDouble(amountEditText.getText().toString());
+            String transName = transactionNameEditText.getText().toString();
+            String creditor = creditorEditText.getText().toString();
+            List<Account> accounts = friendExpansesItemAdapter.getAccounts();
+            Map<String, Double> map = friendExpansesItemAdapter.getSelectedGroupMembers();
 
-                            try(
-                                    Connection connection = Line.getConnection();
-                                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO transaction(group_id, creditor, debtor, trans_name, amount, epoch_issued, trans_type) VALUES(?, ?, ?, ?, ?,?,?)")
-                                    ){
-                                preparedStatement.setInt(1, currentGroup.getGroupID());
-                                preparedStatement.setInt(2, user.getUserID());
-                                preparedStatement.setString(4, transactionName);
-                                preparedStatement.setDouble(5, netAmount);
-                                preparedStatement.setLong(6, epochIssued);
-                                preparedStatement.setString(7, "PAYMENT_ISSUE");
-                                for(int i = 0; i < userIDs.size(); i++){
-                                    preparedStatement.setInt(3, userIDs.get(i).getUserID());
-                                    preparedStatement.addBatch();
-                                }
-                                preparedStatement.executeBatch();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                            Navigation.findNavController(v).navigate(R.id.groupInfoFragment);
+
+            if(splitSpinner.getSelectedItem().toString().equals("Equally")){
+                DocumentReference creditorReference = FirebaseFirestore.getInstance().collection("account").document(account.getAccountID());
+                Double netAmount = amount/accounts.size();
+                String transType = "PAYMENT_ISSUE";
+                Date date = new Date();
+
+                Map<String, Object> toMap = new HashMap<>();
+                toMap.put("transType", transType);
+                toMap.put("transName", transName);
+                toMap.put("amount", netAmount);
+                toMap.put("creditor", creditorReference);
+                toMap.put("groupID", selectedGroup.getGroupID());
+                toMap.put("epochIssued", date);
+
+                for(int i = 0 ; i < accounts.size(); i++){
+                    DocumentReference documentReference = FirebaseFirestore.getInstance().collection("transaction").document();
+                    DocumentReference debtorReference = FirebaseFirestore.getInstance().collection("account").document(accounts.get(i).getAccountID());
+                    String transactionID = documentReference.getId();
+
+                    toMap.put("transactionID", transactionID);
+                    toMap.put("debtor", debtorReference);
+
+                    documentReference.set(toMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            System.out.println("Transaction added");
                         }
-                        else{
-                            HashMap<Integer, Double> unequalUsers = friendExpansesItemAdapter.getSelectedGroupMembers();
-                            List<User> userObjects = friendExpansesItemAdapter.getUserObjects();
-                            try(
-                                    Connection connection = Line.getConnection();
-                                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO transaction(group_id, creditor, debtor, trans_name, amount, epoch_issued, trans_type) VALUES(?, ?, ?, ?, ?,?,?)")
-                                    ){
-                                preparedStatement.setInt(1, currentGroup.getGroupID());
-                                preparedStatement.setInt(2, user.getUserID());
-                                preparedStatement.setString(4, transactionName);
-                                preparedStatement.setLong(6, epochIssued);
-                                preparedStatement.setString(7, "PAYMENT_ISSUE");
-                                for(int i = 0 ; i  < userObjects.size(); i++){
-                                    preparedStatement.setInt(3, userObjects.get(i).getUserID());
-                                    preparedStatement.setDouble(5, unequalUsers.get(userObjects.get(i).getUserID()));
-                                    preparedStatement.addBatch();
-                                }
-                                preparedStatement.executeBatch();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                            Navigation.findNavController(v).navigate(R.id.groupInfoFragment);
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
+                    });
+                }
+                Navigation.findNavController(v).navigate(R.id.groupInfoFragment);
             }
             else{
-                amountEditText.setError("Amount cannot be empty!");
+
             }
+
         });
     }
 }

@@ -62,7 +62,7 @@ public class PaymentApproval{
 
                 // Query and append Picture object
                 for(int i = 0 ; i < pictureIDs.size(); i++){
-                    paymentApprovalList.get(i).setPaymentProof(Picture.getPictureFromDB(pictureIDs.get(i)));
+                    paymentApprovalList.get(i).setPaymentProof(null);
                 }
                 listAtomicReference.set(paymentApprovalList);
             } catch (SQLException e) {

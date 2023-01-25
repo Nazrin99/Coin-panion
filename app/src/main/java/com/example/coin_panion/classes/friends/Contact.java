@@ -6,41 +6,37 @@ import android.database.Cursor;
 import android.os.health.PackageHealthStats;
 import android.provider.ContactsContract;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.example.coin_panion.classes.general.Account;
+import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.ThreadStatic;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Contact {
 
     private String contactName;
     private String contactNumber;
-    private Boolean isSelected;
-    private Boolean hasAccount; //????
 
     public Contact() {
 
     }
 
-    public Contact(String contactName, String contactNumber, Boolean isSelected) {
-        this.contactName = contactName;
-
-        if(contactNumber.matches("^\\d+$")){
-            this.contactNumber = contactNumber.replaceAll("[^\\d]", "");
-        }else {
-            this.contactNumber = contactNumber;
-        }
-
-        this.isSelected = isSelected;
-    }
-
     // Constructor to necessary contacts objects
-
     public Contact(String contactName, String contactNumber) {
         this.contactName = contactName;
         this.contactNumber = contactNumber;
@@ -62,76 +58,71 @@ public class Contact {
         this.contactNumber = contactNumber;
     }
 
-    public Boolean getSelected() {
-        return isSelected;
-    }
+    public static List<Contact> getAllContacts(ContentResolver contentResolver, List<Account> friends, Account currentAccount){
+        List<String> friendPhoneNumbers = new ArrayList<>();
+        for(Account account: friends){
+            friendPhoneNumbers.add(account.getUser().getPhoneNumber());
+        }
+        List<Contact> contactList = new ArrayList();
+        List<String> bufferSet = new ArrayList<>();
+        Contact contact;
 
-    public void setSelected(Boolean selected) {
-        isSelected = selected;
-    }
+        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
 
-    /*TODO based on contact number check if the contact number exist in database*/
-    public Boolean getHasAccount() {
-        return hasAccount;
-    }
+                @SuppressLint("Range") int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
+                if (hasPhoneNumber > 0) {
+                    @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                    @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-    @SuppressLint("Range")
-    public static ArrayList<Contact> getAllContacts(ContentResolver contentResolver) {
-        ArrayList<String> nameList = new ArrayList<>();
-        ArrayList<String> phoneNumber = new ArrayList<>();
-        ArrayList<Contact> contacts = new ArrayList<>();
-        ContentResolver cr = contentResolver;
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                null, null, null, null);
-        if ((cur != null ? cur.getCount() : 0) > 0) {
-            while (cur != null && cur.moveToNext()) {
-                @SuppressLint("Range") String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                @SuppressLint("Range") String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                nameList.add(name);
-                if (cur.getInt(cur.getColumnIndex( ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-                    Cursor pCur = cr.query(
+                    contact = new Contact();
+                    contact.setContactName(name);
+
+                    Cursor phoneCursor = contentResolver.query(
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                             null,
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            new String[]{id}, null);
-                    while (pCur.moveToNext()) {
-                        String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        phoneNumber.add(phoneNo.substring(1));
+                            new String[]{id},
+                            null);
+                    if (phoneCursor.moveToNext()) {
+                        @SuppressLint("Range") String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        if(!bufferSet.contains(phoneNumber)){
+                            contact.setContactNumber(phoneNumber);
+                        }
+                        else{
+                            continue;
+                        }
                     }
-                    pCur.close();
-                }
-            }
-        }
-        if (cur != null) {
-            cur.close();
-        }
-        for(int i = 0; i  < phoneNumber.size(); i++){
-            contacts.add(new Contact(nameList.get(i), phoneNumber.get(i)));
-        }
-        return contacts;
-    }
 
-    public static boolean hasAnAccount(Long phoneNumber, Thread dataThread){
-        AtomicReference<Boolean> booleanAtomicReference = new AtomicReference<>();
-        dataThread = new Thread(() -> {
-            try(
-                    Connection connection = Line.getConnection();
-                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE phone_number = ?")
-                    ){
-                preparedStatement.setLong(1, phoneNumber);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if(resultSet.next()){
-                    booleanAtomicReference.set(true);
+                    phoneCursor.close();
+
+                    AtomicReference<Contact> contactAtomicReference = new AtomicReference<>(contact);
+                    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                    Query query = firebaseFirestore.collection("user").whereEqualTo("phoneNumber", contact.getContactNumber() == null ? null : contact.getContactNumber());
+                    query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if (!queryDocumentSnapshots.isEmpty()){
+                                if(!contactAtomicReference.get().getContactNumber().equalsIgnoreCase(currentAccount.getUser().getPhoneNumber())){
+                                    contactList.add(contactAtomicReference.get());
+                                }
+                                for(String number: friendPhoneNumbers){
+                                    if(number.equalsIgnoreCase(contactAtomicReference.get().getContactNumber())){
+                                        contactList.remove(contactAtomicReference.get());
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    });
                 }
-                else{
-                    booleanAtomicReference.set(false);
-                }
-                resultSet.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
-        });
-        ThreadStatic.run(dataThread);
-        return booleanAtomicReference.get();
+        }
+        Set<Contact> set = new LinkedHashSet<>(contactList);
+        contactList.clear();
+        contactList.addAll(set);
+
+        return contactList;
     }
 }

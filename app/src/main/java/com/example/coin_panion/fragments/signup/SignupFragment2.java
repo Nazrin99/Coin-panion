@@ -26,8 +26,14 @@ import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.SendSMS;
 import com.example.coin_panion.classes.utility.ThreadStatic;
 import com.example.coin_panion.classes.utility.Validifier;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,6 +53,10 @@ public class SignupFragment2 extends Fragment {
     Button nextButton;
     Thread dataThread;
     Handler handler = new Handler();
+    FirebaseFirestore firebaseFirestore;
+    int delay = 2000;
+    long last_text_edit = 0;
+    boolean emailValid = false;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,6 +97,7 @@ public class SignupFragment2 extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         dataThread = new Thread();
+        firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -120,7 +131,6 @@ public class SignupFragment2 extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    handler.removeCallbacks(emailCheck);
             }
 
             @Override
@@ -132,11 +142,16 @@ public class SignupFragment2 extends Fragment {
                     });
                 }
                 else{
-                    // Email format is correct, search email availability in database
+                    // Email format is correct, check for password format validity
                     requireActivity().runOnUiThread(() -> {
                         emailLayout.setError(null);
+                        if(Validifier.validPassword(passwordLayout.getEditText().getText().toString())){
+                            nextButton.setEnabled(true);
+                        }
+                        else{
+                            nextButton.setEnabled(false);
+                        }
                     });
-                    handler.postDelayed(emailCheck,1500);
                 }
             }
         });
@@ -181,17 +196,8 @@ public class SignupFragment2 extends Fragment {
             requireActivity().runOnUiThread(() -> {
                 InputMethodManager imm = (InputMethodManager) requireParentFragment().requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(requireView().getApplicationWindowToken(), 0);
-                // All data is correct and in order, store into model
-                signupViewModel.put("firstName", firstNameLayout.getEditText().getText().toString());
-                signupViewModel.put("lastName", lastNameLayout.getEditText().getText().toString());
-                signupViewModel.put("email", emailLayout.getEditText().getText().toString());
-                signupViewModel.put("password", passwordLayout.getEditText().getText().toString());
-                signupViewModel.put("otp", SendSMS.generateOTP());
-
-                // Proceed to email verification
-                NavDirections navDirections = SignupFragment2Directions.actionSignupFragment2ToSignupFragment3();
-                Navigation.findNavController(requireView()).navigate(navDirections);
             });
+            emailCheck.run();
         });
     }
 
@@ -200,42 +206,34 @@ public class SignupFragment2 extends Fragment {
         public void run() {
             // User stopped typing email, check database for email validity
             AtomicBoolean emailExist = new AtomicBoolean(false);
-            dataThread = new Thread(() -> {
-                try{
-                    Connection connection = Objects.requireNonNull(Line.getConnection());
-                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE email = ?");
-                    preparedStatement.setString(1, emailLayout.getEditText().getText().toString());
-                    ResultSet resultSet = preparedStatement.executeQuery();
+            String email = emailLayout.getEditText().getText().toString();
+            Query query = firebaseFirestore.collection("user").whereEqualTo("email", email);
+            query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if(queryDocumentSnapshots != null){
+                        if(queryDocumentSnapshots.getDocuments().size() > 0){
+                            // Email exists
+                            requireActivity().runOnUiThread(() -> {
+                                emailLayout.setError(getResources().getString(R.string.email_exists));
+                                nextButton.setEnabled(false);
+                            });
+                        }
+                        else{
+                            // Email does not exists, everything should be in order
+                            signupViewModel.put("firstName", firstNameLayout.getEditText().getText().toString());
+                            signupViewModel.put("lastName", lastNameLayout.getEditText().getText().toString());
+                            signupViewModel.put("email", emailLayout.getEditText().getText().toString());
+                            signupViewModel.put("password", passwordLayout.getEditText().getText().toString());
+                            signupViewModel.put("otp", SendSMS.generateOTP());
 
-                    if(resultSet.next()){
-                        // Email exists, throw error on EditText
-                        emailExist.set(true);
+                            // Proceed to email verification
+                            NavDirections navDirections = SignupFragment2Directions.actionSignupFragment2ToSignupFragment3();
+                            Navigation.findNavController(requireView()).navigate(navDirections);
+                        }
                     }
-                    else{
-                        // Email does not exists, can proceed as normal
-                        emailExist.set(false);
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
             });
-            ThreadStatic.run(dataThread);
-            if(emailExist.get()){
-                requireActivity().runOnUiThread(() -> {
-                    emailLayout.getEditText().setError(getResources().getString(R.string.email_exists));
-                    emailLayout.getEditText().requestFocus();
-                    emailLayout.getEditText().getText().clear();
-                    nextButton.setEnabled(false);
-                });
-            }
-            else{
-                if(Validifier.validPassword(passwordLayout.getEditText().getText().toString())){
-                    nextButton.setEnabled(true);
-                }
-                else{
-                    nextButton.setEnabled(false);
-                }
-            }
         }
     };
 }

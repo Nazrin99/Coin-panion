@@ -82,7 +82,6 @@ public class GroupFirstFragment extends Fragment {
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
         account = (Account) mainViewModel.get("account");
-        user = (User) mainViewModel.get("user");
 
         addGroupImageView = view.findViewById(R.id.addGroupImageView);
 

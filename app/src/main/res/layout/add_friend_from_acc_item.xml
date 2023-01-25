@@ -22,7 +22,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/IVRemoveFriendProfile"
+                android:id="@+id/removeFriendImageView"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/profile_vector"
@@ -32,7 +32,7 @@
                 />
 
             <TextView
-                android:id="@+id/TVRemoveFriendUserName"
+                android:id="@+id/removeFriendUsernameTextView"
                 android:layout_width="170dp"
                 android:layout_height="52dp"
                 android:layout_marginTop="10sp"
@@ -42,7 +42,7 @@
                 android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/BtnRemoveFriend"
+                android:id="@+id/removeFriendButton"
                 android:layout_width="96dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10sp"

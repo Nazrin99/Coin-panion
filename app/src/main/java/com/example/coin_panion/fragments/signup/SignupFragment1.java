@@ -34,8 +34,12 @@ import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.ThreadStatic;
 import com.example.coin_panion.classes.utility.Validifier;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -58,7 +62,7 @@ public class SignupFragment1 extends Fragment {
     Thread dataThread = new Thread();
     TextInputLayout layout;
     Handler handler = new Handler();
-    long delay = 2000; // 1 seconds after user stops typing
+    long delay = 2000; // 2 seconds after user stops typing
     long last_text_edit = 0;
     ColorStateList RED;
     ColorStateList DARK_BLUE;
@@ -187,38 +191,36 @@ public class SignupFragment1 extends Fragment {
         });
     }
 
-    private boolean phoneNumberExists(){
+    private void phoneNumberExists(){
         // Assuming phone number format is valid, we check database if phone number already exists
-        AtomicReference<Boolean> phoneNumberExists = new AtomicReference<>();
-        dataThread = new Thread(() -> {
-            try{
-                String string = phoneNumberField.getText().toString().substring(1);
-                Long phoneNumber = Long.parseLong(string);
-                System.out.println(phoneNumber);
-                Connection connection = Line.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE phone_number=?");
-                preparedStatement.setLong(1, phoneNumber);
-                ResultSet resultSet = preparedStatement.executeQuery();
-
-                if(resultSet.next()){
-                    // Phone number already exists
-                    phoneNumberExists.set(true);
+        String phoneNumber = phoneNumberField.getText().toString();
+        Query query = FirebaseFirestore.getInstance().collection("user").whereEqualTo("phoneNumber", phoneNumber);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots != null){
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        requireActivity().runOnUiThread(() -> {
+                            layout.setError(getResources().getString(R.string.signup_phone_already_exists));
+                            layout.setErrorIconDrawable(null);
+                        });
+                    }
+                    else{
+                        requireActivity().runOnUiThread(() -> {
+                            layout.setError(getResources().getString(R.string.signup_phone_is_available));
+                            layout.setErrorIconDrawable(0);
+                            layout.setBoxStrokeErrorColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_blue)));
+                            layout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_blue)));
+                            layout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_blue)));
+                            nextButton.setEnabled(true);
+                        });
+                    }
                 }
                 else{
-                    // Phone number does not exist, proceed to next fragment
-                    phoneNumberExists.set(false);
+                    System.out.println("Document is null");
                 }
-                resultSet.close();
-                preparedStatement.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         });
-        dataThread.start();
-        while(dataThread.isAlive()){
-        }
-        return phoneNumberExists.get();
     }
 
     private final Runnable closeKeyboard = new Runnable() {
@@ -235,25 +237,7 @@ public class SignupFragment1 extends Fragment {
     private final Runnable input_finish_checker = new Runnable() {
         public void run() {
             if (System.currentTimeMillis() > (last_text_edit + delay - 500)) {
-                boolean exists = phoneNumberExists();
-                if(exists){
-                    // Phone number already exists in database
-                    requireActivity().runOnUiThread(() -> {
-                        layout.setError(getResources().getString(R.string.signup_phone_already_exists));
-                        layout.setErrorIconDrawable(null);
-                    });
-                }
-                else{
-                    // Phone number is not in database, can proceed to next fragment for verification
-                    requireActivity().runOnUiThread(() -> {
-                        layout.setError(getResources().getString(R.string.signup_phone_is_available));
-                        layout.setErrorIconDrawable(0);
-                        layout.setBoxStrokeErrorColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_blue)));
-                        layout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_blue)));
-                        layout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_blue)));
-                        nextButton.setEnabled(true);
-                    });
-                }
+                phoneNumberExists();
                 requireActivity().runOnUiThread(() -> {
                     InputMethodManager imm = (InputMethodManager) requireParentFragment().requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(requireView().getApplicationWindowToken(), 0);

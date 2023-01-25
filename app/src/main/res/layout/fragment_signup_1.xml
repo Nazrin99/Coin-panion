@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/friendsDetailsOweTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
@@ -54,9 +54,9 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
-            app:layout_constraintEnd_toEndOf="@+id/textView6"
-            app:layout_constraintStart_toStartOf="@+id/textView6"
-            app:layout_constraintTop_toBottomOf="@+id/textView6">
+            app:layout_constraintEnd_toEndOf="@+id/friendsDetailsOweTextView"
+            app:layout_constraintStart_toStartOf="@+id/friendsDetailsOweTextView"
+            app:layout_constraintTop_toBottomOf="@+id/friendsDetailsOweTextView">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signupPhoneNumberEditText"

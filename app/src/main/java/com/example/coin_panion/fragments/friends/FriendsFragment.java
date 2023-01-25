@@ -6,19 +6,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.coin_panion.R;
 import com.example.coin_panion.classes.friends.Contact;
-import com.example.coin_panion.classes.friends.ContactAdapter;
 import com.example.coin_panion.classes.friends.FriendAdapter;
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
@@ -34,10 +32,10 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class FriendsFragment extends Fragment {
-    BaseViewModel friendsViewModel;
+    BaseViewModel mainViewModel;
     Account account;
-    User user;
-    RecyclerView contactRecyclerView;
+    RecyclerView friendsRecyclerView;
+    Button BtnAddMoreFriend;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,7 +74,7 @@ public class FriendsFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam1 = getArguments().getString("extraString");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
@@ -89,28 +87,41 @@ public class FriendsFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_friends, container, false);
     }
+    FriendAdapter friendAdapter;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        friendsViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
-        account = (Account) friendsViewModel.get("account");
-        user = (User) friendsViewModel.get("user");
+        if(friendAdapter != null){
+            friendAdapter.notifyDataSetChanged();
+        }
+
+        mainViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
+        account = (Account) mainViewModel.get("account");
 
         // Binding views
-        contactRecyclerView = view.findViewById(R.id.contactRecyclerView);
+        friendsRecyclerView = view.findViewById(R.id.friendsRecyclerView);
+        BtnAddMoreFriend = view.findViewById(R.id.BtnAddMoreFriend);
 
-        // Get list of friends from Account object into a List of Contacts
-        List<User> friends = account.getFriends();
-        List<Contact> contactList = new ArrayList<>();
-        for(int i = 0; i < friends.size(); i++){
-            contactList.add(new Contact(friends.get(i).getUsername(), friends.get(i).getPhoneNumber().toString()));
+        BtnAddMoreFriend.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.friendsAddFragment);
+        });
+
+        List<Account> friends;
+        if(account == null){
+            friends = new ArrayList<>();
         }
-        FriendAdapter friendAdapter = new FriendAdapter(contactList, friendsViewModel, view);
-        contactRecyclerView.setAdapter(friendAdapter);
-        contactRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        else{
+            friends = account.getFriends();
+        }
+        System.out.println(friends.size());
 
+        friendAdapter = new FriendAdapter(friends, mainViewModel, getActivity().getApplicationContext());
+        friendsRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
+        friendsRecyclerView.setAdapter(friendAdapter);
 
     }
+
+
 }

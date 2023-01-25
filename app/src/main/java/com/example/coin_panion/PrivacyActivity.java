@@ -43,7 +43,7 @@ public class PrivacyActivity extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        textView = view.findViewById(R.id.activityName);
+        textView = requireActivity().findViewById(R.id.activityName);
         textView.setText("PRIVACY");
         imageView4 = view.findViewById(R.id.imageView4);
         imageView5 = view.findViewById(R.id.imageView5);
@@ -51,14 +51,17 @@ public class PrivacyActivity extends Fragment {
 
         imageView4.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.accountFirstActivity2);
+            textView.setText("PROFILE");
         });
 
         imageView5.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.blockAccountFragment);
+            textView.setText("BLOCKED ACCOUNT");
         });
 
         IVNextResetPassword.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.forgotPassword);
+            textView.setText("RESET PASSWORD");
         });
 
     }

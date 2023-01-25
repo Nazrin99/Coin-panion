@@ -6,40 +6,46 @@ import static com.example.coin_panion.classes.utility.Validifier.isPhoneNumber;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.coin_panion.classes.general.Account;
-import com.example.coin_panion.classes.general.DebtLimit;
-import com.example.coin_panion.classes.general.SettleUpAccount;
 import com.example.coin_panion.classes.general.User;
-import com.example.coin_panion.classes.notification.Notification;
 import com.example.coin_panion.classes.utility.Hashing;
-import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.Picture;
-import com.example.coin_panion.classes.utility.ThreadStatic;
 import com.example.coin_panion.classes.utility.Validifier;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
+
+import io.grpc.Context;
 
 
 public class LoginActivity extends AppCompatActivity {
     TextInputLayout loginLayout, passwordLayout;
     Button BtnLogin;
     Button BtnSignUp;
-    Runnable dataThread;
     Bundle bundle = new Bundle();
     Handler handler = new Handler();
 
@@ -51,7 +57,8 @@ public class LoginActivity extends AppCompatActivity {
         callUI();
         setupUIListeners();
 
-        dataThread = new Thread(() -> {});
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
     public void callUI(){
@@ -126,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void validateLogin() {
+        System.out.println("Entered validate login block");
 
         String userLogin = loginLayout.getEditText().getText().toString();
         String userPass = passwordLayout.getEditText().getText().toString();
@@ -138,114 +146,59 @@ public class LoginActivity extends AppCompatActivity {
             runOnUiThread(() -> passwordLayout.setError("Password field cannot be empty!"));
             return;
         }
-        Object data = null;
-        if(isEmail(userLogin)){
-            data = userLogin;
-        }
-        else if(isPhoneNumber(userLogin)){
-            data = Long.parseLong(userLogin.substring(1));
-        }
-        else{
-            // Not a phone number, not an email
-            runOnUiThread(() -> loginLayout.setError("Make sure your phone number is in the following format (eg +60179916645)"));
-            return;
-        }
-        System.out.println("Before");
-        AtomicReference<Object> objectAtomicReference = new AtomicReference<>(data);
-        dataThread = new Runnable() {
-            AtomicReference<User> userAtomicReference = new AtomicReference<>();
-            @Override
-            public void run() {
-                // Getting User from the database
-                System.out.println("Entered thread");
-                User user = User.verifyUserLogin(objectAtomicReference.get(), new Thread());
-                System.out.println("Verifying");
-                if(user != null && user.getUserID() > 0){
-                    // User exists, check for password validity
-                    boolean account_exists = false;
-                    try(
-                            Connection connection = Line.getConnection();
-                            PreparedStatement preparedStatement = connection.prepareStatement("SELECT password FROM account WHERE user_id = ? ");
-                            PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM account WHERE user_id = ?");
-                    ){
-                        preparedStatement.setInt(1, user.getUserID());
-                        ResultSet resultSet = preparedStatement.executeQuery();
-                        if(resultSet.next()){
-                            // Said account exists, verify password
-                            if(resultSet.getString(1).equalsIgnoreCase(Hashing.keccakHash(userPass))){
-                                // Password if correct, construct account object pass into bundle
-                                account_exists = true;
-                            }
-                            else{
-                                // Password is incorrect, show Toast
-                                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Incorrect login credentials", Toast.LENGTH_SHORT).show());
-                            }
-                        }
-                        else{
-                            // Said account doesn't exists, show Toast
-                            runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Account associated with the above credentials, does not exists!", Toast.LENGTH_SHORT).show());
-                        }
-                        if(account_exists){
-                            System.out.println("Account exists");
-                            preparedStatement1.setInt(1, user.getUserID());
 
-                            ResultSet resultSet1 = preparedStatement1.executeQuery();
-                            if(resultSet1.next()){
-                                // Account info exists, create Account object
+        queryLoginInfo(userLogin, userPass);
 
-                                // 1 : Create debt limit object. Store bio string, accountID integer, picture id, and picture cover id
-                                DebtLimit debtLimit = new DebtLimit(resultSet1.getDouble(4), resultSet1.getLong(5));
-                                Integer accountID = resultSet1.getInt(1);
-                                String password = resultSet1.getString(2);
-                                String bio = resultSet1.getString(3);
-                                Integer accountPicID = resultSet1.getInt(6);
-                                Integer accountCoverID = resultSet1.getInt(7);
-
-                                // 2 : Close the result set and query picture object
-                                resultSet1.close();
-
-//                                Picture accountPic = Picture.getPictureFromDB(accountPicID);
-//                                Picture accountCover = Picture.getPictureFromDB(accountCoverID);
-
-                                Picture accountPic = null;
-                                Picture accountCover = null;
-
-                                // 3 : Query account friends
-                                List<User> friends = User.getFriends(accountID, new Thread());
-
-                                // 4 : Query settle accounts
-                                SettleUpAccount settleUpAccount = SettleUpAccount.retrieveSettleUpAccount(accountID, new Thread());
-
-                                // 5 : Query notifications
-                                List<Notification> notifications = Notification.getNotifications(accountID, new Thread());
-
-                                // 6 : Create account object, and pass to bundle then switch activity
-                                Account account = new Account(accountID, user, password, bio, friends, debtLimit, settleUpAccount, notifications, accountPic, accountCover);
-                                System.out.println(account == null);
-                                System.out.println(account.getFriends().size());
-
-                                switchToLoginActivity(account, user);
-                            }
-                        }
-                        resultSet.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else{
-                    // User does exists, show Toast
-                    runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Credentials does not exists", Toast.LENGTH_SHORT).show());
-                }
-            }
-        };
-        handler.post(dataThread);
-        System.out.println("Exited program");
     }
 
-    private void switchToLoginActivity(Account account, User user){
+    private void queryLoginInfo(String userLogin, String userPass){
+        Executors.newSingleThreadExecutor().execute(() -> {
+            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+            CollectionReference user = firebaseFirestore.collection("user");
+
+            Query query;
+            AtomicReference<Account> atomicReference = new AtomicReference<>(null);
+            if(Validifier.isEmail(userLogin)){
+                query = user.whereEqualTo("email", userLogin);
+            }
+            else{
+                query = user.whereEqualTo("phoneNumber", userLogin);
+            }
+            query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    System.out.println("Query successful");
+                    assert queryDocumentSnapshots != null;
+                    if(queryDocumentSnapshots.isEmpty()){
+                        System.out.println("Email / phone number does not exists");
+                    }
+                    else if(queryDocumentSnapshots.getDocuments().size() == 1){
+                        // Email / phone number exists, check password
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        if(documentSnapshot.get("password", String.class).equals(Hashing.keccakHash(userPass))){
+                            // All credentials are correct, send userID to MainActivity.class
+                            String userID = documentSnapshot.getString("userID");
+
+                            switchToMainActivity(userID);
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "Credentials incorrect", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    System.out.println("Query unsuccessful");
+                }
+            });
+
+        });
+    }
+
+    private void switchToMainActivity(String userID){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.putExtra("account", account);
-        intent.putExtra("user", user);
+        intent.putExtra("userID", userID);
         startActivity(intent);
     }
 

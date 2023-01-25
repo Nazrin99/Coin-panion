@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="390dp"
+    android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:layout_marginLeft="10sp"
     android:layout_marginTop="10sp"
-    android:layout_marginRight="40sp"
     android:layout_marginBottom="10sp"
     android:backgroundTint="@color/Biru_Muda"
     card_view:cardCornerRadius="10dp"
@@ -14,7 +12,7 @@
     <!-- A CardView that contains a TextView -->
     <LinearLayout
         android:id="@+id/card_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center">
 
@@ -31,7 +29,7 @@
 
         <TextView
             android:id="@+id/TVGroupNameItem"
-            android:layout_width="148dp"
+            android:layout_width="155dp"
             android:layout_height="match_parent"
             android:layout_gravity="left|center_vertical"
             android:layout_marginLeft="10dp"
@@ -43,9 +41,9 @@
 
         <ImageView
             android:id="@+id/IVGroupInfoItem"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="30dp"
+            android:layout_width="75dp"
+            android:layout_height="52dp"
+            android:layout_gravity="center"
             android:contentDescription="@string/group_info"
             android:src="@mipmap/ic_next_foreground" />
 

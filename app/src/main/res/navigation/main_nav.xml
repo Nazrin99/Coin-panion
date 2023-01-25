@@ -132,6 +132,9 @@
         <action
             android:id="@+id/action_accountFirstActivity2_to_privacyActivity"
             app:destination="@id/privacyActivity" />
+        <action
+            android:id="@+id/action_accountFirstActivity2_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/createGroupFragment"
@@ -206,4 +209,9 @@
         android:name="com.example.coin_panion.CreateExpensesFragment"
         android:label="fragment_create_expenses"
         tools:layout="@layout/fragment_create_expenses" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.coin_panion.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
 </navigation>

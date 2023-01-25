@@ -1,14 +1,6 @@
 package com.example.coin_panion;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +8,26 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.group.Group;
+import com.example.coin_panion.classes.notification.TransactionAdapter;
+import com.example.coin_panion.classes.transaction.Transaction;
 import com.example.coin_panion.classes.utility.BaseViewModel;
+import com.example.coin_panion.classes.utility.Picture;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,11 +36,8 @@ import java.util.List;
  */
 public class GroupInfoFragment extends Fragment {
     BaseViewModel mainViewModel;
-    Account account;
-    User user;
-    ImageView groupInfoPicImageView, groupInfoCoverImageView, groupInfoSettingsImageView;
+    ImageView groupInfoPicImageView, groupInfoCoverImageView, groupInfoSettingsImageView, groupInfoBackImageView;
     TextView groupNameTextView, groupDescTextView;
-    Group selected;
     RecyclerView groupActivityRecyclerView;
     Button createExpensesButton;
 
@@ -44,7 +47,7 @@ public class GroupInfoFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private Integer groupID;
+    private Group selectedGroup;
     private String mParam2;
 
     public GroupInfoFragment() {
@@ -72,22 +75,7 @@ public class GroupInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            groupID = getArguments().getInt(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-
-        }
         mainViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
-
-        selected = null;
-        List<Group> groupList = (List<Group>) mainViewModel.get("groups");
-        for(int i = 0; i < groupList.size(); i++){
-            if(groupList.get(i).getGroupID() == groupID){
-                selected = groupList.get(i);
-            }
-        }
-        assert selected != null;
-
 
     }
 
@@ -102,6 +90,9 @@ public class GroupInfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        selectedGroup = (Group) mainViewModel.get("selectedGroup");
+
+        TextView textView = requireActivity().findViewById(R.id.activityName);
         createExpensesButton = view.findViewById(R.id.createExpensesButton);
         groupInfoPicImageView = view.findViewById(R.id.groupInfoPicImageView);
         groupInfoCoverImageView = view.findViewById(R.id.groupInfoCoverImageView);
@@ -109,23 +100,37 @@ public class GroupInfoFragment extends Fragment {
         groupNameTextView = view.findViewById(R.id.groupNameTextView);
         groupDescTextView = view.findViewById(R.id.groupDescTextView);
         groupActivityRecyclerView = view.findViewById(R.id.groupActivityRecyclerView);
+        groupInfoBackImageView = view.findViewById(R.id.groupInfoBackImageView);
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<Transaction> transactions = Transaction.getListOfTransaction(selectedGroup.getGroupID());
+            TransactionAdapter transactionAdapter = new TransactionAdapter(transactions, requireActivity().getApplicationContext());
+
+            requireActivity().runOnUiThread(() -> {
+                groupActivityRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
+                groupActivityRecyclerView.setAdapter(transactionAdapter);
+            });
+        });
 
         requireActivity().runOnUiThread(() -> {
-            groupNameTextView.setText(selected.getGroupName());
-            groupDescTextView.setText(selected.getGroupDesc());
-            groupInfoPicImageView.setImageDrawable(selected.getGroupPic().getPicture());
-            groupInfoCoverImageView.setImageDrawable(selected.getGroupCover().getPicture());
+            textView.setText(selectedGroup.getGroupName().toUpperCase(Locale.ROOT));
+            groupNameTextView.setText(selectedGroup.getGroupName());
+            groupDescTextView.setText(selectedGroup.getGroupDesc());
+            groupInfoPicImageView.setImageDrawable(selectedGroup.getGroupPic().getPicture() != null ? Picture.cropToSquareAndRound(selectedGroup.getGroupPic().getPicture(), getResources()) : ResourcesCompat.getDrawable(getResources(), R.mipmap.default_profile, null));
+            groupInfoCoverImageView.setImageDrawable(selectedGroup.getGroupCover().getPicture() != null ? selectedGroup.getGroupCover().getPicture() : ResourcesCompat.getDrawable(getResources(), R.mipmap.default_cover, null));
         });
 
         groupInfoSettingsImageView.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.editGroupFragment2);
-            mainViewModel.put("currentGroup", selected);
         });
 
         createExpensesButton.setOnClickListener(v -> {
-            mainViewModel.put("currentGroup", selected);
-            Navigation.findNavController(v).navigate(R.id.createExpensesButton);
+            Navigation.findNavController(v).navigate(R.id.createExpensesFragment);
+        });
 
+        groupInfoBackImageView.setOnClickListener(v -> {
+            textView.setText("GROUP");
+            Navigation.findNavController(v).navigate(R.id.groupBalanceFragment);
         });
 
 

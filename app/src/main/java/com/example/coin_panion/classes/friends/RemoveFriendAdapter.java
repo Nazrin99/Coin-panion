@@ -1,6 +1,5 @@
 package com.example.coin_panion.classes.friends;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coin_panion.R;
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
-import com.example.coin_panion.classes.utility.ConfirmationDialog;
+import com.example.coin_panion.classes.utility.Picture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,29 +24,21 @@ import java.util.List;
 public class RemoveFriendAdapter extends RecyclerView.Adapter<RemoveFriendAdapter.ViewHolder>{
 
     /*Remove friend from a list of added friend*/
-    List<User> users = new ArrayList<>();
+    List<Account> groupMembers;
     Context context;
-    List<User> removedUser = new ArrayList<>();
+    List<Account> removedMembers = new ArrayList<>();
 
-    public RemoveFriendAdapter() {
-        this.users = new ArrayList<>();
-    }
-
-    public RemoveFriendAdapter(List<User> users) {
-        this.users = users;
-    }
-
-    public RemoveFriendAdapter(List<User> users, Context context) {
-        this.users = users;
+    public RemoveFriendAdapter(List<Account> groupMembers, Context context) {
+        this.groupMembers = groupMembers;
         this.context = context;
     }
 
-    public List<User> getRemovedUser() {
-        return removedUser;
+    public List<Account> getRemovedMembers() {
+        return removedMembers;
     }
 
-    public void setRemovedUser(List<User> removedUser) {
-        this.removedUser = removedUser;
+    public void setRemovedMembers(List<Account> removedMembers) {
+        this.removedMembers = removedMembers;
     }
 
     @NonNull
@@ -61,20 +54,18 @@ public class RemoveFriendAdapter extends RecyclerView.Adapter<RemoveFriendAdapte
     @Override
     public void onBindViewHolder(@NonNull RemoveFriendAdapter.ViewHolder holder, int position) {
 
-        User user = users.get(position);
+        Account account = groupMembers.get(position);
 
-//        Account userAccount = new Account(user.getUserID());
-
-//       holder.IVRemoveFriendProfile.setImageDrawable(); TODO get profile image of other user
-
-        holder.TVRemoveFriendUserName.setText(user.getUsername());
-
-        holder.BtnRemoveFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                users.remove(user);
-                removedUser.add(user);
-                notifyItemRemoved(holder.getAdapterPosition());
+        holder.removedFriendImageView.setImageDrawable(account.getAccountPic().getPicture() != null ? Picture.cropToSquareAndRound(account.getAccountPic().getPicture(), context.getResources()) : Picture.cropToSquareAndRound(ResourcesCompat.getDrawable(context.getResources(), R.mipmap.default_profile, null), context.getResources()));
+        holder.removeFriendUsernameTextView.setText(account.getUser().getUsername());
+        holder.removeFriendButton.setOnClickListener(v -> {
+            if(holder.removeFriendButton.getText().toString().equalsIgnoreCase("Undo")){
+                removedMembers.remove(account);
+                holder.removeFriendButton.setText("Remove");
+            }
+            else if(holder.removeFriendButton.getText().toString().equalsIgnoreCase("Remove")){
+                removedMembers.add(account);
+                holder.removeFriendButton.setText("Undo");
             }
         });
 
@@ -82,28 +73,38 @@ public class RemoveFriendAdapter extends RecyclerView.Adapter<RemoveFriendAdapte
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return groupMembers.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView IVRemoveFriendProfile;
-        TextView TVRemoveFriendUserName;
-        Button BtnRemoveFriend;
+        ImageView removedFriendImageView;
+        TextView removeFriendUsernameTextView;
+        AppCompatButton removeFriendButton;
 
         public ViewHolder(@NonNull View itemView) {
 
             super(itemView);
-
-            IVRemoveFriendProfile = itemView.findViewById(R.id.IVRemoveFriendProfile);
-            TVRemoveFriendUserName = itemView.findViewById(R.id.TVRemoveFriendUserName);
-            BtnRemoveFriend = itemView.findViewById(R.id.BtnRemoveFriend);
+            removedFriendImageView = itemView.findViewById(R.id.removeFriendImageView);
+            removeFriendUsernameTextView = itemView.findViewById(R.id.removeFriendUsernameTextView);
+            removeFriendButton = itemView.findViewById(R.id.removeFriendButton);
         }
 
     }
 
-    /*Get the remaining friend*/
-    public List<User> getUsers() {
-        return users;
+    public List<Account> getGroupMembers() {
+        return groupMembers;
+    }
+
+    public void setGroupMembers(List<Account> groupMembers) {
+        this.groupMembers = groupMembers;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

@@ -1,11 +1,25 @@
 package com.example.coin_panion.classes.utility;
 
 import android.content.ContentResolver;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StreamDownloadTask;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,117 +27,101 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.DoubleAccumulator;
+
+import kotlinx.coroutines.internal.AtomicOp;
 
 public class Picture implements Serializable{
-    private int pictureID;
     private Drawable picture;
+    private String firebaseReference;
+    private PictureType pictureType;
+    public static final String storageUrl = "gs://coinpanion-86b14.appspot.com";
 
-    public int getPictureID() {
-        return pictureID;
+    public Picture(Drawable picture, String firebaseReference, PictureType pictureType) {
+        this.picture = picture;
+        this.firebaseReference = firebaseReference;
+        this.pictureType = pictureType;
     }
 
-    public void setPictureID(int pictureID) {
-        this.pictureID = pictureID;
+
+
+    public Picture() {
     }
 
-    public Drawable getPicture() {
+    public Picture(String firebaseReference) {
+        this.firebaseReference = firebaseReference;
+        this.pictureType = getPictureType(firebaseReference);
+    }
+
+    /**
+     * Inserts a new image into the database, returns a Picture object. Insertion into database is asynchronous
+     * @param id
+     * @param uri
+     * @param pictureType
+     * @param contentResolver
+     * @return
+     */
+    public static Picture insertIntoDatabase(String id, Uri uri, PictureType pictureType, ContentResolver contentResolver){
+
+        InputStream inputStream = null;
+        try{
+            inputStream = contentResolver.openInputStream(uri);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if(inputStream == null){
+            return null;
+        }
+        AtomicReference<InputStream> inputStreamAtomicReference = new AtomicReference<>(inputStream);
+        Picture picture = new Picture(Drawable.createFromStream(inputStream, uri.toString()), constructImageReference(id, pictureType), pictureType);
+        Executors.newSingleThreadExecutor().execute(() -> {
+            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance(storageUrl);
+            StorageReference imageReference = firebaseStorage.getReference().child(constructImageReference(id, pictureType));
+            StorageMetadata metadata = new StorageMetadata.Builder()
+                    .setContentType("image/png")
+                    .build();
+
+            System.out.println(inputStreamAtomicReference.get());
+            UploadTask uploadTask = imageReference.putStream(inputStreamAtomicReference.get(), metadata);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    System.out.println("Picture added");
+                }
+            });
+        });
         return picture;
     }
 
-    public void setPicture(Drawable picture) {
-        this.picture = picture;
-    }
-
-    public Picture(int pictureID, Drawable picture) {
-        this.pictureID = pictureID;
-        this.picture = picture;
-    }
 
     /**
-     * Gets existing image from database
-     * @DATABASE
-     * @param pictureID
-     * @return drawable object associated with the id
+     * Gets picture from database based on the references given. Is asynchronous, hence used while block to wait for data transfer to complete, might not be a good idea
+     * @param reference
+     * @return
      */
-    public static Picture getPictureFromDB(int pictureID){
-        AtomicReference<Picture> drawableAtomicReference = new AtomicReference<>();
-        Thread pictureThread = new Thread(() -> {
-            try{
-                Connection connection = Line.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM picture WHERE picture_id = ?");
-                preparedStatement.setInt(1, pictureID);
-                ResultSet resultSet = preparedStatement.executeQuery();
+    public void getPictureFromDatabase(String reference){
+        Executors.newSingleThreadExecutor().execute(() -> {
+            AtomicReference<Drawable> pictureAtomicReference = new AtomicReference<>(null);
+            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance(storageUrl);
+            StorageReference storageReference = firebaseStorage.getReference();
+            StorageReference imageReference = storageReference.child(reference);
 
-                while(resultSet.next()){
-                    drawableAtomicReference.set(new Picture(resultSet.getInt(1), constructDrawableFromBlob(resultSet.getBlob(2))));
+            imageReference.getStream().addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(StreamDownloadTask.TaskSnapshot taskSnapshot) {
+                    InputStream inputStream = taskSnapshot.getStream();
+                    Drawable drawable = Drawable.createFromStream(inputStream, null);
+                    pictureAtomicReference.set(drawable);
                 }
+            });
+            while(pictureAtomicReference.get() == null){
 
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+            this.setPicture(pictureAtomicReference.get());
         });
-        ThreadStatic.run(pictureThread);
-
-        return drawableAtomicReference.get();
-    }
-
-    /**
-     * Insert new picture into database, returns Picture object
-     * @DATABASE
-     * @param imageUri
-     * @param contentResolver
-     * @param dataThread
-     * @return picture
-     */
-    public static Picture insertPicIntoDB(Uri imageUri, ContentResolver contentResolver, Thread dataThread){
-        AtomicReference<Picture> atomicReference = new AtomicReference<>();
-        dataThread = new Thread(() -> {
-            try{
-                Connection connection = Line.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO picture(picture_data) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setBlob(1, constructInputStreamFromUri(imageUri, contentResolver));
-                preparedStatement.execute();
-                ResultSet resultSet = preparedStatement.getGeneratedKeys();
-                resultSet.next();
-                atomicReference.set(new Picture(resultSet.getInt(1), constructDrawableFromUri(imageUri, contentResolver)));
-                resultSet.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-        ThreadStatic.run(dataThread);
-        return atomicReference.get();
-    }
-
-    public static Picture insertPicIntoDB(Drawable drawable, Thread dataThread){
-        AtomicReference<Picture> atomicReference = new AtomicReference<>();
-        dataThread = new Thread(() -> {
-            try(
-                    Connection connection = Line.getConnection();
-                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO picture(picture_data) VALUES(?)", Statement.RETURN_GENERATED_KEYS)
-                    ){
-                preparedStatement.setBlob(1, constructInputStreamFromDrawable(drawable));
-                preparedStatement.execute();
-
-                ResultSet resultSet = preparedStatement.getGeneratedKeys();
-                resultSet.next();
-
-                atomicReference.set(new Picture(resultSet.getInt(1), drawable));
-                resultSet.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        });
-        ThreadStatic.run(dataThread);
-        return atomicReference.get();
     }
 
     /**
@@ -169,16 +167,150 @@ public class Picture implements Serializable{
         return inputStream;
     }
 
-    public static InputStream constructInputStreamFromDrawable(Drawable drawable){
-        BitmapDrawable bitmapDrawable = ((BitmapDrawable) drawable);
-        Bitmap bitmap = bitmapDrawable.getBitmap();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] imageInByte = stream.toByteArray();
-        System.out.println("........length......" + imageInByte);
-        ByteArrayInputStream bis = new ByteArrayInputStream(imageInByte);
-        return bis;
+    public static PictureType getPictureType(String imageReference) {
+        if(imageReference.contains("COVER")){
+            return PictureType.COVER;
+        }
+        else if(imageReference.contains("PROFILE")){
+            return PictureType.PROFILE;
+        }
+        else if(imageReference.contains("QR")){
+            return PictureType.QR;
+        }
+        else if(imageReference.contains("PAYMENT")){
+            return PictureType.PAYMENT;
+        }
+        return PictureType.GENERAL;
+
     }
 
+    public static String constructImageReference(String id, PictureType pictureType){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(id);
+        stringBuilder.append("_");
+        stringBuilder.append(pictureType.getType());
+        stringBuilder.append(".png");
+        return stringBuilder.toString();
+    }
 
+    public void getPictureFromDatabase(){
+        Executors.newSingleThreadExecutor().execute(() -> {
+            String reference = this.getFirebaseReference();
+            if(reference == null){
+                return;
+            }
+
+            AtomicReference<Drawable> drawableAtomicReference = new AtomicReference<>(null);
+            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+            StorageReference storageReference = firebaseStorage.getReference().child(reference);
+
+            storageReference.getStream().addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(StreamDownloadTask.TaskSnapshot taskSnapshot) {
+                    InputStream inputStream = taskSnapshot.getStream();
+                    Drawable drawable = Drawable.createFromStream(inputStream, null);
+                    drawableAtomicReference.set(drawable);
+                    System.out.println(drawable);
+                }
+            });
+            while(drawableAtomicReference.get() == null){
+
+            }
+            this.setPicture(drawableAtomicReference.get());
+        });
+    }
+
+    public static Bitmap getRoundedCroppedBitmap(Bitmap bitmap) {
+        int widthLight = bitmap.getWidth();
+        int heightLight = bitmap.getHeight();
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+        Paint paintColor = new Paint();
+        paintColor.setFlags(Paint.ANTI_ALIAS_FLAG);
+
+        RectF rectF = new RectF(new Rect(0, 0, widthLight, heightLight));
+
+        canvas.drawRoundRect(rectF, widthLight / 2, heightLight / 2, paintColor);
+
+        Paint paintImage = new Paint();
+        paintImage.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        canvas.drawBitmap(bitmap, 0, 0, paintImage);
+
+        return output;
+    }
+
+    public static Drawable getRoundedDrawable(Drawable drawable, Resources resources){
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+        Bitmap roundBitmap = getRoundedCroppedBitmap(bitmapDrawable.getBitmap());
+
+        return new BitmapDrawable(resources, roundBitmap);
+    }
+
+    public static Drawable cropToSquareAndRound(Drawable drawable, Resources resources){
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+
+        int width  = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int newWidth = (height > width) ? width : height;
+        int newHeight = (height > width)? height - ( height - width) : height;
+        int cropW = (width - height) / 2;
+        cropW = (cropW < 0)? 0: cropW;
+        int cropH = (height - width) / 2;
+        cropH = (cropH < 0)? 0: cropH;
+        Bitmap cropImg = Bitmap.createBitmap(bitmap, cropW, cropH, newWidth, newHeight);
+
+        Bitmap circleCropped = getRoundedCroppedBitmap(cropImg);
+        Drawable croppedDrawable = new BitmapDrawable(resources, circleCropped);
+
+        return croppedDrawable;
+    }
+
+    public static InputStream compressInputStream(InputStream inputStream){
+        int quality = 110;
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] data = null;
+        do {
+            if(quality <= 10){
+                quality -= 1;
+            }
+            else{
+                quality -= 10;
+            }
+            outputStream.reset();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            data = outputStream.toByteArray();
+            System.out.println(data.length);
+            System.out.println(quality);
+        } while(data.length > 1024000);
+
+        return new ByteArrayInputStream(data);
+    }
+
+    public Drawable getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Drawable picture) {
+        this.picture = picture;
+    }
+
+    public String getFirebaseReference() {
+        return firebaseReference;
+    }
+
+    public void setFirebaseReference(String firebaseReference) {
+        this.firebaseReference = firebaseReference;
+    }
+
+    public PictureType getPictureType() {
+        return pictureType;
+    }
+
+    public void setPictureType(PictureType pictureType) {
+        this.pictureType = pictureType;
+    }
 }

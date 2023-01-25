@@ -24,7 +24,7 @@
         android:id="@+id/TVDefaultFriendTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="276dp"
+        android:layout_marginTop="200dp"
         android:text="Welcome to CoinPanion"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -38,15 +38,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:layout_marginTop="200dp"
+        android:layout_marginBottom="100dp"
         android:background="@color/Biru_Muda"
         android:text="ADD FRIENDS"
         android:textColor="@color/black"
         android:textSize="10sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/TVDefaultFriendBottom"
         app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="@+id/TVDefaultFriendBottom"
-        app:layout_constraintTop_toBottomOf="@+id/TVDefaultFriendBottom" />
+        app:layout_constraintStart_toStartOf="@+id/TVDefaultFriendBottom" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

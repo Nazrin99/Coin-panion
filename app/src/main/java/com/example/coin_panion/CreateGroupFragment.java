@@ -1,15 +1,15 @@
 package com.example.coin_panion;
 
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -17,17 +17,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.coin_panion.classes.friends.Contact;
+import com.example.coin_panion.classes.friends.ContactAdapter;
 import com.example.coin_panion.classes.general.Account;
-import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.group.Group;
-import com.example.coin_panion.classes.group.GroupMemberAddAdapter;
 import com.example.coin_panion.classes.utility.BaseViewModel;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.Executable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,10 +42,13 @@ import java.util.List;
  */
 public class CreateGroupFragment extends Fragment {
     BaseViewModel mainViewModel;
-    ImageView createGroupBackButton, createGroupCoverImageView, createGroupPicImageView;
+    ImageView createGroupBackButton;
     AppCompatButton createGroupFinishButton;
     EditText createGroupNameEditText, createGroupDescEditText, createGroupTypeEditText;
-    RecyclerView createGroupRecyclerView;
+    RecyclerView createGroupAddRecyclerView, createGroupRemoveRecyclerView;
+    ContactAdapter groupMemberAddAdapter, groupMemberRemoveAdapter;
+    Account account;
+    List<Group> groups;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -95,55 +104,149 @@ public class CreateGroupFragment extends Fragment {
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
 
-        Account account  = (Account) mainViewModel.get("account");
-        User user = (User) mainViewModel.get("user");
+        account  = (Account) mainViewModel.get("account");
+        groups = (List<Group>) mainViewModel.get("groups");
+        System.out.println("Number of groups: " + groups.size());
 
         // View bindings
         createGroupBackButton = view.findViewById(R.id.createGroupBackButton);
-        createGroupCoverImageView = view.findViewById(R.id.createGroupCoverImageView);
-        createGroupPicImageView = view.findViewById(R.id.createGroupPicImageView);
-        createGroupRecyclerView = view.findViewById(R.id.createGroupRecyclerView);
+        createGroupAddRecyclerView = view.findViewById(R.id.createGroupAddRecyclerView);
+        createGroupRemoveRecyclerView = view.findViewById(R.id.createGroupRemoveRecyclerView);
         createGroupDescEditText = view.findViewById(R.id.createGroupDescEditText);
         createGroupNameEditText = view.findViewById(R.id.createGroupNameEditText);
         createGroupFinishButton = view.findViewById(R.id.createGroupFinishButton);
         createGroupTypeEditText = view.findViewById(R.id.createGroupTypeEditText);
 
         // Get list of potential friends to add into group. Get from Account object
-        List<User> friends = account.getFriends();
+        List<Account> friends = account.getFriends();
+        System.out.println("Number of friends: " + friends.size());
         List<Contact> contacts = new ArrayList<>();
         for(int i = 0 ; i < friends.size(); i++){
-            contacts.add(new Contact(friends.get(i).getUsername(), friends.get(i).getPhoneNumber().toString()));
+            contacts.add(new Contact(friends.get(i).getUser().getUsername(), friends.get(i).getUser().getPhoneNumber()));
         }
+        List<Contact> selectedMembers = new ArrayList<>();
 
         // Bind the list of potential friends to adapter
-        GroupMemberAddAdapter groupMemberAddAdapter = new GroupMemberAddAdapter(contacts, getContext());
-        createGroupRecyclerView.setAdapter(groupMemberAddAdapter);
-
-        createGroupFinishButton.setOnClickListener(v -> {
-            // 1 : Get the IDs of all members from the database using phone number
-            List<Contact> selectedContacts = groupMemberAddAdapter.getSelectedContacts();
-            List<Long> phoneNumbers = new ArrayList<>();
-            for(int i = 0 ; i < selectedContacts.size(); i++){
-                phoneNumbers.add(Long.parseLong(selectedContacts.get(i).getContactNumber()));
-            }
-            phoneNumbers.add(user.getPhoneNumber());
-            List<Integer> memberIDs = User.getListOfIDs(phoneNumbers, new Thread());
-
-            // 2 : Get the value from all the fields in the fragment
-            String groupName = createGroupNameEditText.getText().toString();
-            String groupType = createGroupTypeEditText.getText().toString();
-            String groupDesc = createGroupDescEditText.getText().toString();
-            Group newGroup = new Group(groupName, groupType, groupDesc, memberIDs);
-            System.out.println(groupName);
-            System.out.println(groupType);
-            System.out.println(groupDesc);
-            System.out.println(memberIDs.get(0));
-            Group.insertNewGroupToDB(newGroup, new Thread());
+        groupMemberAddAdapter = new ContactAdapter(contacts, selectedMembers, requireActivity().getApplicationContext(), true);
+        groupMemberRemoveAdapter = new ContactAdapter(selectedMembers, contacts, groupMemberAddAdapter, requireActivity().getApplicationContext(), false);
+        groupMemberAddAdapter.setOtherAdapter(groupMemberRemoveAdapter);
+        requireActivity().runOnUiThread(() -> {
+            createGroupAddRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
+            createGroupAddRecyclerView.setAdapter(groupMemberAddAdapter);
+            createGroupRemoveRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
+            createGroupRemoveRecyclerView.setAdapter(groupMemberRemoveAdapter);
         });
+
+        createGroupFinishButton.setOnClickListener(this::createGroupFinished);
 
         createGroupBackButton.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.groupFirstFragment);
+            if(groups.size() == 0){
+                Navigation.findNavController(v).navigate(R.id.groupFirstFragment);
+            }
+            else{
+                Navigation.findNavController(v).navigate(R.id.groupBalanceFragment);
+            }
         });
 
+    }
+
+    private void createGroupFinished(View v){
+        // 1 : Get all the details for the new group
+        String groupName = createGroupNameEditText.getText().toString();
+        String groupDesc = createGroupDescEditText.getText().toString();
+        String groupType = createGroupTypeEditText.getText().toString();
+
+        // 2 : Create a map to insert all the new group details
+        Map<String, Object> groupDetails = new HashMap<>();
+        groupDetails.put("groupName", groupName);
+        groupDetails.put("groupDesc", groupDesc);
+        groupDetails.put("groupType", groupType);
+        groupDetails.put("groupPic", "default_PROFILE.png");
+        groupDetails.put("groupCover", "default_COVER.png");
+
+        // 3 : Create a new Firebase document in "group" collection
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        DocumentReference documentReference = firebaseFirestore.collection("group").document();
+
+        // 4 : Insert document ID as groupID in group details
+        groupDetails.put("groupID", documentReference.getId());
+
+        // 5 : Create group object
+        Group newGroup = new Group(documentReference.getId(), groupName, groupDesc, groupType, "default_PROFILE.png", "default_COVER.png");
+
+        // 6 : Get list of group members for new group and append to the new group
+        List<Account> newMembers = new ArrayList<>();
+        List<Contact> finalSelectedContacts = groupMemberRemoveAdapter.getContacts();
+        List<Account> listOfFriends = account.getFriends();
+        for(int i = 0; i < finalSelectedContacts.size(); i++){
+            for(int j = 0; j < listOfFriends.size(); j++){
+                if(finalSelectedContacts.get(i).getContactNumber().equalsIgnoreCase(listOfFriends.get(j).getUser().getPhoneNumber())){
+                    newMembers.add(listOfFriends.get(j));
+                    break;
+                }
+            }
+        }
+        newMembers.add(account);
+
+        // 7 : Append list of members to new group and append new group to list of existing groups
+        newGroup.setGroupMembers(newMembers);
+        groups.add(newGroup);
+
+        // 8 : Get the group pic and group cover for new group (Asynchronous)
+        Executors.newSingleThreadExecutor().execute(() -> {
+            newGroup.getGroupPic().getPictureFromDatabase();
+            newGroup.getGroupCover().getPictureFromDatabase();
+        });
+
+        // 9 : Insert the new group info inside Firebase (Asynchronous)
+        Executors.newSingleThreadExecutor().execute(() -> {
+            documentReference.set(groupDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    System.out.println("New group with name: " + groupDetails.get("groupName") + " with ID: " + documentReference.getId() + " has been added");
+                }
+            });
+        });
+
+        // 10 : Insert the list of new group members inside Firebase (Asynchronous)
+        Executors.newSingleThreadExecutor().execute(() -> {
+            FirebaseFirestore firebaseFirestore1 = FirebaseFirestore.getInstance();
+
+            // 10.1 : Create a map for account_group details
+            Map<String, Object> accountGroupDetails = new HashMap<>();
+
+            // 10.2 : Create DocumentReference to new group document and append to map
+            DocumentReference newGroupReference = firebaseFirestore1.collection("group").document(documentReference.getId());
+            accountGroupDetails.put("groupID", newGroupReference);
+
+            // 10.3 : Loop through list of new members and insert data into Firebase
+            for(int i = 0 ; i < newMembers.size(); i++){
+                // 10.3.1 : Create DocumentReference for new account_group document
+                DocumentReference accountGroupReference = firebaseFirestore1.collection("account_group").document();
+
+                // 10.3.2 : Create DocumentReference for members' accounts
+                DocumentReference accountReference = firebaseFirestore1.collection("account").document(newMembers.get(i).getAccountID());
+                accountGroupDetails.put("accountID", accountReference);
+
+                accountGroupReference.set(accountGroupDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        System.out.println("Bridge entity in account group added!");
+                    }
+                });
+            }
+
+            // 10.4 : Navigate away from the fragment
+            if(groups.size() > 0){
+                requireActivity().runOnUiThread(() -> {
+                    Navigation.findNavController(v).navigate(R.id.groupBalanceFragment);
+                });
+            }
+            else{
+                requireActivity().runOnUiThread(() -> {
+                    Navigation.findNavController(v).navigate(R.id.groupFirstFragment);
+                });
+            }
+        });
     }
 }

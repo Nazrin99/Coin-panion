@@ -10,34 +10,42 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         app:srcCompat="@mipmap/ic_back_foreground" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/TVResetPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
-            android:paddingTop="15sp"
             android:layout_marginLeft="60dp"
+            android:fontFamily="@font/fugaz_one_regular"
             android:text="Reset Password"
             android:textColor="@color/black"
-            android:fontFamily="@font/fugaz_one_regular"
-            android:textSize="20dp" />
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="177dp"
+            android:layout_height="50dp"
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/IVNextResetPassword"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="110dp"
+            android:layout_marginRight="40dp"
             app:srcCompat="@mipmap/ic_next_foreground" />
 
     </LinearLayout>
@@ -47,26 +55,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="15dp"
         >
 
         <TextView
             android:id="@+id/TV"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
-            android:paddingTop="15sp"
             android:layout_marginLeft="60dp"
+            android:fontFamily="@font/fugaz_one_regular"
             android:text="Blocked Accounts"
             android:textColor="@color/black"
-            android:fontFamily="@font/fugaz_one_regular"
-            android:textSize="20dp" />
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/imageView5"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="92dp"
+            android:layout_marginRight="40dp"
             app:srcCompat="@mipmap/ic_next_foreground" />
 
     </LinearLayout>

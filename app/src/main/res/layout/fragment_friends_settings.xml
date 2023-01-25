@@ -1,182 +1,214 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout17"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal">
+        android:id="@+id/linearLayout18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="84dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
+            android:id="@+id/friendsSettingsBackButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
             android:background="@color/white"
             android:contentDescription="Cancel"
-            android:paddingLeft="20dp"
             android:src="@drawable/backward_arrow_img" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/BtnDummy"
-            android:layout_width="230dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:background="@color/white"
-            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+        <View
+            android:id="@+id/view4"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/BtnSaveFriendSettings"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:id="@+id/friendsSettingsSaveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
             android:contentDescription="Edit Friend Settings"
             android:text="Save"
-            android:background="@color/white"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="230sp"
-        android:layout_marginTop="10sp"
-        android:layout_marginBottom="10sp"
-        >
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
+        android:layout_height="171dp"
+        app:layout_constraintBottom_toTopOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout18">
 
         <ImageView
             android:id="@+id/IVGroupBackground"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/background_img" />
 
         <ImageView
-            android:layout_width="133dp"
-            android:layout_height="115dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="bottom|left"
+            android:layout_marginLeft="20dp"
             android:src="@drawable/profilefriends_img" />
 
     </FrameLayout>
 
     <TextView
-        android:id="@+id/TVFriendName"
-        android:layout_width="match_parent"
+        android:id="@+id/friendsSettingsUsernameTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30sp"
-        android:layout_marginTop="10sp"
-        android:layout_marginRight="30sp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="30dp"
         android:text="User Name"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
     <TextView
-        android:id="@+id/TVFriendPhoneNumber"
-        android:layout_width="match_parent"
+        android:id="@+id/friendsSettingsNumberTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30sp"
-        android:layout_marginTop="10sp"
-        android:layout_marginRight="30sp"
-        android:layout_marginBottom="10sp"
+        android:layout_marginTop="5dp"
         android:text="User Phone Number"
         android:textColor="@color/black"
         android:textSize="15sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintStart_toStartOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/friendsSettingsUsernameTextView" />
 
     <TextView
         android:id="@+id/TVManageRelationship"
-        android:layout_width="246dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30sp"
-        android:layout_marginTop="10sp"
-        android:layout_marginRight="30sp"
-        android:layout_marginBottom="10sp"
+        android:layout_marginTop="30dp"
         android:background="@color/blue_omey"
         android:text="Manage Relationship"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/friendsSettingsNumberTextView" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="20sp"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
+        android:id="@+id/linearLayout19"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal"
-        >
+        app:layout_constraintEnd_toEndOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintStart_toStartOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/TVManageRelationship">
 
         <TextView
-            android:layout_width="269dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingTop="15dp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
+            android:gravity="center|start"
             android:text="Remove from friend list"
+            android:textColor="@color/black"
             android:textSize="20dp"
-            />
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/view6"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <Switch
-            android:id="@+id/SWRemoveFriend"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            />
+            android:id="@+id/removeFriendSwitch"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="10dp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:id="@+id/linearLayout20"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
         android:orientation="horizontal"
-        >
+        app:layout_constraintEnd_toEndOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintStart_toStartOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout19">
 
         <TextView
-            android:layout_width="269dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingTop="15dp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
+            android:gravity="center|start"
             android:text="Notification"
+            android:textColor="@color/black"
             android:textSize="20dp"
-            />
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/view8"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <Switch
-            android:id="@+id/SWNotification"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            />
+            android:id="@+id/notificationSwitch"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="10dp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:id="@+id/linearLayout21"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
         android:orientation="horizontal"
-        >
+        app:layout_constraintEnd_toEndOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintStart_toStartOf="@+id/friendsSettingsUsernameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout20">
 
         <TextView
-            android:layout_width="269dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingTop="15dp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
+            android:gravity="center|start"
             android:text="Block User"
+            android:textColor="@color/black"
             android:textSize="20dp"
-            />
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/view9"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <Switch
-            android:id="@+id/SWBlockFriend"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            />
+            android:id="@+id/blockFriendSwitch"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="10dp" />
 
     </LinearLayout>
 
@@ -184,8 +216,9 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
         android:text="You can block user only if both of \nyou have settled up each other"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout21"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout21" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,12 +3,16 @@ package com.example.coin_panion;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +31,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class AccountFirstActivity extends Fragment {
     BottomNavigationView bottomNavigationView;
     Account account;
-    User user;
     BaseViewModel mainViewModel;
     ImageView profileImageView, profileUsernameNextImageView, profilePrivacyNextImageView, profileDebtNextImageView, profileDebtLimitNextImageView;
 
@@ -51,7 +54,7 @@ public class AccountFirstActivity extends Fragment {
         mainViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
 
         account = (Account) mainViewModel.get("account");
-        user = (User) mainViewModel.get("user");
+        System.out.println(account);
 
         textView = view.findViewById(R.id.profileUsernameTextView);
         profileImageView = view.findViewById(R.id.profileImageView);
@@ -61,8 +64,11 @@ public class AccountFirstActivity extends Fragment {
         profileUsernameNextImageView = view.findViewById(R.id.profileUsernameNextImageView);
 
         requireActivity().runOnUiThread(() -> {
+            profileImageView.setImageDrawable(account.getAccountPic().getPicture() != null ? Picture.cropToSquareAndRound(account.getAccountPic().getPicture(), getResources()) : Picture.cropToSquareAndRound(ResourcesCompat.getDrawable(getResources(), R.mipmap.default_profile, null), getResources()));
+            profileImageView.setAdjustViewBounds(true);
+            profileImageView.setMaxHeight(10);
+            profileImageView.setMaxWidth(10);
             textView.setText(account.getUser().getUsername());
-            profileImageView.setImageDrawable(Picture.getPictureFromDB(2501).getPicture());
         });
 
         profileDebtLimitNextImageView.setOnClickListener(v -> {
@@ -78,6 +84,7 @@ public class AccountFirstActivity extends Fragment {
         });
 
         profileUsernameNextImageView.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.editProfileFragment);
         });
 
 

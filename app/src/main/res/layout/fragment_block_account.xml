@@ -9,42 +9,45 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="match_parent">
 
         <!--            TODO make it clickable-->
         <ImageView
-            android:id="@+id/imageView11"
+            android:id="@+id/blockedContactBackImageView"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
             android:src="@mipmap/ic_back_foreground"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.044"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.018" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/blockedContactSaveButton"
             android:layout_width="104dp"
-            android:layout_height="60dp"
+            android:layout_height="48dp"
             android:background="@android:color/transparent"
             android:text="SAVE"
             android:textColor="@color/black"
             android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/blockedContactBackImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.938"
-            app:layout_constraintStart_toEndOf="@+id/imageView11"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/blockedContactBackImageView"
+            app:layout_constraintTop_toTopOf="@+id/blockedContactBackImageView"
             app:layout_constraintVertical_bias="0.017" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/blockedContactRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/blockedContactSaveButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="800dp"
-        android:layout_gravity="top"
-        android:layout_marginTop="75dp"
-        android:layout_marginHorizontal="20dp"/>
 </FrameLayout>

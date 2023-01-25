@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coin_panion.R;
+import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.fragments.friends.FriendsAddFragment;
 import com.example.coin_panion.fragments.friends.FriendsAddFragmentDirections;
@@ -22,43 +23,20 @@ import com.example.coin_panion.fragments.friends.FriendsFragmentDirections;
 import java.util.List;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder>{
-    List<Contact> contacts;
-    BaseViewModel friendsViewModel;
-    View view;
+    List<Account> accounts;
+    BaseViewModel mainViewModel;
+    Context context;
 
-    public FriendAdapter(List<Contact> contacts, BaseViewModel friendsViewModel, View view) {
-        this.contacts = contacts;
-        this.friendsViewModel = friendsViewModel;
-        this.view = view;
-    }
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView textView;
-        ImageView imageView;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            textView = itemView.findViewById(R.id.contactNameTextView);
-            imageView = itemView.findViewById(R.id.selectContactImageView);
-        }
-
-        void bind(int position, Contact contact){
-            textView.setText(contact.getContactName());
-            imageView.setOnClickListener(v -> {
-                friendsViewModel.put("phoneNumber", Long.parseLong(contact.getContactNumber()));
-
-                NavDirections navDirections = FriendsFragmentDirections.actionFriendsFragmentToFriendsDetailFragment();
-                Navigation.findNavController(view).navigate(navDirections);
-            });
-        }
+    public FriendAdapter(List<Account> accounts, BaseViewModel mainViewModel, Context context) {
+        this.accounts = accounts;
+        this.mainViewModel = mainViewModel;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_from_acc_item,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.friend_from_acc_item,parent,false);
 
         /*Return the view inflated*/
         return new FriendAdapter.ViewHolder(view);
@@ -66,13 +44,54 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Contact contact = contacts.get(position);
+        Account account = accounts.get(position);
 
-        holder.bind(position, contact);
+        holder.contactNameTextView.setText(account.getUser().getUsername());
+        holder.selectContactImageView.setOnClickListener(v -> {
+            mainViewModel.put("selectedFriend", account);
+            NavDirections navDirections = FriendsFragmentDirections.actionFriendsFragmentToFriendsDetailFragment();
+            Navigation.findNavController(v).navigate(navDirections);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return accounts.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        TextView contactNameTextView;
+        ImageView selectContactImageView;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            contactNameTextView = itemView.findViewById(R.id.contactNameTextView);
+            selectContactImageView = itemView.findViewById(R.id.selectContactImageView);
+        }
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public BaseViewModel getMainViewModel() {
+        return mainViewModel;
+    }
+
+    public void setMainViewModel(BaseViewModel mainViewModel) {
+        this.mainViewModel = mainViewModel;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

@@ -34,7 +34,6 @@ public class GroupMemberAddAdapter extends RecyclerView.Adapter<GroupMemberAddAd
             /*Assign the variable*/
             TVContactName = itemView.findViewById(R.id.contactNameTextView);
             TVContactNumber = itemView.findViewById(R.id.TVContact_number);
-            CBSelectContact = itemView.findViewById(R.id.CBSelectContact);
         }
 
     }
@@ -81,7 +80,7 @@ public class GroupMemberAddAdapter extends RecyclerView.Adapter<GroupMemberAddAd
 
     @Override
     public int getItemCount() {
-        return 0;
+        return contacts.size();
     }
 
     public List<Contact> getContacts() {

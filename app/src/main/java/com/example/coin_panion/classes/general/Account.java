@@ -5,12 +5,23 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.example.coin_panion.classes.group.Group;
 import com.example.coin_panion.classes.notification.Notification;
 import com.example.coin_panion.classes.transaction.Transaction;
 import com.example.coin_panion.classes.utility.Hashing;
 import com.example.coin_panion.classes.utility.Line;
 import com.example.coin_panion.classes.utility.Picture;
 import com.example.coin_panion.classes.utility.ThreadStatic;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -19,150 +30,285 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
+import kotlinx.coroutines.internal.AtomicOp;
+
 public class Account implements Serializable {
-    private Integer accountID;
+    private String accountID;
     private User user;
-    private String password;
     private String bio;
-    private List<User> friends = new ArrayList<>();
-    private DebtLimit debtLimit;
+    private List<Account> friends;
+    private List<Account> blockedContacts;
+    private List<Group> groups;
+    private Double debtLimitAmount;
+    private Date debtLimitEndDate;
 //    private List<Transaction> debts;
 //    private List<Transaction> credits;
 //    private List<PaymentApproval> paymentApprovalList;
-    private SettleUpAccount settleUpAccount;
+    private String settleUpAccountName;
+    private String settleUpAccountNumber;
     private List<Notification> notifications = new ArrayList<>();
     private Picture accountPic;
     private Picture accountCover;
+    private Picture qrImage;
 
-    /**
-     * Constructor to create new account prior database insertion
-     * @param user
-     * @param password
-     * @param bio
-     * @param accountPic
-     * @param accountCover
-     */
-    public Account(User user, String password, String bio, Picture accountPic, Picture accountCover) {
-        this.user = user;
-        this.password = password;
-        this.bio = bio;
-        this.accountPic = accountPic;
-        this.accountCover = accountCover;
+    public Account() {
     }
 
     /**
-     * Constructor to create complete Account object
+     * Create complete Account objects without friends and notifications
      * @param accountID
      * @param user
-     * @param password
      * @param bio
-     * @param friends
-     * @param debtLimit
-     * @param settleUpAccount
-     * @param notifications
+     * @param debtLimitAmount
+     * @param debtLimitEndDate
+     * @param settleUpAccountName
+     * @param settleUpAccountNumber
      * @param accountPic
      * @param accountCover
+     * @param qrImage
      */
-    public Account(Integer accountID, User user, String password, String bio, List<User> friends, DebtLimit debtLimit, SettleUpAccount settleUpAccount, List<Notification> notifications, Picture accountPic, Picture accountCover) {
+    public Account(String accountID, User user, String bio, Double debtLimitAmount, Date debtLimitEndDate, String settleUpAccountName, String settleUpAccountNumber, Picture accountPic, Picture accountCover, Picture qrImage) {
         this.accountID = accountID;
         this.user = user;
-        this.password = password;
         this.bio = bio;
-        this.friends = friends;
-        this.debtLimit = debtLimit;
-        this.settleUpAccount = settleUpAccount;
-        this.notifications = notifications;
+        this.debtLimitAmount = debtLimitAmount;
+        this.debtLimitEndDate = debtLimitEndDate;
+        this.settleUpAccountName = settleUpAccountName;
+        this.settleUpAccountNumber = settleUpAccountNumber;
         this.accountPic = accountPic;
         this.accountCover = accountCover;
+        this.qrImage = qrImage;
     }
 
-    /**
-     * Retrieve a list of UNSETTLED DEBTS from the transaction table
-     * @param accountID
-     * @param dataThread
-     * @return
-     */
-    public static List<Transaction> retrieveDebts(Integer accountID, Thread dataThread){
-        AtomicReference<List<Transaction>> listAtomicReference = new AtomicReference<>();
-        dataThread = new Thread(() -> {
-            List<Transaction> debts = new ArrayList<>();
-            try(
-                    Connection connection = Line.getConnection();
-                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM transaction WHERE epoch_settled IS NULL AND debtor = ?");
-            ){
-                preparedStatement.setInt(1, accountID);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while(resultSet.next()){
-                    debts.add(new Transaction(resultSet.getInt(1), resultSet.getString(9), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4),resultSet.getString(5), resultSet.getDouble(6), resultSet.getLong(7), resultSet.getLong(8)));
+
+
+    public static List<Account> getListOfFriends(String accountID){
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        Query query = firebaseFirestore.collection("friend").whereEqualTo("accountID", accountID).whereEqualTo("blocked", false);
+
+        AtomicReference<List<String>> listAtomicReference1 = new AtomicReference<>(null);
+        Executors.newSingleThreadExecutor().execute(() -> {
+            query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if(queryDocumentSnapshots != null){
+                        if(!queryDocumentSnapshots.isEmpty()){
+                            List<String> accountIDs = new ArrayList<>();
+                            for(int i = 0 ; i < queryDocumentSnapshots.size(); i++){
+                                accountIDs.add(queryDocumentSnapshots.getDocuments().get(i).getDocumentReference("friendAccountID").getId());
+                            }
+                            listAtomicReference1.set(accountIDs);
+                        }
+                        else{
+                            System.out.println("Snapshot empty");
+                            listAtomicReference1.set(new ArrayList<>());
+                        }
+                    }
+                    else{
+                        System.out.println("Snapshot is null");
+                        listAtomicReference1.set(new ArrayList<>());
+                    }
                 }
-                resultSet.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            listAtomicReference.set(debts);
+            });
         });
-        ThreadStatic.run(dataThread);
-        return listAtomicReference.get();
+        while(listAtomicReference1.get() == null){
+        }
+
+        List<Account> accounts = new ArrayList<>();
+        List<String> accountIDs = listAtomicReference1.get();
+        for(int i = 0; i < accountIDs.size(); i++) {
+            accounts.add(Account.getAccount(accountIDs.get(i)));
+        }
+
+        return accounts;
     }
 
-    /**
-     * Inserts the details of the new Account in the database and updates this objects' accountID with the generated keys. Nulled fields remain for friends, debt limits, notifications, and settle up account
-     * @param dataThread
-     */
-    public void insertNewAccount(Thread dataThread){
-        dataThread = new Thread(() -> {
-            try(
-                    Connection connection = Line.getConnection();
-                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO account(password, bio, account_pic, account_cover, user_id) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            ){
-                preparedStatement.setString(1, Hashing.keccakHash(this.getPassword()));
-                preparedStatement.setString(2,this.getBio());
-                preparedStatement.setInt(3, this.getAccountPic().getPictureID());
-                preparedStatement.setInt(4, this.getAccountCover().getPictureID());
-                preparedStatement.setInt(5, this.getUser().getUserID());
-                preparedStatement.execute();
+    public static List<Account> getBlockedFriends(String accountID){
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        Query query = firebaseFirestore.collection("friend").whereEqualTo("accountID", accountID).whereEqualTo("blocked", true);
 
-                ResultSet resultSet = preparedStatement.getGeneratedKeys();
-                if(resultSet.next()){
-                    // Key exists, update Account object
-                    this.setAccountID(resultSet.getInt(1));
+        AtomicReference<List<String>> listAtomicReference1 = new AtomicReference<>(null);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots != null){
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        List<String> accountIDs = new ArrayList<>();
+                        for(int i = 0 ; i < queryDocumentSnapshots.size(); i++){
+                            accountIDs.add(queryDocumentSnapshots.getDocuments().get(i).getDocumentReference("friendAccountID").getId());
+                        }
+                        listAtomicReference1.set(accountIDs);
+                    }
+                    else{
+                        System.out.println("Snapshot empty");
+                        listAtomicReference1.set(new ArrayList<>());
+                    }
                 }
-                resultSet.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-        ThreadStatic.run(dataThread);
-    }
-
-    public static Account accountCredentialsValid( User user, String password, Thread dataThread){
-        AtomicReference<Account> atomicReference = new AtomicReference<>();
-        dataThread = new Thread(() -> {
-            try{
-                Connection connection = Line.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM account WHERE user_id = ? AND password = ?");
-                preparedStatement.setInt(1, user.getUserID());
-                preparedStatement.setString(2, Hashing.keccakHash(password));
-                ResultSet resultSet = preparedStatement.executeQuery();
-
-                if(resultSet.next()){
-                    // TODO Account credentials match, proceed to construct account object from User and return Account object
-                    Account loggedAccount = null;
-                    loggedAccount.setUser(user);
-                    atomicReference.set(loggedAccount);
+                else{
+                    System.out.println("Snapshot is null");
+                    listAtomicReference1.set(new ArrayList<>());
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         });
-        ThreadStatic.run(dataThread);
-        return atomicReference.get();
+        while(listAtomicReference1.get() == null){
+        }
+        List<Account> accounts = new ArrayList<>();
+        List<String> accountIDs = listAtomicReference1.get();
+        for(int i = 0; i < accountIDs.size(); i++) {
+            accounts.add(Account.getAccount(accountIDs.get(i)));
+        }
+
+        return accounts;
     }
 
-    public static void changePassword(Integer accountID, String password, Thread dataThread){
+
+    public static Account getAccount(String accountID){
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        Query query = firebaseFirestore.collection("account").whereEqualTo("accountID", accountID);
+
+        AtomicReference<Account> accountAtomicReference = new AtomicReference<>(null);
+        AtomicReference<DocumentReference> documentReferenceAtomicReference = new AtomicReference<>(null);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots != null){
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+
+                        // Sending references for creating later
+                        DocumentReference documentReference = documentSnapshot.getDocumentReference("user");
+                        documentReferenceAtomicReference.set(documentReference);
+
+                        Picture accountPic = new Picture(documentSnapshot.getString("accountPic"));
+                        Picture accountCover = new Picture(documentSnapshot.getString("accountCover"));
+                        Picture qrImage = new Picture(documentSnapshot.getString("qrImage"));
+                        String bio = documentSnapshot.getString("bio");
+                        Double debtLimitAmount = documentSnapshot.getDouble("debtLimitAmount");
+                        Date debtLimitEndDate = documentSnapshot.getDate("debtLimitEndDate");
+                        String settleUpAccountName = documentSnapshot.getString("settleUpAccountName");
+                        String settleUpAccountNumber = documentSnapshot.getString("settleUpAccountNumber");
+
+                        Account account = new Account(accountID, null, bio, debtLimitAmount, debtLimitEndDate, settleUpAccountName, settleUpAccountNumber, accountPic, accountCover, qrImage);
+                        accountAtomicReference.set(account);
+                        System.out.println("Leaving");
+                    }
+                    else{
+                        System.out.println("Snapshot is empty");
+                    }
+                }
+                else{
+                    System.out.println("Snapshot is null");
+                }
+            }
+        });
+        while(accountAtomicReference.get() == null || documentReferenceAtomicReference.get() == null){
+
+        }
+        Account account = accountAtomicReference.get();
+
+        // Getting user object
+        User user = User.getUser(documentReferenceAtomicReference.get());
+
+        // Getting the pictures
+        Executors.newSingleThreadExecutor().execute(() -> {
+            Picture accountPic = account.getAccountPic();
+            Picture accountCover = account.getAccountCover();
+            Picture qrImage = account.getQrImage();
+            accountPic.getPictureFromDatabase();
+            accountCover.getPictureFromDatabase();
+            qrImage.getPictureFromDatabase();
+        });
+        account.setUser(user);
+
+        return account;
+    }
+
+    public static Account getAccountFromPhoneNumber(String phoneNumber){
+        long start = System.currentTimeMillis();
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+        AtomicReference<DocumentReference> documentReferenceAtomicReference = new AtomicReference<>(null);
+        AtomicReference<User> userAtomicReference = new AtomicReference<>(null);
+        Query query = firebaseFirestore.collection("user").whereEqualTo("phoneNumber", phoneNumber);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                    documentReferenceAtomicReference.set(documentSnapshot.getReference());
+                    String userID = documentSnapshot.getString("userID");
+                    String phoneNumber = documentSnapshot.getString("phoneNumber");
+                    String firstName = documentSnapshot.getString("firstName");
+                    String lastName = documentSnapshot.getString("lastName");
+                    String username = documentSnapshot.getString("username");
+                    String email = documentSnapshot.getString("email");
+                    String password = documentSnapshot.getString("password");
+                    User user = new User(userID, phoneNumber, firstName, lastName, username, email, password);
+                    userAtomicReference.set(user);
+                }
+            }
+        });
+        while(System.currentTimeMillis() >= start + 3000L){
+
+        }
+        if(userAtomicReference.get() == null){
+            return null;
+        }
+
+        AtomicReference<Account> accountAtomicReference = new AtomicReference<>(null);
+        Query query1 = firebaseFirestore.collection("account").whereEqualTo("user", documentReferenceAtomicReference.get());
+        query1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                    String accountID = documentSnapshot.getString("accountID");
+                    String bio = documentSnapshot.getString("bio");
+                    Double debtLimitAmount = documentSnapshot.getDouble("debtLimitAmount");
+                    Date debtLimitEndDate = documentSnapshot.getDate("debtLimitEndDate");
+                    String settleUpAccountName = documentSnapshot.getString("settleUpAccountName");
+                    String settleUpAccountNumber = documentSnapshot.getString("settleUpAccountNumber");
+                    Picture accountPic = new Picture(documentSnapshot.getString("accountPic"));
+                    Picture accountCover = new Picture(documentSnapshot.getString("accountCover"));
+                    Picture qrImage = new Picture(documentSnapshot.getString("qrImage"));
+
+                    Account account = new Account(accountID, userAtomicReference.get(), bio, debtLimitAmount, debtLimitEndDate, settleUpAccountName, settleUpAccountNumber, accountPic, accountCover, qrImage);
+                    accountAtomicReference.set(account);
+                    System.out.println("Pass by here");
+                }
+                else{
+                    System.out.println("Snapshot is empty");
+                }
+            }
+        });
+        while(accountAtomicReference.get() == null){
+
+        }
+        System.out.println("Account created");
+        Account account = accountAtomicReference.get();
+        Picture accountPic = account.getAccountPic();
+        Picture accountCover = account.getAccountCover();
+        Picture qrImage = account.getQrImage();
+        accountPic.getPictureFromDatabase();
+        accountCover.getPictureFromDatabase();
+        qrImage.getPictureFromDatabase();
+
+
+        while(accountPic.getPicture() == null || accountCover.getPicture() == null || qrImage.getPicture() == null){
+
+        }
+        return account;
+
+    }
+
+    public static void changePassword( Integer accountID, String password, Thread dataThread){
         dataThread = new Thread(() -> {
             try(
                     Connection connection = Line.getConnection();
@@ -178,12 +324,106 @@ public class Account implements Serializable {
         ThreadStatic.run(dataThread);
     }
 
-    public Integer getAccountID() {
+    public static void insertNewAccount(Account account){
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        DocumentReference accountDocument = firebaseFirestore.collection("account").document(account.getAccountID());
+        DocumentReference userDocument = firebaseFirestore.collection("users").document(account.getUser().getUserID());
+
+        Map<String, Object> accountDetails = new HashMap<>();
+        accountDetails.put("accountPic", account.getAccountPic().getFirebaseReference());
+        accountDetails.put("accountID", account.getAccountID());
+        accountDetails.put("accountCover", account.getAccountCover().getFirebaseReference());
+        accountDetails.put("bio", account.getBio());
+        accountDetails.put("user", userDocument);
+        accountDetails.put("debtLimitAmount", null);
+        accountDetails.put("debtLimitEndDate", null);
+
+        accountDocument.set(accountDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                System.out.println("Account successfully added");
+            }
+        });
+    }
+
+    public String getAccountID() {
         return accountID;
     }
 
-    public void setAccountID(Integer accountID) {
+    public void setAccountID(String accountID) {
         this.accountID = accountID;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public List<Account> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<Account> friends) {
+        this.friends = friends;
+    }
+
+    public Double getDebtLimitAmount() {
+        return debtLimitAmount;
+    }
+
+    public void setDebtLimitAmount(Double debtLimitAmount) {
+        this.debtLimitAmount = debtLimitAmount;
+    }
+
+    public Date getDebtLimitEndDate() {
+        return debtLimitEndDate;
+    }
+
+    public void setDebtLimitEndDate(Date debtLimitEndDate) {
+        this.debtLimitEndDate = debtLimitEndDate;
+    }
+
+    public String getSettleUpAccountName() {
+        return settleUpAccountName;
+    }
+
+    public void setSettleUpAccountName(String settleUpAccountName) {
+        this.settleUpAccountName = settleUpAccountName;
+    }
+
+    public String getSettleUpAccountNumber() {
+        return settleUpAccountNumber;
+    }
+
+    public void setSettleUpAccountNumber(String settleUpAccountNumber) {
+        this.settleUpAccountNumber = settleUpAccountNumber;
+    }
+
+    public Picture getQrImage() {
+        return qrImage;
+    }
+
+    public void setQrImage(Picture qrImage) {
+        this.qrImage = qrImage;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     public Picture getAccountPic() {
@@ -202,59 +442,19 @@ public class Account implements Serializable {
         this.accountCover = accountCover;
     }
 
-    public User getUser() {
-        return user;
+    public List<Account> getBlockedContacts() {
+        return blockedContacts;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setBlockedContacts(List<Account> blockedContacts) {
+        this.blockedContacts = blockedContacts;
     }
 
-    public String getPassword() {
-        return password;
+    public List<Group> getGroups() {
+        return groups;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public List<User> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(List<User> friends) {
-        this.friends = friends;
-    }
-
-    public DebtLimit getDebtLimit() {
-        return debtLimit;
-    }
-
-    public void setDebtLimit(DebtLimit debtLimit) {
-        this.debtLimit = debtLimit;
-    }
-
-    public SettleUpAccount getSettleUpAccount() {
-        return settleUpAccount;
-    }
-
-    public void setSettleUpAccounts(SettleUpAccount settleUpAccount) {
-        this.settleUpAccount = settleUpAccount;
-    }
-
-    public List<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 }
