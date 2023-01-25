@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1060110706184",
+    "project_id": "coinpanion-86b14",
+    "storage_bucket": "coinpanion-86b14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1060110706184:android:dd84f0f857c081d86b13bd",
+        "android_client_info": {
+          "package_name": "com.example.coin_panion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1060110706184-n26vebq4avn9rma81lpuoj308u9pfena.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ93vFbFJia8EFpkaIsW8_vekWVEmD0Iw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1060110706184-n26vebq4avn9rma81lpuoj308u9pfena.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
