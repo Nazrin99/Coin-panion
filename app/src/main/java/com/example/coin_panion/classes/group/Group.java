@@ -25,7 +25,7 @@ public class Group implements Serializable {
     private String groupName;
     private String groupDesc;
     private String groupType;
-    private List<Account> groupMembers;
+    private List<Account> groupMembers = new ArrayList<>();
     private List<Transaction> groupTransactions;
     private Picture groupPic = null; // TODO
     private Picture groupCover = null; // TODO

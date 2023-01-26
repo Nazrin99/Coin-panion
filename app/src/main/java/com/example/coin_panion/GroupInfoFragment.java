@@ -18,13 +18,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coin_panion.classes.general.Account;
-import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.group.Group;
 import com.example.coin_panion.classes.notification.TransactionAdapter;
 import com.example.coin_panion.classes.transaction.Transaction;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Picture;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -40,6 +40,8 @@ public class GroupInfoFragment extends Fragment {
     TextView groupNameTextView, groupDescTextView;
     RecyclerView groupActivityRecyclerView;
     Button createExpensesButton;
+    Account account;
+    TransactionAdapter transactionAdapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -91,6 +93,7 @@ public class GroupInfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         selectedGroup = (Group) mainViewModel.get("selectedGroup");
+        account = (Account) mainViewModel.get("account");
 
         TextView textView = requireActivity().findViewById(R.id.activityName);
         createExpensesButton = view.findViewById(R.id.createExpensesButton);
@@ -102,16 +105,6 @@ public class GroupInfoFragment extends Fragment {
         groupActivityRecyclerView = view.findViewById(R.id.groupActivityRecyclerView);
         groupInfoBackImageView = view.findViewById(R.id.groupInfoBackImageView);
 
-        Executors.newSingleThreadExecutor().execute(() -> {
-            List<Transaction> transactions = Transaction.getListOfTransaction(selectedGroup.getGroupID());
-            TransactionAdapter transactionAdapter = new TransactionAdapter(transactions, requireActivity().getApplicationContext());
-
-            requireActivity().runOnUiThread(() -> {
-                groupActivityRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
-                groupActivityRecyclerView.setAdapter(transactionAdapter);
-            });
-        });
-
         requireActivity().runOnUiThread(() -> {
             textView.setText(selectedGroup.getGroupName().toUpperCase(Locale.ROOT));
             groupNameTextView.setText(selectedGroup.getGroupName());
@@ -119,6 +112,28 @@ public class GroupInfoFragment extends Fragment {
             groupInfoPicImageView.setImageDrawable(selectedGroup.getGroupPic().getPicture() != null ? Picture.cropToSquareAndRound(selectedGroup.getGroupPic().getPicture(), getResources()) : ResourcesCompat.getDrawable(getResources(), R.mipmap.default_profile, null));
             groupInfoCoverImageView.setImageDrawable(selectedGroup.getGroupCover().getPicture() != null ? selectedGroup.getGroupCover().getPicture() : ResourcesCompat.getDrawable(getResources(), R.mipmap.default_cover, null));
         });
+
+        if(selectedGroup.getGroupTransactions() == null){
+            Executors.newSingleThreadExecutor().execute(() -> {
+                selectedGroup.setGroupTransactions(new ArrayList<>());
+                int size = Transaction.getListOfTransaction(selectedGroup.getGroupID(), selectedGroup.getGroupTransactions(), account);
+                while(selectedGroup.getGroupTransactions().size() < size){
+
+                }
+                TransactionAdapter transactionAdapter1 = new TransactionAdapter(selectedGroup.getGroupTransactions(), requireActivity().getApplicationContext());
+                requireActivity().runOnUiThread(() -> {
+                    groupActivityRecyclerView.setAdapter(transactionAdapter1);
+                    groupActivityRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
+                });
+            });
+        }
+        else{
+            TransactionAdapter transactionAdapter1 = new TransactionAdapter(selectedGroup.getGroupTransactions(), requireActivity().getApplicationContext());
+            requireActivity().runOnUiThread(() -> {
+                groupActivityRecyclerView.setAdapter(transactionAdapter1);
+                groupActivityRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
+            });
+        }
 
         groupInfoSettingsImageView.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.editGroupFragment2);

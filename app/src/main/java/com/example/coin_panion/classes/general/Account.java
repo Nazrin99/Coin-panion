@@ -53,6 +53,7 @@ public class Account implements Serializable {
 //    private List<PaymentApproval> paymentApprovalList;
     private String settleUpAccountName;
     private String settleUpAccountNumber;
+    private List<Transaction> debts;
     private List<Notification> notifications = new ArrayList<>();
     private Picture accountPic;
     private Picture accountCover;
@@ -456,5 +457,13 @@ public class Account implements Serializable {
 
     public void setGroups(List<Group> groups) {
         this.groups = groups;
+    }
+
+    public List<Transaction> getDebts() {
+        return debts;
+    }
+
+    public void setDebts(List<Transaction> debts) {
+        this.debts = debts;
     }
 }

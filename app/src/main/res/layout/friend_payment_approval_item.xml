@@ -25,7 +25,7 @@
             android:src="@drawable/img" />
 
         <TextView
-            android:id="@+id/contactNameTextView"
+            android:id="@+id/creditorUsernameTextView"
             android:layout_width="183dp"
             android:layout_height="match_parent"
             android:layout_marginRight="10sp"

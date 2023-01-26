@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DebtList">
+    tools:context=".CreditList">
 
     <ImageView
-        android:id="@+id/debtListBackImageView"
+        android:id="@+id/creditListBackImageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginLeft="20dp"
@@ -16,12 +16,12 @@
         android:src="@mipmap/ic_back_foreground" />
 
     <TextView
-        android:id="@+id/textView38"
+        android:id="@+id/textView40"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
         android:layout_marginStart="20dp"
-        android:text="List of Debts You Have"
+        android:text="List of Debts You Can Collect"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
 

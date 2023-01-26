@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.coin_panion.R;
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.utility.BaseViewModel;
-import com.example.coin_panion.fragments.friends.FriendsAddFragment;
-import com.example.coin_panion.fragments.friends.FriendsAddFragmentDirections;
 import com.example.coin_panion.fragments.friends.FriendsFragmentDirections;
 
 import java.util.List;
@@ -66,7 +63,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            contactNameTextView = itemView.findViewById(R.id.contactNameTextView);
+            contactNameTextView = itemView.findViewById(R.id.creditorUsernameTextView);
             selectContactImageView = itemView.findViewById(R.id.selectContactImageView);
         }
     }

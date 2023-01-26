@@ -1,6 +1,15 @@
 package com.example.coin_panion;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.format.DateUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,38 +22,32 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.group.FriendExpansesItemAdapter;
 import com.example.coin_panion.classes.group.Group;
+import com.example.coin_panion.classes.settleUp.PaymentRequestStatus;
+import com.example.coin_panion.classes.transaction.Transaction;
+import com.example.coin_panion.classes.transaction.TransactionType;
 import com.example.coin_panion.classes.utility.BaseViewModel;
-import com.example.coin_panion.classes.utility.Line;
+import com.example.coin_panion.classes.utility.Validifier;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.math.RoundingMode;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -200,48 +203,150 @@ public class CreateExpensesFragment extends Fragment {
         });
 
         expensesFinishButton.setOnClickListener(v -> {
-            Double amount = Double.parseDouble(amountEditText.getText().toString());
+            double amount = Double.parseDouble(amountEditText.getText().toString());
             String transName = transactionNameEditText.getText().toString();
-            String creditor = creditorEditText.getText().toString();
+            String creditor = account.getAccountID();
             List<Account> accounts = friendExpansesItemAdapter.getAccounts();
-            Map<String, Double> map = friendExpansesItemAdapter.getSelectedGroupMembers();
 
+            // 1 : Get DocumentReference for new Transaction document
+            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+            // 2 : Get DocumentReference for creditor Account document
+            DocumentReference creditorReference = firebaseFirestore.collection("user").document(account.getUser().getUserID());
+
+            // 3 : Create a map of Transaction details & PaymentRequest details
+            Map<String, Object> transDetails = new HashMap<>();
+            transDetails.put("transName", transName);
+            transDetails.put("transType", "PAYMENT_ISSUE");
+            transDetails.put("epochIssued", Validifier.getProperDate(new Date()));
+            transDetails.put("groupID", selectedGroup.getGroupID());
+            transDetails.put("creditor", creditorReference);
+
+            Map<String, Object> payReqDetails = new HashMap<>();
+            payReqDetails.put("epochPayIssued", null);
+            payReqDetails.put("epochPayApprov", null);
+            payReqDetails.put("payProof", null);
+            payReqDetails.put("payReqStatus", PaymentRequestStatus.PAYMENT_NOT_MADE.getType());
 
             if(splitSpinner.getSelectedItem().toString().equals("Equally")){
-                DocumentReference creditorReference = FirebaseFirestore.getInstance().collection("account").document(account.getAccountID());
-                Double netAmount = amount/accounts.size();
-                String transType = "PAYMENT_ISSUE";
-                Date date = new Date();
+                transDetails.put("amount", amount/accounts.size());
 
-                Map<String, Object> toMap = new HashMap<>();
-                toMap.put("transType", transType);
-                toMap.put("transName", transName);
-                toMap.put("amount", netAmount);
-                toMap.put("creditor", creditorReference);
-                toMap.put("groupID", selectedGroup.getGroupID());
-                toMap.put("epochIssued", date);
+                // 4 : For each of the member, append the member ID, transactionID, append to group object, and send to Firebase using separate Thread
+                for(int i = 0; i < accounts.size(); i++){
+                    // 4.1 : Create a Transaction document & PaymentRequest document
+                    DocumentReference transReference = firebaseFirestore.collection("transaction").document();
+                    DocumentReference payReqReference = firebaseFirestore.collection("payment_request").document();
+                    transDetails.put("transID", transReference.getId());
+                    payReqDetails.put("transID", transReference.getId());
 
-                for(int i = 0 ; i < accounts.size(); i++){
-                    DocumentReference documentReference = FirebaseFirestore.getInstance().collection("transaction").document();
-                    DocumentReference debtorReference = FirebaseFirestore.getInstance().collection("account").document(accounts.get(i).getAccountID());
-                    String transactionID = documentReference.getId();
+                    // 4.2 : Get debtor Account document reference
+                    DocumentReference debtorReference = firebaseFirestore.collection("user").document(accounts.get(i).getUser().getUserID());
 
-                    toMap.put("transactionID", transactionID);
-                    toMap.put("debtor", debtorReference);
+                    // 4.3 : Append debtor to map
+                    transDetails.put("debtor", debtorReference);
 
-                    documentReference.set(toMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            System.out.println("Transaction added");
-                        }
+                    // 4.4 : Send the Document to the Firebase
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        transReference.set(transDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                System.out.println("Transaction document added");
+                            }
+                        });
+
+                        payReqReference.set(payReqDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                System.out.println("Payment Request document added");
+                            }
+                        });
                     });
+
+                    // 4.5 : Append Transaction object to existing group
+                    Transaction transaction = new Transaction(transReference.getId(), TransactionType.PAYMENT_ISSUE, selectedGroup.getGroupID(), account.getUser(), accounts.get(i).getUser(), transName, amount/accounts.size(), (Date)transDetails.get("epochIssued"));
+                    System.out.println(transDetails.get("epochIssued"));
+                    selectedGroup.getGroupTransactions().add(transaction);
                 }
-                Navigation.findNavController(v).navigate(R.id.groupInfoFragment);
+                selectedGroup.getGroupTransactions().sort(new Comparator<Transaction>() {
+                    @Override
+                    public int compare(Transaction o1, Transaction o2) {
+                        return o2.getEpochIssued().compareTo(o1.getEpochIssued());
+                    }
+                });
+
+
             }
             else{
+                Map<User, Double> selectedAmounts = friendExpansesItemAdapter.getSelectedGroupMembers();
+                List<Account> unequalAccounts = friendExpansesItemAdapter.getAccounts();
 
+                System.out.println(selectedAmounts.size());
+                // 4 : Get the total amount
+                double totalAmount = 0;
+                for(int i = 0; i < unequalAccounts.size(); i++){
+                    totalAmount += selectedAmounts.get(unequalAccounts.get(i).getUser());
+                }
+                System.out.println(totalAmount);
+
+                // 5 : Check if total amount entered equals the amount entered by creditor
+                if(!(totalAmount == amount)){
+                    Toast.makeText(requireActivity().getApplicationContext(), "Total amount across all debtors does not equal to entered amount", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 6 : For each member, append member ID, amount, transactionID, append to group object, and send to Firebase
+                Iterator<Map.Entry<User, Double>> iterator = selectedAmounts.entrySet().iterator();
+                while (iterator.hasNext()){
+                    Map.Entry<User, Double> entry = iterator.next();
+                    // 7 : Create a Transaction DocumentReference
+                    DocumentReference transReference = firebaseFirestore.collection("transaction").document();
+                    DocumentReference payReqReference = firebaseFirestore.collection("payment_request").document();
+                    transDetails.put("transID", transReference.getId());
+                    payReqDetails.put("transID", transReference.getId());
+
+                    // 8 : Get debtor DocumentReference
+                    DocumentReference debtorReference = firebaseFirestore.collection("user").document(entry.getKey().getUserID());
+                    transDetails.put("debtor", debtorReference);
+
+                    // 9 : Get debtor amount
+                    transDetails.put("amount", entry.getValue());
+
+                    // 10 : Send document to firebase
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        transReference.set(transDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                System.out.println("Transaction document added!");
+                            }
+                        });
+
+                        payReqReference.set(payReqDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                System.out.println("Payment Request document added");
+                            }
+                        });
+                    });
+
+                    // 11 : Append transaction to group
+                    Transaction transaction = new Transaction(transReference.getId(), TransactionType.PAYMENT_ISSUE, selectedGroup.getGroupID(), account.getUser(), entry.getKey(), transName, entry.getValue(), (Date) transDetails.get("epochIssued"));
+                    System.out.println(transDetails.get("epochIssued"));
+                    selectedGroup.getGroupTransactions().add(transaction);
+                }
+
+                selectedGroup.getGroupTransactions().sort(new Comparator<Transaction>() {
+                    @Override
+                    public int compare(Transaction o1, Transaction o2) {
+                        return o2.getEpochIssued().compareTo(o1.getEpochIssued());
+                    }
+                });
             }
+
+            requireActivity().runOnUiThread(() -> {
+                Navigation.findNavController(v).navigate(R.id.groupInfoFragment);
+            });
 
         });
     }
+
 }

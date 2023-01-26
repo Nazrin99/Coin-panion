@@ -62,6 +62,10 @@ public class User implements Serializable {
     public User() {
     }
 
+    public User(String userID) {
+        this.userID = userID;
+    }
+
     /**
      * Constructor to create User object for database insertion
      * @param phoneNumber
@@ -101,6 +105,28 @@ public class User implements Serializable {
 
         }
         return userAtomicReference.get();
+    }
+
+    public void getUser(){
+        AtomicReference<User> userAtomicReference = new AtomicReference<>(this);
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        Query query = firebaseFirestore.collection("user").whereEqualTo("userID", this.getUserID());
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots != null){
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        userAtomicReference.get().setUsername(documentSnapshot.getString("username"));
+                        userAtomicReference.get().setFirstName(documentSnapshot.getString("firstName"));
+                        userAtomicReference.get().setLastName(documentSnapshot.getString("lastName"));
+                        userAtomicReference.get().setEmail(documentSnapshot.getString("email"));
+                        userAtomicReference.get().setPassword(documentSnapshot.getString("password"));
+                        userAtomicReference.get().setPhoneNumber(documentSnapshot.getString("phoneNumber"));
+                    }
+                }
+            }
+        });
     }
 
     /**

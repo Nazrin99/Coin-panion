@@ -24,6 +24,8 @@ import android.widget.TextView;
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.general.User;
 import com.example.coin_panion.classes.group.Group;
+import com.example.coin_panion.classes.settleUp.PaymentRequest;
+import com.example.coin_panion.classes.transaction.Transaction;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Picture;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,6 +38,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -187,6 +190,11 @@ public class MainActivity extends AppCompatActivity {
             account.setGroups(groups);
 
             // 2.8 : Get list of transactions for a group TODO
+            System.out.println("Passed");
+
+            account.setDebts(new ArrayList<>());
+            System.out.println("Got the debts");
+
             mainViewModel.put("account", account);
 
             if(account.getFriends().size() > 0){

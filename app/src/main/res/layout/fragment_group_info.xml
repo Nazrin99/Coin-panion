@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="150dp">
 
         <!--            TODO make it editable-->
 
@@ -84,42 +84,40 @@
             android:src="@drawable/setting_line_svgrepo_com" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/groupNameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/Biru_Muda"
+        android:gravity="center"
+        android:inputType="textMultiLine"
+        android:text="Group Name"
+        android:textAlignment="center"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/groupDescTextView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginVertical="5dp"
+        android:background="@color/Biru_Muda"
+        android:gravity="center"
+        android:inputType="textMultiLine"
+        android:paddingTop="0dp"
+        android:text="@string/group_description"
+        android:textAlignment="center"
+        android:textSize="15sp" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingHorizontal="20dp">
-
-            <TextView
-                android:id="@+id/groupNameTextView"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/Biru_Muda"
-                android:gravity="center"
-                android:inputType="textMultiLine"
-                android:text="Group Name"
-                android:textAlignment="center"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/groupDescTextView"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/Biru_Muda"
-                android:gravity="center"
-                android:inputType="textMultiLine"
-                android:paddingTop="0dp"
-                android:text="@string/group_description"
-                android:textAlignment="center"
-                android:textSize="15dp" />
 
 
             <androidx.recyclerview.widget.RecyclerView

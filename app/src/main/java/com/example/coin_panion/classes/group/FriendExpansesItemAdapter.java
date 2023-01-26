@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,12 +23,13 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpansesItemAdapter.ViewHolder> {
 
     Context context;
     List<Account> allGroupMembers;
-    HashMap<String, Double> selectedGroupMembers = new HashMap<>();
+    Map<User, Double> selectedGroupMembers = new HashMap<>();
     List<Account> accounts = new ArrayList<>();
     boolean allSelected = false;
     double amount;
@@ -68,28 +70,32 @@ public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpans
         else{
             holder.CBCustomExpansesItem.setChecked(false);
             holder.CBCustomExpansesItem.setEnabled(true);
-            holder.ETCustomExpansesItemAmount.setEnabled(false);
+            holder.ETCustomExpansesItemAmount.setEnabled(true);
             holder.ETCustomExpansesItemAmount.setText(null);
         }
 
         holder.CBCustomExpansesItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(holder.ETCustomExpansesItemAmount.getText().toString().isEmpty()){
-                    return;
-                }
                 if(isChecked){
-                    Double amount = Double.parseDouble(holder.ETCustomExpansesItemAmount.getText().toString());
+                    if(holder.ETCustomExpansesItemAmount.getText().toString().isEmpty()){
+                        holder.CBCustomExpansesItem.setChecked(false);
+                        Toast.makeText(context, "You have to enter an amount before checking the box", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        System.out.println("Checked");
+                        double amount = Double.parseDouble(holder.ETCustomExpansesItemAmount.getText().toString());
 
-                    selectedGroupMembers.put(account.getUser().getUserID(), amount);
-                    accounts.add(account);
-                    holder.ETCustomExpansesItemAmount.setEnabled(true);
+                        selectedGroupMembers.put(account.getUser(), amount);
+                        accounts.add(account);
+                        holder.ETCustomExpansesItemAmount.setEnabled(false);
+                    }
                 }else {
-                    selectedGroupMembers.remove(account.getUser().getUserID());
+                    System.out.println("Not checked");
+                    selectedGroupMembers.remove(account.getUser());
                     accounts.remove(account);
                     holder.ETCustomExpansesItemAmount.setText(null);
-                    holder.ETCustomExpansesItemAmount.setEnabled(false);
-                    holder.ETCustomExpansesItemAmount.setText(null);
+                    holder.ETCustomExpansesItemAmount.setEnabled(true);
                 }
             }
         });
@@ -142,11 +148,11 @@ public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpans
         this.accounts = accounts;
     }
 
-    public HashMap<String, Double> getSelectedGroupMembers() {
+    public Map<User, Double> getSelectedGroupMembers() {
         return selectedGroupMembers;
     }
 
-    public void setSelectedGroupMembers(HashMap<String, Double> selectedGroupMembers) {
+    public void setSelectedGroupMembers(Map<User, Double> selectedGroupMembers) {
         this.selectedGroupMembers = selectedGroupMembers;
     }
 

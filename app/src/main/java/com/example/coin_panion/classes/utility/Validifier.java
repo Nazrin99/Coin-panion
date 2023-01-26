@@ -4,6 +4,8 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.widget.EditText;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 public class Validifier {
@@ -22,5 +24,12 @@ public class Validifier {
 
     public static boolean validPassword(String password){
         return (password.length() >= 8 && password.matches(".*[^a-zA-Z0-9 ].*") && password.matches(".*\\d+.*"));
+    }
+
+    public static Date getProperDate(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR_OF_DAY, 8);
+        return calendar.getTime();
     }
 }

@@ -214,4 +214,14 @@
         android:name="com.example.coin_panion.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/debtList"
+        android:name="com.example.coin_panion.DebtList"
+        android:label="fragment_debt_checklist"
+        tools:layout="@layout/fragment_debt_checklist" />
+    <fragment
+        android:id="@+id/creditList"
+        android:name="com.example.coin_panion.CreditList"
+        android:label="fragment_credit_list"
+        tools:layout="@layout/fragment_credit_list" />
 </navigation>

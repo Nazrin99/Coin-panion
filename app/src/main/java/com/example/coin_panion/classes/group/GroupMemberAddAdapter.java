@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coin_panion.R;
 import com.example.coin_panion.classes.friends.Contact;
-import com.example.coin_panion.classes.friends.ContactAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +31,8 @@ public class GroupMemberAddAdapter extends RecyclerView.Adapter<GroupMemberAddAd
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             /*Assign the variable*/
-            TVContactName = itemView.findViewById(R.id.contactNameTextView);
-            TVContactNumber = itemView.findViewById(R.id.TVContact_number);
+            TVContactName = itemView.findViewById(R.id.creditorUsernameTextView);
+            TVContactNumber = itemView.findViewById(R.id.creditorAmountTextView);
         }
 
     }

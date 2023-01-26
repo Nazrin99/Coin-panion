@@ -1,7 +1,7 @@
 package com.example.coin_panion.classes.general;
 
 import android.app.Notification;
-import com.example.coin_panion.classes.settleUp.PaymentApproval;
+import com.example.coin_panion.classes.settleUp.PaymentRequest;
 
 import java.util.ArrayList;
 
@@ -10,11 +10,11 @@ public class History {
     private String HistoryID;
     private Integer userID;
     ArrayList<Notification> notificationList = new ArrayList<>();
-    ArrayList<PaymentApproval> paymentApprovalList = new ArrayList<>();
+    ArrayList<PaymentRequest> paymentRequestList = new ArrayList<>();
 
-    public History(ArrayList<Notification> notificationList, ArrayList<PaymentApproval> paymentApprovalList) {
+    public History(ArrayList<Notification> notificationList, ArrayList<PaymentRequest> paymentRequestList) {
         this.notificationList = notificationList;
-        this.paymentApprovalList = paymentApprovalList;
+        this.paymentRequestList = paymentRequestList;
 //        this.userID = User.userID;
     }
 
@@ -24,7 +24,7 @@ public class History {
     }
 
     //TODO call Payment request from database based on the CreditorID that is the UserID place everthing into an arraylist
-    public ArrayList<PaymentApproval> DisplayPaymentRequestList(Integer userID){
+    public ArrayList<PaymentRequest> DisplayPaymentRequestList(Integer userID){
         return new ArrayList<>();
     }
 
