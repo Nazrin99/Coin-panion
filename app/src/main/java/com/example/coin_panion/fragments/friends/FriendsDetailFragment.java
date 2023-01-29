@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -100,9 +99,9 @@ public class FriendsDetailFragment extends Fragment {
         friendsDetailRemindCompatButton = view.findViewById(R.id.friendsDetailRemindCompatButton);
         friendsDetailUsernameTextView = view.findViewById(R.id.friendsDetailUsernameTextView);
         friendsDetailPhoneNumberTextView = view.findViewById(R.id.friendsDetailPhoneNumberTextView);
-        friendsDetailCoverImageView = view.findViewById(R.id.friendsDetailCoverImageView);
-        friendsDetailsProfileImageView = view.findViewById(R.id.friendsDetailsProfileImageView);
-        friendDetailsBackImageButton = view.findViewById(R.id.friendDetailsBackImageButton);
+        friendsDetailCoverImageView = view.findViewById(R.id.settleUpCoverImageView);
+        friendsDetailsProfileImageView = view.findViewById(R.id.settleUpProfileImageView);
+        friendDetailsBackImageButton = view.findViewById(R.id.settleUpBackImageButton);
         friendDetailsSettingsImageButton = view.findViewById(R.id.friendDetailsSettingsImageButton);
 
         requireActivity().runOnUiThread(() -> {

@@ -113,27 +113,11 @@ public class GroupInfoFragment extends Fragment {
             groupInfoCoverImageView.setImageDrawable(selectedGroup.getGroupCover().getPicture() != null ? selectedGroup.getGroupCover().getPicture() : ResourcesCompat.getDrawable(getResources(), R.mipmap.default_cover, null));
         });
 
-        if(selectedGroup.getGroupTransactions() == null){
-            Executors.newSingleThreadExecutor().execute(() -> {
-                selectedGroup.setGroupTransactions(new ArrayList<>());
-                int size = Transaction.getListOfTransaction(selectedGroup.getGroupID(), selectedGroup.getGroupTransactions(), account);
-                while(selectedGroup.getGroupTransactions().size() < size){
-
-                }
-                TransactionAdapter transactionAdapter1 = new TransactionAdapter(selectedGroup.getGroupTransactions(), requireActivity().getApplicationContext());
-                requireActivity().runOnUiThread(() -> {
-                    groupActivityRecyclerView.setAdapter(transactionAdapter1);
-                    groupActivityRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
-                });
-            });
-        }
-        else{
-            TransactionAdapter transactionAdapter1 = new TransactionAdapter(selectedGroup.getGroupTransactions(), requireActivity().getApplicationContext());
-            requireActivity().runOnUiThread(() -> {
-                groupActivityRecyclerView.setAdapter(transactionAdapter1);
-                groupActivityRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
-            });
-        }
+        TransactionAdapter transactionAdapter1 = new TransactionAdapter(selectedGroup.getGroupTransactions(), requireActivity().getApplicationContext());
+        requireActivity().runOnUiThread(() -> {
+            groupActivityRecyclerView.setAdapter(transactionAdapter1);
+            groupActivityRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
+        });
 
         groupInfoSettingsImageView.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.editGroupFragment2);

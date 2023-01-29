@@ -8,7 +8,7 @@
     >
 
     <ImageView
-        android:id="@+id/debtListBackImageView"
+        android:id="@+id/creditListBackImageView"
         android:layout_width="wrap_content"
         android:layout_height="90dp"
         android:src="@mipmap/ic_back_foreground"
@@ -26,7 +26,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="20sp"
             android:layout_marginBottom="30sp"
-            tools:listitem="@layout/debt_friend_item" />
+            tools:listitem="@layout/debt_list_item" />
 
     </ScrollView>
 

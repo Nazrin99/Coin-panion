@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="@+id/linearLayout11"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="@+id/linearLayout10"
-        app:layout_constraintTop_toBottomOf="@+id/friendsDetailsProfileImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/settleUpProfileImageView" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -26,14 +26,14 @@
         android:orientation="horizontal"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/friendsDetailCoverImageView"
+        app:layout_constraintBottom_toTopOf="@+id/settleUpCoverImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/friendDetailsBackImageButton"
+            android:id="@+id/settleUpBackImageButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@color/white"
@@ -57,7 +57,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/friendsDetailCoverImageView"
+        android:id="@+id/settleUpCoverImageView"
         android:layout_width="0dp"
         android:layout_height="183dp"
         android:layout_marginTop="10dp"
@@ -69,13 +69,13 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <ImageView
-        android:id="@+id/friendsDetailsProfileImageView"
+        android:id="@+id/settleUpProfileImageView"
         android:layout_width="106dp"
         android:layout_height="106dp"
         android:layout_marginTop="128dp"
         android:src="@drawable/profilefriends_img"
         app:layout_constraintStart_toStartOf="@+id/linearLayout10"
-        app:layout_constraintTop_toTopOf="@+id/friendsDetailCoverImageView" />
+        app:layout_constraintTop_toTopOf="@+id/settleUpCoverImageView" />
 
     <LinearLayout
         android:id="@+id/linearLayout10"

@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="start|center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="5dp"
         android:paddingVertical="10dp">
@@ -27,31 +27,48 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/creditorUsernameTextView"
+                android:id="@+id/debtorUsernameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="User Name"
+                android:textColor="@android:color/black"
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/creditorAmountTextView"
+                android:id="@+id/debtorAmountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5sp"
+                android:layout_marginTop="5dp"
                 android:text="RM 0.00"
+                android:textColor="@android:color/black"
                 android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/debtorFromTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:lines="2"
+                android:maxWidth="150dp"
+                android:text="TextView"
+                android:textColor="@android:color/black" />
         </LinearLayout>
 
+        <View
+            android:id="@+id/view18"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
         <Button
-            android:id="@+id/creditorSettleUpButton"
-            android:layout_width="48dp"
+            android:id="@+id/debtorSettleUpButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
+            android:layout_marginRight="7dp"
             android:backgroundTint="@color/dark_blue"
             android:minWidth="48dp"
             android:text="Settle Up"

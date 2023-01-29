@@ -59,7 +59,7 @@ public class FriendExpansesItemAdapter extends RecyclerView.Adapter<FriendExpans
         Account account = allGroupMembers.get(position);
 
         /*Initialze the variable based on Friend Expanses*/
-        holder.TVCustomExpansesFriendName.setText(account.getUser().getFirstName());
+        holder.TVCustomExpansesFriendName.setText(account.getUser().getUsername());
 
         if(allSelected){
             holder.ETCustomExpansesItemAmount.setText(Double.toString(amount));

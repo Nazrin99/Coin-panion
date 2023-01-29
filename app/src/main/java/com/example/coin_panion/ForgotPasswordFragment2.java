@@ -1,15 +1,11 @@
-package com.example.coin_panion.fragments.signup;
+package com.example.coin_panion;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.text.Editable;
@@ -18,41 +14,23 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.coin_panion.R;
-import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.SendEmail;
+import com.example.coin_panion.classes.utility.SendSMS;
 
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SignupFragment3#newInstance} factory method to
+ * Use the {@link ForgotPasswordFragment2#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignupFragment3 extends Fragment {
-    TextView emailSentTextView;
-    EditText[] codeEditTexts = new EditText[6];
-    int[] editTextIDs = {
-            R.id.codeEditText1,
-            R.id.codeEditText2,
-            R.id.codeEditText3,
-            R.id.codeEditText4,
-            R.id.codeEditText5,
-            R.id.codeEditText6
-    };
-    String otp;
-    BaseViewModel signupViewModel;
+public class ForgotPasswordFragment2 extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,10 +38,11 @@ public class SignupFragment3 extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String phoneNumber;
+    private String email;
+    private String userID;
 
-    public SignupFragment3() {
+    public ForgotPasswordFragment2() {
         // Required empty public constructor
     }
 
@@ -73,11 +52,11 @@ public class SignupFragment3 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SignupFragment_1.
+     * @return A new instance of fragment ForgotPasswordFragment2.
      */
     // TODO: Rename and change types and number of parameters
-    public static SignupFragment3 newInstance(String param1, String param2) {
-        SignupFragment3 fragment = new SignupFragment3();
+    public static ForgotPasswordFragment2 newInstance(String param1, String param2) {
+        ForgotPasswordFragment2 fragment = new ForgotPasswordFragment2();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -89,10 +68,10 @@ public class SignupFragment3 extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            phoneNumber = getArguments().getString("phoneNumber");
+            email = getArguments().getString("email");
+            userID = getArguments().getString("userID");
         }
-
     }
 
     @Override
@@ -102,28 +81,37 @@ public class SignupFragment3 extends Fragment {
         return inflater.inflate(R.layout.fragment_signup_3, container, false);
     }
 
+    TextView emailSentTextView;
+    EditText[] codeEditTexts = new EditText[6];
+    int[] editTextIDs = {
+            R.id.codeEditText1,
+            R.id.codeEditText2,
+            R.id.codeEditText3,
+            R.id.codeEditText4,
+            R.id.codeEditText5,
+            R.id.codeEditText6
+    };
+    String otp;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        signupViewModel = new ViewModelProvider(requireActivity()).get(BaseViewModel.class);
+        otp = SendSMS.generateOTP();
 
-        //Send verification email
-        otp = signupViewModel.get("otp").toString();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                SendEmail.sendEmail(signupViewModel.get("email").toString(), otp);
+                SendEmail.sendEmail(email, otp);
             }
         }).start();
 
-        // Bind views
         for(int i = 0; i < codeEditTexts.length; i++){
             codeEditTexts[i] = view.findViewById(editTextIDs[i]);
         }
         emailSentTextView = view.findViewById(R.id.emailSentTextView);
 
-        requireActivity().runOnUiThread(() -> emailSentTextView.setText(String.format(getResources().getString(R.string.email_sent_to), signupViewModel.get("email").toString())));
+        requireActivity().runOnUiThread(() -> emailSentTextView.setText(String.format(getResources().getString(R.string.email_sent_to), email)));
 
         // Bind listeners up until before the last edit text
         for(int i = 0 ; i < editTextIDs.length; i++){
@@ -148,7 +136,9 @@ public class SignupFragment3 extends Fragment {
 
                         if(verifyCode(otp)){
                             // Code is verified proceed to next fragment
-                            Navigation.findNavController(requireView()).navigate(R.id.action_signupFragment_3_to_signupFragment_4);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("userID", userID);
+                            Navigation.findNavController(requireView()).navigate(R.id.forgotPasswordFragment3, bundle);
                         }
                         else{
                             // Display popup, wrong code entered

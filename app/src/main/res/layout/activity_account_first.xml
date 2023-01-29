@@ -177,7 +177,7 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button7"
+        android:id="@+id/accountLogOutAppCompatButton"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="70dp"

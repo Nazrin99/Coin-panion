@@ -3,7 +3,6 @@ package com.example.coin_panion;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,19 +27,16 @@ import com.example.coin_panion.classes.group.FriendExpansesItemAdapter;
 import com.example.coin_panion.classes.group.Group;
 import com.example.coin_panion.classes.settleUp.PaymentRequestStatus;
 import com.example.coin_panion.classes.transaction.Transaction;
-import com.example.coin_panion.classes.transaction.TransactionType;
+import com.example.coin_panion.classes.transaction.TransactionStatus;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Validifier;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -217,16 +213,12 @@ public class CreateExpensesFragment extends Fragment {
             // 3 : Create a map of Transaction details & PaymentRequest details
             Map<String, Object> transDetails = new HashMap<>();
             transDetails.put("transName", transName);
-            transDetails.put("transType", "PAYMENT_ISSUE");
             transDetails.put("epochIssued", Validifier.getProperDate(new Date()));
             transDetails.put("groupID", selectedGroup.getGroupID());
+            transDetails.put("groupName", selectedGroup.getGroupName());
             transDetails.put("creditor", creditorReference);
-
-            Map<String, Object> payReqDetails = new HashMap<>();
-            payReqDetails.put("epochPayIssued", null);
-            payReqDetails.put("epochPayApprov", null);
-            payReqDetails.put("payProof", null);
-            payReqDetails.put("payReqStatus", PaymentRequestStatus.PAYMENT_NOT_MADE.getType());
+            transDetails.put("payProof", null);
+            transDetails.put("transStatus", TransactionStatus.PAYMENT_NOT_MADE.getType());
 
             if(splitSpinner.getSelectedItem().toString().equals("Equally")){
                 transDetails.put("amount", amount/accounts.size());
@@ -235,9 +227,7 @@ public class CreateExpensesFragment extends Fragment {
                 for(int i = 0; i < accounts.size(); i++){
                     // 4.1 : Create a Transaction document & PaymentRequest document
                     DocumentReference transReference = firebaseFirestore.collection("transaction").document();
-                    DocumentReference payReqReference = firebaseFirestore.collection("payment_request").document();
                     transDetails.put("transID", transReference.getId());
-                    payReqDetails.put("transID", transReference.getId());
 
                     // 4.2 : Get debtor Account document reference
                     DocumentReference debtorReference = firebaseFirestore.collection("user").document(accounts.get(i).getUser().getUserID());
@@ -253,17 +243,10 @@ public class CreateExpensesFragment extends Fragment {
                                 System.out.println("Transaction document added");
                             }
                         });
-
-                        payReqReference.set(payReqDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                System.out.println("Payment Request document added");
-                            }
-                        });
                     });
 
                     // 4.5 : Append Transaction object to existing group
-                    Transaction transaction = new Transaction(transReference.getId(), TransactionType.PAYMENT_ISSUE, selectedGroup.getGroupID(), account.getUser(), accounts.get(i).getUser(), transName, amount/accounts.size(), (Date)transDetails.get("epochIssued"));
+                    Transaction transaction = new Transaction(transReference.getId(), transName, TransactionStatus.PAYMENT_NOT_MADE, selectedGroup.getGroupID(), selectedGroup.getGroupName(), account.getUser(), accounts.get(i).getUser(), amount/accounts.size(), (Date)transDetails.get("epochIssued"), null);
                     System.out.println(transDetails.get("epochIssued"));
                     selectedGroup.getGroupTransactions().add(transaction);
                 }
@@ -302,7 +285,6 @@ public class CreateExpensesFragment extends Fragment {
                     DocumentReference transReference = firebaseFirestore.collection("transaction").document();
                     DocumentReference payReqReference = firebaseFirestore.collection("payment_request").document();
                     transDetails.put("transID", transReference.getId());
-                    payReqDetails.put("transID", transReference.getId());
 
                     // 8 : Get debtor DocumentReference
                     DocumentReference debtorReference = firebaseFirestore.collection("user").document(entry.getKey().getUserID());
@@ -319,17 +301,10 @@ public class CreateExpensesFragment extends Fragment {
                                 System.out.println("Transaction document added!");
                             }
                         });
-
-                        payReqReference.set(payReqDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                System.out.println("Payment Request document added");
-                            }
-                        });
                     });
 
                     // 11 : Append transaction to group
-                    Transaction transaction = new Transaction(transReference.getId(), TransactionType.PAYMENT_ISSUE, selectedGroup.getGroupID(), account.getUser(), entry.getKey(), transName, entry.getValue(), (Date) transDetails.get("epochIssued"));
+                    Transaction transaction = new Transaction(transReference.getId(), transName, TransactionStatus.PAYMENT_NOT_MADE, selectedGroup.getGroupID(), selectedGroup.getGroupName(), account.getUser(), entry.getKey(), entry.getValue(), (Date)transDetails.get("epochIssued"), null);
                     System.out.println(transDetails.get("epochIssued"));
                     selectedGroup.getGroupTransactions().add(transaction);
                 }

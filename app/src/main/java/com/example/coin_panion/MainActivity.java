@@ -182,22 +182,33 @@ public class MainActivity extends AppCompatActivity {
             List<Account> blockedContacts = Account.getBlockedFriends(account.getAccountID());
             account.setBlockedContacts(blockedContacts);
 
-            // 2.7 : Get list of group & group members
+            // 2.7 : Get list of group, group members, and list of transactions
             List<Group> groups = Group.getGroups(account.getAccountID());
             for(int i = 0; i < groups.size(); i++){
                 groups.get(i).getGroupMembersFromDatabase();
+                groups.get(i).setGroupTransactions(new ArrayList<>());
             }
             account.setGroups(groups);
 
-            // 2.8 : Get list of transactions for a group TODO
-            System.out.println("Passed");
+            for(int j = 0; j < groups.size(); j++){
+                Transaction.getGroupTransaction(groups.get(j).getGroupID(), groups.get(j).getGroupTransactions(), account);
+            }
 
+            // Get list of debts for the Account
             account.setDebts(new ArrayList<>());
-            System.out.println("Got the debts");
+            Transaction.getAccountDebts(account, account.getDebts());
+
+            // Get list of credits for the Account
+            account.setCredits(new ArrayList<>());
+            Transaction.getAccountCredits(account, account.getCredits());
+
 
             mainViewModel.put("account", account);
 
             if(account.getFriends().size() > 0){
+                for(int i = 0 ; i < account.getFriends().size(); i++){
+                    mainViewModel.putAccount(account.getFriends().get(i).getAccountID(), account.getFriends().get(i).getUser().getUserID(), account.getFriends().get(i));
+                }
                 runOnUiThread(() -> {
                     progressDialog.dismiss();
                     navController.navigate(R.id.friendsFragment);

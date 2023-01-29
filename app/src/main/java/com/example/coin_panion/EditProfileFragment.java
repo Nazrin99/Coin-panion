@@ -29,6 +29,7 @@ import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Picture;
 import com.example.coin_panion.classes.utility.PictureType;
+import com.example.coin_panion.classes.utility.Validifier;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -136,12 +137,12 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 Date date = new Date(year-1900, month, dayOfMonth);
-                if(date.getTime() < System.currentTimeMillis()){
-                    Toast.makeText(requireActivity(), "Debt limit end date cannot be earlier than current time", Toast.LENGTH_SHORT);
+                if(date.getTime() < Validifier.getProperDate(new Date()).getTime()){
+                    Toast.makeText(requireActivity().getApplicationContext(), "Debt limit end date cannot be earlier than current time", Toast.LENGTH_SHORT).show();
+                    editProfileDebtLimitCalendarView.setDate(Validifier.getProperDate(new Date()).getTime());
                 }
                 else{
                     debtLimitEndDate = date;
-                    System.out.println(date);
                 }
             }
         });

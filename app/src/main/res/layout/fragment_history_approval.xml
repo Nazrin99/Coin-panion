@@ -42,7 +42,7 @@
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button4"
+                android:id="@+id/settleUpSaveAppCompatButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -92,7 +92,7 @@
                     android:textSize="15dp" />
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/settleUpQRImageView"
                     android:layout_width="198dp"
                     android:layout_height="240dp"
                     android:src="@drawable/qr_img" />

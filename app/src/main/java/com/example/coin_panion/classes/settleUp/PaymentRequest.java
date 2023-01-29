@@ -2,10 +2,8 @@ package com.example.coin_panion.classes.settleUp;
 
 import com.example.coin_panion.classes.general.Account;
 import com.example.coin_panion.classes.transaction.Transaction;
-import com.example.coin_panion.classes.transaction.TransactionType;
-import com.example.coin_panion.classes.utility.Line;
+import com.example.coin_panion.classes.transaction.TransactionStatus;
 import com.example.coin_panion.classes.utility.Picture;
-import com.example.coin_panion.classes.utility.ThreadStatic;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -13,10 +11,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -120,8 +114,9 @@ public class PaymentRequest {
                             DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(i);
                             Transaction transaction = new Transaction(
                                     documentSnapshot.getString("transID"),
-                                    TransactionType.getTransType(documentSnapshot.getString("transType")),
+                                    TransactionStatus.getTransType(documentSnapshot.getString("transType")),
                                     documentSnapshot.getString("groupID"),
+                                    documentSnapshot.getString("groupName"),
                                     documentSnapshot.getDocumentReference("creditor").getId(),
                                     account.getUser(),
                                     documentSnapshot.getString("transName"),

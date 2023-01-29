@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="170dp">
 
         <!--            TODO make it editable-->
 
@@ -88,6 +88,7 @@
         android:id="@+id/groupNameTextView"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginHorizontal="20dp"
         android:background="@color/Biru_Muda"
         android:gravity="center"
         android:inputType="textMultiLine"
@@ -99,6 +100,7 @@
         android:id="@+id/groupDescTextView"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="5dp"
         android:background="@color/Biru_Muda"
         android:gravity="center"

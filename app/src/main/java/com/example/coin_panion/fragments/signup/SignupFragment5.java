@@ -23,6 +23,7 @@ import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Hashing;
 import com.example.coin_panion.classes.utility.Picture;
 import com.example.coin_panion.classes.utility.PictureType;
+import com.example.coin_panion.classes.utility.Validifier;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FoldingCube;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -187,7 +188,7 @@ public class SignupFragment5 extends Fragment {
         accountDetails.put("accountCover", "default_COVER.png");
         accountDetails.put("bio", bio);
         accountDetails.put("debtLimitAmount", 0);
-        accountDetails.put("debtLimitEndDate", new Date(Instant.now().getEpochSecond()));
+        accountDetails.put("debtLimitEndDate", Validifier.getProperDate(new Date()));
         accountDetails.put("settleUpAccountName", "General");
         accountDetails.put("settleUpAccountNumber", "00000000");
         accountDetails.put("qrImage", "default_QR.png");

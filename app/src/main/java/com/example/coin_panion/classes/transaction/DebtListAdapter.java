@@ -1,14 +1,17 @@
 package com.example.coin_panion.classes.transaction;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class DebtListAdapter extends RecyclerView.Adapter<DebtListAdapter.ViewHolder> {
+public class DebtListAdapter extends RecyclerView.Adapter<DebtListAdapter.DebtListHolder> {
 
     List<Transaction> debts = new ArrayList<>();
     Context context;
@@ -33,21 +36,33 @@ public class DebtListAdapter extends RecyclerView.Adapter<DebtListAdapter.ViewHo
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.debt_friend_item, null);
-
-        return new ViewHolder(view);
+    public DebtListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType == 0){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.debt_list_item, null);
+            return new DebtListHolder(view);
+        }
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DebtListHolder holder, int position) {
         Transaction debt = debts.get(position);
 
-        holder.creditorUsernameTextView.setText(debt.getCreditorID().getUsername());
-        holder.creditorAmountTextView.setText(String.format(Locale.ENGLISH, "%.2f", debt.getAmount()));
-        holder.creditorSettleUpButton.setOnClickListener(v -> {
-            mainViewModel.put("settleUpDebt", debt);
-        });
+        holder.debtorFromTextView.setText(debt.getTransName() + " from group " + debt.getGroupName());
+        holder.debtorUsernameTextView.setText(debt.getCreditorID().getUsername());
+        holder.debtorAmountTextView.setText("RM " + String.format(Locale.ENGLISH, "%.2f", debt.getAmount()));
+        if(debt.getTransStatus().getType().equalsIgnoreCase(TransactionStatus.PAYMENT_REQUEST.getType())){
+            holder.debtorSettleUpButton.setText("PENDING APPROVAL");
+            holder.debtorSettleUpButton.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.grey)));
+        }
+        else{
+            holder.debtorSettleUpButton.setOnClickListener(v -> {
+                mainViewModel.put("debt", debt);
+                Navigation.findNavController(v).navigate(R.id.friendsSettleUpFragment);
+            });
+            holder.debtorSettleUpButton.setText("SETTLE UP");
+            holder.debtorSettleUpButton.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.dark_blue)));
+        }
     }
 
     @Override
@@ -55,18 +70,30 @@ public class DebtListAdapter extends RecyclerView.Adapter<DebtListAdapter.ViewHo
         return debts.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView creditorUsernameTextView, creditorAmountTextView;
-        Button creditorSettleUpButton;
+    @Override
+    public long getItemId(int position) {
+        Transaction debt = debts.get(position);
 
-        public ViewHolder(@NonNull View itemView) {
+        if(debt.getTransStatus().getType().equalsIgnoreCase(TransactionStatus.PAYMENT_NOT_MADE.getType())){
+            return 0;
+        }
+        return 1;
+    }
+
+    static class DebtListHolder extends RecyclerView.ViewHolder{
+        TextView debtorUsernameTextView, debtorAmountTextView, debtorFromTextView;
+        Button debtorSettleUpButton;
+
+        public DebtListHolder(@NonNull View itemView) {
             super(itemView);
 
-            creditorUsernameTextView = itemView.findViewById(R.id.creditorUsernameTextView);
-            creditorAmountTextView = itemView.findViewById(R.id.creditorAmountTextView);
-            creditorSettleUpButton = itemView.findViewById(R.id.creditorSettleUpButton);
+            debtorUsernameTextView = itemView.findViewById(R.id.debtorUsernameTextView);
+            debtorAmountTextView = itemView.findViewById(R.id.debtorAmountTextView);
+            debtorSettleUpButton = itemView.findViewById(R.id.debtorSettleUpButton);
+            debtorFromTextView = itemView.findViewById(R.id.debtorFromTextView);
         }
     }
+
 
     public List<Transaction> getDebts() {
         return debts;

@@ -88,7 +88,7 @@ public class DebtList extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         debtListBackImageView = view.findViewById(R.id.debtListBackImageView);
-        debtListRecyclerView = view.findViewById(R.id.debtListRecyclerView);
+        debtListRecyclerView = view.findViewById(R.id.creditListRecyclerView);
         account = (Account) mainViewModel.get("account");
 
         if(account.getDebts() != null){

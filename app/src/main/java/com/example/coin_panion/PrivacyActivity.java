@@ -2,10 +2,8 @@ package com.example.coin_panion;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.os.Bundle;
@@ -45,7 +43,7 @@ public class PrivacyActivity extends Fragment {
 
         textView = requireActivity().findViewById(R.id.activityName);
         textView.setText("PRIVACY");
-        imageView4 = view.findViewById(R.id.imageView4);
+        imageView4 = view.findViewById(R.id.settleUpQRImageView);
         imageView5 = view.findViewById(R.id.imageView5);
         IVNextResetPassword = view.findViewById(R.id.IVNextResetPassword);
 

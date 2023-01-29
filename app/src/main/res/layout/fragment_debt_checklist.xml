@@ -12,7 +12,6 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
         android:src="@mipmap/ic_back_foreground" />
 
     <TextView
@@ -31,11 +30,11 @@
         android:layout_marginBottom="20dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/debtListRecyclerView"
+            android:id="@+id/creditListRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingHorizontal="20dp"
-            tools:listitem="@layout/debt_friend_item" />
+            tools:listitem="@layout/debt_list_item" />
 
     </ScrollView>
 

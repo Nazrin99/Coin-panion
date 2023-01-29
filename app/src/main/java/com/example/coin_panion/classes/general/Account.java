@@ -48,12 +48,10 @@ public class Account implements Serializable {
     private List<Group> groups;
     private Double debtLimitAmount;
     private Date debtLimitEndDate;
-//    private List<Transaction> debts;
-//    private List<Transaction> credits;
-//    private List<PaymentApproval> paymentApprovalList;
     private String settleUpAccountName;
     private String settleUpAccountNumber;
     private List<Transaction> debts;
+    private List<Transaction> credits;
     private List<Notification> notifications = new ArrayList<>();
     private Picture accountPic;
     private Picture accountCover;
@@ -170,6 +168,68 @@ public class Account implements Serializable {
     }
 
 
+    public static Account getAccount(DocumentReference userReference){
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        Query query = firebaseFirestore.collection("account").whereEqualTo("user", userReference);
+
+        AtomicReference<Account> accountAtomicReference = new AtomicReference<>(null);
+        AtomicReference<DocumentReference> documentReferenceAtomicReference = new AtomicReference<>(null);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots != null){
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+
+                        // Sending references for creating later
+                        DocumentReference documentReference = documentSnapshot.getDocumentReference("user");
+                        documentReferenceAtomicReference.set(documentReference);
+
+                        String accountID1 = documentSnapshot.getString("accountID");
+                        Picture accountPic = new Picture(documentSnapshot.getString("accountPic"));
+                        Picture accountCover = new Picture(documentSnapshot.getString("accountCover"));
+                        Picture qrImage = new Picture(documentSnapshot.getString("qrImage"));
+                        String bio = documentSnapshot.getString("bio");
+                        Double debtLimitAmount = documentSnapshot.getDouble("debtLimitAmount");
+                        Date debtLimitEndDate = documentSnapshot.getDate("debtLimitEndDate");
+                        String settleUpAccountName = documentSnapshot.getString("settleUpAccountName");
+                        String settleUpAccountNumber = documentSnapshot.getString("settleUpAccountNumber");
+
+                        Account account = new Account(accountID1, null, bio, debtLimitAmount, debtLimitEndDate, settleUpAccountName, settleUpAccountNumber, accountPic, accountCover, qrImage);
+                        accountAtomicReference.set(account);
+                        System.out.println("Leaving");
+                    }
+                    else{
+                        System.out.println("Snapshot is empty");
+                    }
+                }
+                else{
+                    System.out.println("Snapshot is null");
+                }
+            }
+        });
+        while(accountAtomicReference.get() == null || documentReferenceAtomicReference.get() == null){
+
+        }
+        Account account = accountAtomicReference.get();
+
+        // Getting user object
+        User user = User.getUser(documentReferenceAtomicReference.get());
+
+        // Getting the pictures
+        Executors.newSingleThreadExecutor().execute(() -> {
+            Picture accountPic = account.getAccountPic();
+            Picture accountCover = account.getAccountCover();
+            Picture qrImage = account.getQrImage();
+            accountPic.getPictureFromDatabase();
+            accountCover.getPictureFromDatabase();
+            qrImage.getPictureFromDatabase();
+        });
+        account.setUser(user);
+
+        return account;
+    }
+
     public static Account getAccount(String accountID){
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         Query query = firebaseFirestore.collection("account").whereEqualTo("accountID", accountID);
@@ -187,6 +247,7 @@ public class Account implements Serializable {
                         DocumentReference documentReference = documentSnapshot.getDocumentReference("user");
                         documentReferenceAtomicReference.set(documentReference);
 
+                        String accountID1 = documentSnapshot.getString("accountID");
                         Picture accountPic = new Picture(documentSnapshot.getString("accountPic"));
                         Picture accountCover = new Picture(documentSnapshot.getString("accountCover"));
                         Picture qrImage = new Picture(documentSnapshot.getString("qrImage"));
@@ -196,7 +257,7 @@ public class Account implements Serializable {
                         String settleUpAccountName = documentSnapshot.getString("settleUpAccountName");
                         String settleUpAccountNumber = documentSnapshot.getString("settleUpAccountNumber");
 
-                        Account account = new Account(accountID, null, bio, debtLimitAmount, debtLimitEndDate, settleUpAccountName, settleUpAccountNumber, accountPic, accountCover, qrImage);
+                        Account account = new Account(accountID1, null, bio, debtLimitAmount, debtLimitEndDate, settleUpAccountName, settleUpAccountNumber, accountPic, accountCover, qrImage);
                         accountAtomicReference.set(account);
                         System.out.println("Leaving");
                     }
@@ -461,6 +522,14 @@ public class Account implements Serializable {
 
     public List<Transaction> getDebts() {
         return debts;
+    }
+
+    public List<Transaction> getCredits() {
+        return credits;
+    }
+
+    public void setCredits(List<Transaction> credits) {
+        this.credits = credits;
     }
 
     public void setDebts(List<Transaction> debts) {

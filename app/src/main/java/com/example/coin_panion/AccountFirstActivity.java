@@ -2,11 +2,13 @@ package com.example.coin_panion;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,8 @@ import com.example.coin_panion.classes.utility.BaseViewModel;
 import com.example.coin_panion.classes.utility.Picture;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
+
 public class AccountFirstActivity extends Fragment {
     BottomNavigationView bottomNavigationView;
     Account account;
@@ -26,6 +30,7 @@ public class AccountFirstActivity extends Fragment {
     ImageView profileImageView, profileUsernameNextImageView, profilePrivacyNextImageView, profileDebtNextImageView, profileCreditNextImageView;
 
     private TextView textView;
+    AppCompatButton accountLogOutAppCompatButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +58,7 @@ public class AccountFirstActivity extends Fragment {
         profileDebtNextImageView = view.findViewById(R.id.profileDebtNextImageView);
         profilePrivacyNextImageView = view.findViewById(R.id.profilePrivacyNextImageView);
         profileUsernameNextImageView = view.findViewById(R.id.profileUsernameNextImageView);
+        accountLogOutAppCompatButton = view.findViewById(R.id.accountLogOutAppCompatButton);
 
         requireActivity().runOnUiThread(() -> {
             profileImageView.setImageDrawable(account.getAccountPic().getPicture() != null ? Picture.cropToSquareAndRound(account.getAccountPic().getPicture(), getResources()) : Picture.cropToSquareAndRound(ResourcesCompat.getDrawable(getResources(), R.mipmap.default_profile, null), getResources()));
@@ -60,6 +66,14 @@ public class AccountFirstActivity extends Fragment {
             profileImageView.setMaxHeight(10);
             profileImageView.setMaxWidth(10);
             textView.setText(account.getUser().getUsername());
+        });
+
+        accountLogOutAppCompatButton.setOnClickListener(v -> {
+            File file = new File(requireActivity().getApplicationContext().getFilesDir(), "login.txt");
+            file.delete();
+
+            Intent intent = new Intent(requireActivity(), LoginActivity.class);
+            startActivity(intent);
         });
 
         profileCreditNextImageView.setOnClickListener(v -> {

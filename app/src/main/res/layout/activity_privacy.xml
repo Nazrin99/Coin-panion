@@ -9,7 +9,7 @@
     >
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/settleUpQRImageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginLeft="20dp"
